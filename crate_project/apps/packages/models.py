@@ -67,6 +67,22 @@ class Package(TimeStampedModel):
             return self.latest.uris
 
     @property
+    def requirement_line(self):
+        if self.latest is not None:
+            # @@@ Should This Be Major/Minor/Patch/Exact Version?
+            #       For Now we'll use Minor if verlib can parse it, else exact
+            normalized = verlib.suggest_normalized_version(self.version)
+            if normalized is not None:
+                ver = str(verlib.NormalizedVersion(normalized))
+                next_version = "%(major)s.%(minor)s" % {"major": ver.split(".")[0], "minor": int(ver.split(".")[1]) + 1}
+                return "%(package)s>=%(current_version)s,<%(next_version)s" % {
+                    "package": self.name,
+                    "current_version": self.version,
+                    "next_version": next_version,
+                }
+            return "%(package)s==%(version)s" % {"package": self.name, "version": self.version}
+
+    @property
     def downloads(self):
         total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
         if total_downloads is None:
