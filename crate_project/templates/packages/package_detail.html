@@ -12,7 +12,7 @@
             </div>
 
             <div class="row">
-                <div class="span12">
+                <div class="span9">
                     <div class="summary">
                         {{ object.summary }}
                     </div>
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="span4">
+                        <div class="span3">
                             {% if object.requires.all %}
                                 <h4>Requirements</h4>
                                 <ul>
@@ -55,7 +55,7 @@
                             {% endif %}
                         </div>
 
-                        <div class="span4">
+                        <div class="span3">
                             {% if object.provides.all %}
                                 <h4>Provides</h4>
                                 <ul>
@@ -68,7 +68,7 @@
                             {% endif %}
                         </div>
 
-                        <div class="span4">
+                        <div class="span3">
                             {% if object.obsoletes.all %}
                                 <h4>Obsoletes</h4>
                                 <ul>
@@ -82,7 +82,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="sidebar" class="span4">
+                <div id="sidebar" class="span3">
                     <h3 class="visuallyhidden">Downloads</h3>
                     <div class="downloads">
                         <div class="package"><span class="count">{{ object.downloads|intcomma }}</span> total downlaods</div>
