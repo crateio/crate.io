@@ -87,6 +87,19 @@
                                 </ul>
                             {% endif %}
                         </div>
+
+                        <div class="span4">
+                            {% if object.obsoletes.all %}
+                                <h4>Obsoletes</h4>
+                                <ul>
+                                    {% for obsolete in object.obsoletes.all %}
+                                        <li class="kind-{{ obsolete.kind }}">
+                                            <a href="">{{ obsolete.name }}{{ obsolete.version }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="span4">

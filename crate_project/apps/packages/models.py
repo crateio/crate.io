@@ -77,6 +77,11 @@ class Package(TimeStampedModel):
             return self.latest.provides
 
     @property
+    def obsoletes(self):
+        if self.latest is not None:
+            return self.latest.obsoletes
+
+    @property
     def requirement_line(self):
         if self.latest is not None:
             # @@@ Should This Be Major/Minor/Patch/Exact Version?
