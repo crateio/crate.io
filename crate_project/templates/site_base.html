@@ -3,10 +3,8 @@
 {% load metron_tags %}
 {% load i18n %}
 
-{% block extra_head_base %}
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/crate.css">
-
-    {{ block.super }}
+{% block less_extra %}
+    <link rel="stylesheet/less" type="text/css" href="{{ STATIC_URL }}less/crate.less" />
 {% endblock %}
 
 {% block topbar %}
