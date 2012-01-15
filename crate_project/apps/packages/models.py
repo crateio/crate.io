@@ -32,34 +32,29 @@ class Package(TimeStampedModel):
         return reverse("package_detail", kwargs={"name": self.name})
 
     @property
-    def summary(self):
+    def latest(self):
         if not hasattr(self, "_latest_release"):
-            try:
-                self._latest_release = self.releases.latest()
-            except Release.DoesNotExist:
+            releases = self.releases.order_by("-order")[:1]
+            if releases:
+                self._latest_release = releases[0]
+            else:
                 self._latest_release = None
+        return self._latest_release
 
-        if self._latest_release is not None:
-            return self._latest_release.summary
+    @property
+    def summary(self):
+        if self.latest is not None:
+            return self.latest.summary
 
     @property
     def description(self):
-        if not hasattr(self, "_latest_release"):
-            try:
-                self._latest_release = self.releases.latest()
-            except Release.DoesNotExist:
-                self._latest_release = None
-
-        if self._latest_release is not None:
-            return self._latest_release.description
+        if self.latest is not None:
+            return self.latest.description
 
     @property
     def version(self):
-        try:
-            latest_release = self.releases.latest()
-        except Release.DoesNotExist:
-            return
-        return latest_release.version
+        if self.latest is not None:
+            return self.latest.version
 
     @property
     def downloads(self):
@@ -105,7 +100,6 @@ class Release(TimeStampedModel):
 
     class Meta:
         unique_together = ("package", "version")
-        get_latest_by = "created"  # @@@ Change this to use ordering
 
     def __unicode__(self):
         return u"%(package)s %(version)s" % {"package": self.package.name, "version": self.version}
