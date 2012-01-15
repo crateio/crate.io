@@ -60,6 +60,21 @@
                     <div class="requirements">
                         {{ object.requirement_line }}
                     </div>
+
+                    <div class="row">
+                        <div class="span4">
+                            {% if object.requires.all %}
+                                <h4>Requirements</h4>
+                                <ul>
+                                    {% for requirement in object.requires.all %}
+                                        <li class="kind-{{ requirement.kind }}">
+                                            <a href="">{{ requirement.name }}{{ requirement.version }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
                 <div class="span4">
                     <h3>Downloads</h3>

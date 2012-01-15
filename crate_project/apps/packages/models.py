@@ -67,6 +67,11 @@ class Package(TimeStampedModel):
             return self.latest.uris
 
     @property
+    def requires(self):
+        if self.latest is not None:
+            return self.latest.requires
+
+    @property
     def requirement_line(self):
         if self.latest is not None:
             # @@@ Should This Be Major/Minor/Patch/Exact Version?
