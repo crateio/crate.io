@@ -74,6 +74,19 @@
                                 </ul>
                             {% endif %}
                         </div>
+
+                        <div class="span4">
+                            {% if object.provides.all %}
+                                <h4>Provides</h4>
+                                <ul>
+                                    {% for provide in object.provides.all %}
+                                        <li class="kind-{{ provide.kind }}">
+                                            <a href="">{{ provide.name }}{{ provide.version }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 <div class="span4">
