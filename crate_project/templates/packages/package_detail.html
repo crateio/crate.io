@@ -1,0 +1,56 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block body_base %}
+<style type="text/css">
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 6px 6px 6px 6px;
+           -moz-border-radius: 6px 6px 6px 6px;
+                border-radius: 6px 6px 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      /* Page header tweaks */
+      .page-header {
+        background-color: #f5f5f5;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+    </style>
+    <div class="container">
+        <div class="content">
+            <div class="page-header">
+                <h1>{{ object.name }} <small>{{ object.version }}</small></h1>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <div class="summary">
+                        {{ object.summary }}
+                    </div>
+                    <div class="install-cmd">
+                        pip install {{ object.name }}
+                    </div>
+                </div>
+                <div class="span4">
+                    <h3>Secondary content</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

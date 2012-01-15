@@ -1,0 +1,29 @@
+{% extends "packages/simple/base.html" %}
+
+{% load package_utils %}
+
+{% block head_title %}Links for {{ object.name }}{% endblock %}
+
+{% block body %}
+    <h1>Links for {{ object.name }}</h1>
+
+    {% for release in object.releases.all %}
+        {% for file in release.files.all %}
+            <a href="{{ file.file.url }}" rel="package">{{ file.file.name|filename }}</a>
+        {% endfor %}
+    {% endfor %}
+
+    {% for release in object.releases.all %}
+        {% if release.download_uri %}
+            <a href="{{ release.download_uri }}" rel="download">{{ release.version }} download_url</a>
+        {% endif %}
+
+        {% for key, value in release.uris.iteritems %}
+            {% if key|lower == "home page" or key|lower == "homepage" %}
+                <a href="{{ value }}" rel="homepage">{{ release.version }} home_page</a>
+            {% else %}
+                <a href="{{ value }}" rel="{{ key }}">{{ release.version }} {{ key }}</a>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

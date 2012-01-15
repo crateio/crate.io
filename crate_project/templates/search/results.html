@@ -1,0 +1,63 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% load ifsetting_tag %}
+{% load bootstrap_tags %}
+{% load package_tags %}
+{% load pagination_utils %}
+{% load search_utils %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+{% block body_id %}search-results{% endblock %}
+
+{% block body_base %}
+    <div class="container">
+
+        {% include "_messages.html" %}
+
+        <div class="hero-unit">
+            {% block banner %}
+                <div id="main-search">
+                    <form method="GET" action="." class="row">
+                        {{ form.non_field_errors }}
+
+                        {% for field in form %}
+                            {{ field }}
+                            {% if field.errors %}
+                                <span class="help-inline">{{ field.errors }}</span>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="span1">
+                            <input type="submit" class="btn primary" value="Search">
+                        </div>
+                    </form>
+                </div>
+            {% endblock %}
+        </div>
+
+        {% for result in results %}
+            <div class="results">
+                {% include "search/partials/package.html" with result=result %}
+            </div>
+        {% empty %}
+            <p>No results found.</p>
+        {% endfor %}
+
+        {% if is_paginated %}
+            <div class="pagination">
+                <ul>
+                    <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; Previous</a></li>
+
+                    {% for page_num in paginator.page_range|paginate_numbers:page.number %}
+                        <li{% if page_num == page.number %} class="active"{% endif %}><a href="{{ request.get_full_path|repage:page_num }}">{{ page_num }}</a></li>
+                    {% endfor %}
+
+                    <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">Next &rarr;</a></li>
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

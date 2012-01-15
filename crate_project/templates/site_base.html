@@ -1,0 +1,38 @@
+{% extends "theme_base.html" %}
+
+{% load metron_tags %}
+{% load i18n %}
+
+{% block extra_head_base %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/crate.css">
+
+    {{ block.super }}
+{% endblock %}
+
+{% block topbar %}
+    <h3>
+        <a href="{% url search %}">{{ SITE_NAME }}</a>
+    </h3>
+
+    {% block nav %}
+        {% if user.is_authenticated %}
+            <ul>{% spaceless %}
+                <li id="tab_profile"><a href="{% url profile_detail user.username %}">{% trans "Profile" %}</a></li>
+                {# <li id="tab_notices"><a href="{% url notification_notices %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li> #}
+            {% endspaceless %}</ul>
+        {% endif %}
+    {% endblock %}
+
+    {% block account_bar %}
+        {% include "_account_bar.html" %}
+    {% endblock %}
+{% endblock %}
+
+{% block footer %}
+    {% include "_footer.html" %}
+{% endblock %}
+
+{% block extra_body_base %}
+    {% analytics %}
+    {% block extra_body %}{% endblock %}
+{% endblock %}

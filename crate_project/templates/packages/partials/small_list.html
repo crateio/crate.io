@@ -1,0 +1,5 @@
+<ul class="unstyled">
+    {% for release in releases %}
+        <li><a href="{{ release.get_absolute_url }}">{{ release.package.name }} ({{ release.version }})</a></li>
+    {% endfor %}
+</ul>
