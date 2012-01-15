@@ -62,6 +62,11 @@ class Package(TimeStampedModel):
             return self.latest.author
 
     @property
+    def uris(self):
+        if self.latest is not None:
+            return self.latest.uris
+
+    @property
     def downloads(self):
         total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
         if total_downloads is None:
