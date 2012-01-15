@@ -48,7 +48,7 @@ def updated_releases(num):
 
 @register.assignment_tag
 def package_versions(package_name, num=5):
-    return Release.objects.filter(package__name=package_name).order_by("-order")[:num]
+    return Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")[:num]
 
 
 @register.assignment_tag
