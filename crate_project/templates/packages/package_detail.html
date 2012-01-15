@@ -50,6 +50,13 @@
                     <div class="author">
                         {{ object.author }}
                     </div>
+                    <div class="links">
+                        <ul class="unstyled">
+                            {% for name, uri in object.uris.iteritems %}
+                                <li><a href="{{ uri }}" title="{{ name }}">{{ name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 </div>
                 <div class="span4">
                     <h3>Downloads</h3>
