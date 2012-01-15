@@ -1,6 +1,7 @@
 {% extends "site_base.html" %}
 
 {% load i18n %}
+{% load humanize %}
 
 {% block body_base %}
 <style type="text/css">
@@ -51,7 +52,11 @@
                     </div>
                 </div>
                 <div class="span4">
-                    <h3>Secondary content</h3>
+                    <h3>Downloads</h3>
+                    <div class="downloads">
+                        <div class="package"><span class="count">{{ object.downloads|intcomma }}</span> total downlaods</div>
+                        <div class="version"><span class="count">{{ object.latest.downloads|intcomma }}</span> for this version</div>
+                    </div>
                 </div>
             </div>
         </div>
