@@ -41,7 +41,6 @@ logger = logging.getLogger(__name__)
 # @@@ If we APIize accessing the Crate site (updating metadata, saving files etc), we can set this up so that
 #       these tasks can run anywhere, including S3/Cloud Servers/A Linode Box. Currently they require DB access.
 # @@@ Update the Created of Package and Release based on oldest files
-# @@@ Need a Trigger or some method of ordering Releases based on version.
 
 _md5_fragment_re = re.compile(r"#md5=([a-zA-Z0-9]{32})")
 _disutils2_version_capture = re.compile("^(.*?)(?:\(([^()]+)\))?$")
