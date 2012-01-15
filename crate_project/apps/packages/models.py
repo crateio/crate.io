@@ -109,6 +109,13 @@ class Release(TimeStampedModel):
     def __unicode__(self):
         return u"%(package)s %(version)s" % {"package": self.package.name, "version": self.version}
 
+    @property
+    def downloads(self):
+        total_downloads = ReleaseFile.objects.filter(release__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        if total_downloads is None:
+            return 0
+        return total_downloads
+
 
 class ReleaseFile(TimeStampedModel):
     release = models.ForeignKey(Release, related_name="files")
