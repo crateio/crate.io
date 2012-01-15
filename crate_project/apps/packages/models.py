@@ -3,12 +3,15 @@ import os
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from django_hstore import hstore
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
+from packages.utils import verlib
 
 
 # @@@ These are by Nature Hierarchical. Would we benefit from a tree structure?
@@ -71,6 +74,8 @@ class Release(TimeStampedModel):
     version = models.CharField(max_length=512)
 
     hidden = models.BooleanField(default=False)
+
+    order = models.IntegerField(default=0)
 
     platform = models.TextField(blank=True)
 
@@ -182,3 +187,27 @@ class ReleaseObsolete(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+@receiver(post_save, sender=Release)
+def version_ordering(sender, **kwargs):
+    instance = kwargs.get("instance")
+    if instance is not None and kwargs.get("created", True):
+        releases = Release.objects.filter(package__pk=instance.package.pk)
+
+        versions = []
+        dated = []
+
+        for release in releases:
+            normalized = verlib.suggest_normalized_version(release.version)
+            if normalized is not None:
+                versions.append(release)
+            else:
+                dated.append(release)
+
+        versions.sort(key=lambda x: verlib.NormalizedVersion(verlib.suggest_normalized_version(x.version)))
+        dated.sort(key=lambda x: x.created)
+
+        for i, release in enumerate(dated + versions):
+            if release.order != i:
+                Release.objects.filter(pk=release.pk).update(order=i)
