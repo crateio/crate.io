@@ -1,5 +1,3 @@
-import datetime
-
 from django import template
 from django.db.models import F, Sum
 
