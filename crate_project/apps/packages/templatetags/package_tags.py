@@ -46,3 +46,13 @@ def new_releases(num):
 @register.assignment_tag
 def updated_releases(num):
     return [x.release for x in ReleaseFile.objects.exclude(created=F("release__created")).order_by("-created")[:num]]
+
+
+@register.assignment_tag
+def package_versions(package_name, num=5):
+    return Release.objects.filter(package__name=package_name).order_by("-order")[:num]
+
+
+@register.assignment_tag
+def package_version_count(package_name):
+    return Release.objects.filter(package__name=package_name).count()

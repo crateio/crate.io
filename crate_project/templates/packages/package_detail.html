@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load humanize %}
+{% load package_tags %}
 
 {% block body_base %}
 <style type="text/css">
@@ -107,6 +108,23 @@
                     <div class="downloads">
                         <div class="package"><span class="count">{{ object.downloads|intcomma }}</span> total downlaods</div>
                         <div class="version"><span class="count">{{ object.latest.downloads|intcomma }}</span> for this version</div>
+                    </div>
+
+                    <h3>Versions</h3>
+                    <div class="versions">
+                        {% package_versions object.name as latest_versions %}
+                        <ul class="unstyled">
+                            {% for version in latest_versions %}
+                                <li>
+                                    <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">
+                                        {{ version.version }}
+                                    </a>
+                                    <span class="date">{{ version.created|date:"DATE_FORMAT" }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        {% package_version_count object.name as total_versions %}
+                        <a href="" title="All Versions for {{ object.name }}">Show All Versions ({{ total_versions }} total)</a>
                     </div>
                 </div>
             </div>
