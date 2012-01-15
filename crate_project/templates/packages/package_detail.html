@@ -18,14 +18,17 @@
                     </div>
 
                     <div class="install-cmd">
+                        <h4 class="visuallyhidden">Install</h4>
                         pip install {{ object.name }}
                     </div>
 
                     <div class="author">
+                        <h4>Author</h4>
                         {{ object.author }}
                     </div>
 
                     <div class="links">
+                        <h4>Links</h4>
                         <ul class="unstyled">
                             {% for name, uri in object.uris.iteritems %}
                                 <li><a href="{{ uri }}" title="{{ name }}">{{ name }}</a></li>
@@ -34,6 +37,7 @@
                     </div>
 
                     <div class="requirements">
+                        <h4>Pip</h4>
                         {{ object.requirement_line }}
                     </div>
 
