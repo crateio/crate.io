@@ -16,12 +16,15 @@
                     <div class="summary">
                         {{ object.summary }}
                     </div>
+
                     <div class="install-cmd">
                         pip install {{ object.name }}
                     </div>
+
                     <div class="author">
                         {{ object.author }}
                     </div>
+
                     <div class="links">
                         <ul class="unstyled">
                             {% for name, uri in object.uris.iteritems %}
@@ -29,6 +32,7 @@
                             {% endfor %}
                         </ul>
                     </div>
+
                     <div class="requirements">
                         {{ object.requirement_line }}
                     </div>
