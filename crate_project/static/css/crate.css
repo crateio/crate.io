@@ -1,3 +1,5 @@
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+
 #search .hero-unit, #search-results .hero-unit { padding-top: 30px; }
 #search-results .hero-unit { padding-bottom: 10px; }
 
@@ -61,5 +63,9 @@
     display: block;
     color: #404040;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 24px;
+}
+
+#sidebar .downloads .package, #sidebar .downloads .version {
+    margin-bottom: 1em;
 }
