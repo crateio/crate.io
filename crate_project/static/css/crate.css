@@ -56,3 +56,10 @@
     padding-left: 19px;
     border-left: 1px solid #eee;
 }
+
+#sidebar .downloads .count {
+    display: block;
+    color: #404040;
+    font-weight: bold;
+    font-size: 16px;
+}
