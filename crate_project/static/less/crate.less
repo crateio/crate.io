@@ -3,32 +3,42 @@
 #search .hero-unit, #search-results .hero-unit { padding-top: 30px; }
 #search-results .hero-unit { padding-bottom: 10px; }
 
-#search .package-stats {
-    margin-bottom: 60px;
-    font-size: 16px;
-    color: #404040;
+#search {
+    .package-stats {
+        margin-bottom: 60px;
+        font-size: 16px;
+        color: #404040;
+
+        .downloads {
+            display: block;
+
+            font-size: 24px;
+            font-weight: bold;
+            line-height: 36px;
+        }
+    }
 }
 
-#search .package-stats .downloads {
-    display: block;
 
-    font-size: 24px;
-    font-weight: bold;
-    line-height: 36px;
-}
+#search-results {
+    .results {
+        .result {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
 
+        :nth-child(odd) {
+            .result {
+                background-color: #f9f9f9;
+            }
+        }
 
-#search-results .results .result {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
-#search-results .results:nth-child(odd) .result {
-    background-color: #f9f9f9;
-}
-
-#search-results .results:hover .result {
-    background-color: #f5f5f5;
+        :hover {
+            .result {
+                background-color: #f5f5f5;
+            }
+        }
+    }
 }
 
 .content {
