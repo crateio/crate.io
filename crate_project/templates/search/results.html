@@ -17,26 +17,15 @@
 
         {% include "_messages.html" %}
 
-        <div class="hero-unit">
-            {% block banner %}
-                <div id="main-search">
-                    <form method="GET" action="." class="row">
-                        {{ form.non_field_errors }}
+        <form method="GET" action="." class="well form-search">
+            {{ form.non_field_errors }}
 
-                        {% for field in form %}
-                            {{ field }}
-                            {% if field.errors %}
-                                <span class="help-inline">{{ field.errors }}</span>
-                            {% endif %}
-                        {% endfor %}
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
 
-                        <div class="span1">
-                            <input type="submit" class="btn primary" value="Search">
-                        </div>
-                    </form>
-                </div>
-            {% endblock %}
-        </div>
+            <input type="submit" class="btn primary" value="Search">
+        </form>
 
         {% for result in results %}
             <div class="results">
