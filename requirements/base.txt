@@ -11,7 +11,7 @@
 -e git+https://github.com/django/django.git@9dc2dc2eaead469213854a23780819059037e682#egg=Django
 Pinax
 
-django-debug-toolbar==0.9.1
+django-debug-toolbar==0.9.4
 django-staticfiles==1.1.2
 django_compressor==1.0.1
 
