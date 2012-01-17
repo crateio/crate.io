@@ -27,18 +27,17 @@
                 </div>
 
                 <div id="main-search">
-                    <form method="GET" action="." class="row">
+                    <form method="GET" action="." class="form-horizontal form-search row">
                         {{ form.non_field_errors }}
 
-                        {% for field in form %}
-                            {{ field }}
-                            {% if field.errors %}
-                                <span class="help-inline">{{ field.errors }}</span>
-                            {% endif %}
-                        {% endfor %}
+                        <div class="span9">
+                            {% for field in form %}
+                                {{ field }}
+                            {% endfor %}
+                        </div>
 
                         <div class="span1">
-                            <input type="submit" class="btn primary" value="Search">
+                            <button type="submit" class="btn primary">Search</button>
                         </div>
                     </form>
                 </div>

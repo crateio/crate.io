@@ -8,7 +8,7 @@ class SearchForm(HaystackSearchForm):
         super(SearchForm, self).__init__(*args, **kwargs)
 
         self.fields["q"].widget.attrs.update({
-            "class": "offset1 span10"
+            "class": "search-query span8"
         })
 
     def search(self):
