@@ -87,6 +87,11 @@ class Package(TimeStampedModel):
             return self.latest.obsoletes
 
     @property
+    def files(self):
+        if self.latest is not None:
+            return self.latest.files
+
+    @property
     def requirement_line(self):
         if self.latest is not None:
             # @@@ Should This Be Major/Minor/Patch/Exact Version?
@@ -159,9 +164,20 @@ class Release(TimeStampedModel):
 
 
 class ReleaseFile(TimeStampedModel):
+
+    TYPES = Choices(
+        ("sdist", "Source"),
+        ("bdist_egg", "Egg"),
+        ("bdist_msi", "MSI"),
+        ("bdist_dmg", "DMG"),
+        ("bdist_rpm", "RPM"),
+        ("bdist_dumb", "bdist_dumb"),
+        ("bdist_wininst", "bdist_wininst"),
+    )
+
     release = models.ForeignKey(Release, related_name="files")
 
-    type = models.CharField(max_length=25)
+    type = models.CharField(max_length=25, choices=TYPES)
     file = models.FileField(upload_to="packages", max_length=512)
     filename = models.CharField(max_length=200, help_text="This is the file name given to us by PyPI", blank=True, null=True, default=None)
     digest = models.CharField(max_length=512)
@@ -176,6 +192,11 @@ class ReleaseFile(TimeStampedModel):
 
     def __unicode__(self):
         return os.path.basename(self.file.name)
+
+    def get_python_version_display(self):
+        if self.python_version.lower() == "source":
+            return ""
+        return self.python_version
 
 
 class ReleaseRequire(models.Model):

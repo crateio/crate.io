@@ -5,6 +5,7 @@
 {% load markup %}
 {% load staticfiles %}
 {% load package_tags %}
+{% load package_utils %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
@@ -31,6 +32,7 @@
                     <ul id="package-tabs" class="nav tabs">
                         <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#description" data-toggle="tab">Description</a></li>
+                        <li><a href="#files" data-toggle="tab">Files</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -38,7 +40,7 @@
                             {{ object.description|restructuredtext }}
                         </div>
 
-                        <div class="tab-pane fade in active" id="info">
+                        <div id="info" class="tab-pane fade in active">
                             <div class="author">
                                 <h4>Author</h4>
                                 {{ object.author }}
@@ -108,6 +110,33 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div id="files" class="tab-pane fade">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>File</th>
+                                        <th>Type</th>
+                                        <th>Python Version</th>
+                                        <th>Uploaded On</th>
+                                        <th>Size</th>
+                                        <th>Downloads</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for file in object.files.all %}
+                                        <tr>
+                                            <td><a href="{{ file.get_absolute_url }}">{{ file.file.name|filename }}</a> (<a data-toggle="modal" href="#digest-{{ file.pk }}">{{ file.digest|digest_type }}</a>)</td>
+                                            <td>{{ file.get_type_display }}</td>
+                                            <td>{{ file.get_python_version_display }}</td>
+                                            <td></td>
+                                            <td>{{ file.file.size|filesizeformat }}</td>
+                                            <td>{{ file.downloads|intcomma }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -138,6 +167,22 @@
             </div>
         </div>
     </div>
+
+    {% for file in object.files.all %}
+        <div id="digest-{{ file.pk }}" class="modal hide fade">
+            <div class="modal-header">
+                <a href="#" class="close" data-dismiss="modal">×</a>
+                <h3>{{ file.file.name|filename }}</h3>
+            </div>
+
+            <div class="modal-body">
+                <dl>
+                    <dt>{{ file.digest|digest_type }}</dt>
+                    <dd>{{ file.digest|digest_value }}</dd>
+                </dl>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block extra_body %}
