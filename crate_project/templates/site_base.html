@@ -1,10 +1,11 @@
 {% extends "theme_base.html" %}
 
+{% load staticfiles %}
 {% load metron_tags %}
 {% load i18n %}
 
 {% block less_extra %}
-    <link rel="stylesheet/less" type="text/css" href="{{ STATIC_URL }}less/crate.less" />
+    <link rel="stylesheet/less" type="text/css" href="{% static 'less/crate.less' %}" />
 {% endblock %}
 
 {% block topbar %}
