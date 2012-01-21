@@ -22,72 +22,84 @@
                         pip install {{ object.name }}
                     </div>
 
-                    <div class="author">
-                        <h4>Author</h4>
-                        {{ object.author }}
-                    </div>
+                    <ul id="package-tabs" class="nav tabs">
+                        <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
+                        <li><a href="#description" data-toggle="tab">Description</a></li>
+                    </ul>
 
-                    <div class="links">
-                        <h4>Links</h4>
-                        <ul class="unstyled">
-                            {% for name, uri in object.uris.iteritems %}
-                                <li><a href="{{ uri }}" title="{{ name }}">{{ name }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class="requirements">
-                        <h4>Pip</h4>
-                        {{ object.requirement_line }}
-                    </div>
-
-                    <div id="classifiers">
-                        <h4>Classifiers</h4>
-                        <ul class="unstyled">
-                            {% for classifier in object.classifiers.all %}
-                                <li>{{ classifier.trove }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class="row">
-                        <div class="span3">
-                            {% if object.requires.all %}
-                                <h4>Requirements</h4>
-                                <ul>
-                                    {% for requirement in object.requires.all %}
-                                        <li class="kind-{{ requirement.kind }}">
-                                            <a href="">{{ requirement.name }}{{ requirement.version }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+                    <div class="tab-content">
+                        <div id="description" class="tab-pane fade">
                         </div>
 
-                        <div class="span3">
-                            {% if object.provides.all %}
-                                <h4>Provides</h4>
-                                <ul>
-                                    {% for provide in object.provides.all %}
-                                        <li class="kind-{{ provide.kind }}">
-                                            <a href="">{{ provide.name }}{{ provide.version }}</a>
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        </div>
+                        <div class="tab-pane fade in active" id="info">
+                            <div class="author">
+                                <h4>Author</h4>
+                                {{ object.author }}
+                            </div>
 
-                        <div class="span3">
-                            {% if object.obsoletes.all %}
-                                <h4>Obsoletes</h4>
-                                <ul>
-                                    {% for obsolete in object.obsoletes.all %}
-                                        <li class="kind-{{ obsolete.kind }}">
-                                            <a href="">{{ obsolete.name }}{{ obsolete.version }}</a>
-                                        </li>
+                            <div class="links">
+                                <h4>Links</h4>
+                                <ul class="unstyled">
+                                    {% for name, uri in object.uris.iteritems %}
+                                        <li><a href="{{ uri }}" title="{{ name }}">{{ name }}</a></li>
                                     {% endfor %}
                                 </ul>
-                            {% endif %}
+                            </div>
+
+                            <div class="requirements">
+                                <h4>Pip</h4>
+                                {{ object.requirement_line }}
+                            </div>
+
+                            <div id="classifiers">
+                                <h4>Classifiers</h4>
+                                <ul class="unstyled">
+                                    {% for classifier in object.classifiers.all %}
+                                        <li>{{ classifier.trove }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                            <div class="row">
+                                <div class="span3">
+                                    {% if object.requires.all %}
+                                        <h4>Requirements</h4>
+                                        <ul>
+                                            {% for requirement in object.requires.all %}
+                                                <li class="kind-{{ requirement.kind }}">
+                                                    <a href="">{{ requirement.name }}{{ requirement.version }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+
+                                <div class="span3">
+                                    {% if object.provides.all %}
+                                        <h4>Provides</h4>
+                                        <ul>
+                                            {% for provide in object.provides.all %}
+                                                <li class="kind-{{ provide.kind }}">
+                                                    <a href="">{{ provide.name }}{{ provide.version }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+
+                                <div class="span3">
+                                    {% if object.obsoletes.all %}
+                                        <h4>Obsoletes</h4>
+                                        <ul>
+                                            {% for obsolete in object.obsoletes.all %}
+                                                <li class="kind-{{ obsolete.kind }}">
+                                                    <a href="">{{ obsolete.name }}{{ obsolete.version }}</a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
