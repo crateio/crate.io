@@ -32,6 +32,13 @@ class Package(TimeStampedModel):
         return reverse("package_detail", kwargs={"name": self.name})
 
     @property
+    def downloads(self):
+        total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        if total_downloads is None:
+            return 0
+        return total_downloads
+
+    @property
     def latest(self):
         if not hasattr(self, "_latest_release"):
             releases = self.releases.order_by("-order")[:1]
@@ -42,77 +49,24 @@ class Package(TimeStampedModel):
         return self._latest_release
 
     @property
-    def summary(self):
-        if self.latest is not None:
-            return self.latest.summary
-
-    @property
-    def description(self):
-        if self.latest is not None:
-            return self.latest.description
-
-    @property
-    def version(self):
-        if self.latest is not None:
-            return self.latest.version
-
-    @property
-    def author(self):
-        if self.latest is not None:
-            return self.latest.author
-
-    @property
-    def uris(self):
-        if self.latest is not None:
-            return self.latest.uris
-
-    @property
-    def classifiers(self):
-        if self.latest is not None:
-            return self.latest.classifiers
-
-    @property
-    def requires(self):
-        if self.latest is not None:
-            return self.latest.requires
-
-    @property
-    def provides(self):
-        if self.latest is not None:
-            return self.latest.provides
-
-    @property
-    def obsoletes(self):
-        if self.latest is not None:
-            return self.latest.obsoletes
-
-    @property
-    def files(self):
-        if self.latest is not None:
-            return self.latest.files
+    def install_command(self):
+        return "pip install %(package)s" % {"package": self.name}
 
     @property
     def requirement_line(self):
         if self.latest is not None:
             # @@@ Should This Be Major/Minor/Patch/Exact Version?
             #       For Now we'll use Minor if verlib can parse it, else exact
-            normalized = verlib.suggest_normalized_version(self.version)
+            normalized = verlib.suggest_normalized_version(self.latest.version)
             if normalized is not None:
                 ver = str(verlib.NormalizedVersion(normalized))
                 next_version = "%(major)s.%(minor)s" % {"major": ver.split(".")[0], "minor": int(ver.split(".")[1]) + 1}
                 return "%(package)s>=%(current_version)s,<%(next_version)s" % {
                     "package": self.name,
-                    "current_version": self.version,
+                    "current_version": self.latest.version,
                     "next_version": next_version,
                 }
-            return "%(package)s==%(version)s" % {"package": self.name, "version": self.version}
-
-    @property
-    def downloads(self):
-        total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
-        if total_downloads is None:
-            return 0
-        return total_downloads
+            return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
 
 class Release(TimeStampedModel):
@@ -163,8 +117,8 @@ class Release(TimeStampedModel):
         return total_downloads
 
     @property
-    def name(self):
-        return self.package.name
+    def install_command(self):
+        return "pip install %(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
 
     @property
     def requirement_line(self):
