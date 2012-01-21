@@ -67,6 +67,11 @@ class Package(TimeStampedModel):
             return self.latest.uris
 
     @property
+    def classifiers(self):
+        if self.latest is not None:
+            return self.latest.classifiers
+
+    @property
     def requires(self):
         if self.latest is not None:
             return self.latest.requires
