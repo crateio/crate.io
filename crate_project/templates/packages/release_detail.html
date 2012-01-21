@@ -1,0 +1,12 @@
+{% extends "packages/detail_base.html" %}
+
+{% load humanize %}
+
+{% block downloads %}
+    <h3 class="visuallyhidden">Downloads</h3>
+
+    <div class="downloads">
+        <div class="package"><span class="count">{{ object.package.downloads|intcomma }}</span> total downloads</div>
+        <div class="version"><span class="count">{{ object.downloads|intcomma }}</span> for this version</div>
+    </div>
+{% endblock %}

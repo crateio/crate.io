@@ -162,6 +162,25 @@ class Release(TimeStampedModel):
             return 0
         return total_downloads
 
+    @property
+    def name(self):
+        return self.package.name
+
+    @property
+    def requirement_line(self):
+        # @@@ Should This Be Major/Minor/Patch/Exact Version?
+        #       For Now we'll use Minor if verlib can parse it, else exact
+        normalized = verlib.suggest_normalized_version(self.version)
+        if normalized is not None:
+            ver = str(verlib.NormalizedVersion(normalized))
+            next_version = "%(major)s.%(minor)s" % {"major": ver.split(".")[0], "minor": int(ver.split(".")[1]) + 1}
+            return "%(package)s>=%(current_version)s,<%(next_version)s" % {
+                "package": self.package.name,
+                "current_version": self.version,
+                "next_version": next_version,
+            }
+        return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
+
 
 class ReleaseFile(TimeStampedModel):
 
