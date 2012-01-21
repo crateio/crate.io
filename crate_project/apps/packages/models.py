@@ -59,8 +59,8 @@ class Package(TimeStampedModel):
             #       For Now we'll use Minor if verlib can parse it, else exact
             normalized = verlib.suggest_normalized_version(self.latest.version)
             if normalized is not None:
-                ver = str(verlib.NormalizedVersion(normalized))
-                next_version = "%(major)s.%(minor)s" % {"major": ver.split(".")[0], "minor": int(ver.split(".")[1]) + 1}
+                ver = verlib.NormalizedVersion(normalized)
+                next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
                 return "%(package)s>=%(current_version)s,<%(next_version)s" % {
                     "package": self.name,
                     "current_version": self.latest.version,
@@ -129,8 +129,8 @@ class Release(TimeStampedModel):
         #       For Now we'll use Minor if verlib can parse it, else exact
         normalized = verlib.suggest_normalized_version(self.version)
         if normalized is not None:
-            ver = str(verlib.NormalizedVersion(normalized))
-            next_version = "%(major)s.%(minor)s" % {"major": ver.split(".")[0], "minor": int(ver.split(".")[1]) + 1}
+            ver = verlib.NormalizedVersion(normalized)
+            next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
             return "%(package)s>=%(current_version)s,<%(next_version)s" % {
                 "package": self.package.name,
                 "current_version": self.version,
