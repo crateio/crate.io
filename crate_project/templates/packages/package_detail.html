@@ -60,14 +60,16 @@
                                 {{ object.requirement_line }}
                             </div>
 
-                            <div id="classifiers">
-                                <h4>Classifiers</h4>
-                                <ul class="unstyled">
-                                    {% for classifier in object.classifiers.all %}
-                                        <li>{{ classifier.trove }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                            {% if object.classifiers.all %}
+                                <div id="classifiers">
+                                    <h4>Classifiers</h4>
+                                    <ul class="unstyled">
+                                        {% for classifier in object.classifiers.all %}
+                                            <li>{{ classifier.trove }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
 
                             <div class="row">
                                 <div class="span3">
