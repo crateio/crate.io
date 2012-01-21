@@ -2,7 +2,13 @@
 
 {% load i18n %}
 {% load humanize %}
+{% load markup %}
+{% load staticfiles %}
 {% load package_tags %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
+{% endblock %}
 
 {% block body_base %}
     <div class="container">
@@ -29,6 +35,7 @@
 
                     <div class="tab-content">
                         <div id="description" class="tab-pane fade">
+                            {{ object.description|restructuredtext }}
                         </div>
 
                         <div class="tab-pane fade in active" id="info">
@@ -131,4 +138,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script src="{% static "js/prettify/prettify.js" %}"></script>
+    <script>
+        $(function(){
+            $("#description pre.literal-block").addClass("prettyprint");
+            prettyPrint();
+        });
+    </script>
 {% endblock %}
