@@ -1,22 +1,32 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
+from django.utils.translation import ugettext as _
 from django.views.generic.detail import DetailView
 
-from packages.models import Package, Release
-
-
-class PackageDetail(DetailView):
-
-    model = Package
-    slug_url_kwarg = "name"
-    slug_field = "name"
+from packages.models import Release
 
 
 class ReleaseDetail(DetailView):
 
     model = Release
-    slug_url_kwarg = "version"
-    slug_field = "version"
 
-    def get_queryset(self):
-        qs = super(ReleaseDetail, self).get_queryset()
-        qs = qs.filter(package__name=self.kwargs["name"])
-        return qs
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        package = self.kwargs["package"]
+        version = self.kwargs.get("version", None)
+
+        queryset = queryset.filter(package__name=package)
+
+        if version:
+            queryset = queryset.filter(version=version)
+        else:
+            queryset = queryset.order_by("-order")[:1]
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            raise Http404(_(u"No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
