@@ -26,7 +26,11 @@
 
                     <div id="install-cmd">
                         <h4>Install</h4>
-                        {{ release.install_command }}
+                        {% if version_specific %}
+                            {{ release.install_command }}
+                        {% else %}
+                            {{ release.package.install_command }}
+                        {% endif %}
                     </div>
 
                     <ul id="package-tabs" class="nav tabs">

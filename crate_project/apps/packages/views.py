@@ -10,6 +10,13 @@ class ReleaseDetail(DetailView):
 
     model = Release
 
+    def get_context_data(self, **kwargs):
+        ctx = super(ReleaseDetail, self).get_context_data(**kwargs)
+        ctx.update({
+            "version_specific": self.kwargs.get("version", None),
+        })
+        return ctx
+
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
