@@ -185,10 +185,32 @@
                         </ul>
 
                         {% package_version_count release.package.name as total_versions %}
-                        <a href="" title="All Versions for {{ release.package.name }}">Show All Versions ({{ total_versions }} total)</a>
+                        <a data-toggle="modal" href="#all-versions" title="All Versions for {{ release.package.name }}">Show All Versions ({{ total_versions }} total)</a>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="all-versions" class="modal hide fade">
+        <div class="modal-header">
+            <a href="#" class="close" data-dismiss="modal">×</a>
+            <h3>{{ release.package.name }} Versions</h3>
+        </div>
+
+        <div class="modal-body">
+            {% package_versions release.package.name as latest_versions %}
+
+            <ul class="unstyled">
+                {% for version in latest_versions %}
+                    <li>
+                        <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">
+                            {{ version.version }}
+                        </a>
+                        <span class="date">{{ version.created|date:"DATE_FORMAT" }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 {% endblock %}
