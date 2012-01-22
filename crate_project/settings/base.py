@@ -2,6 +2,7 @@
 # Django settings for basic pinax project.
 
 import os.path
+import posixpath
 
 import djcelery
 
@@ -230,5 +231,3 @@ LOGGING = {
 }
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
-
-PYPI_SAVE_FILE = False
