@@ -144,6 +144,7 @@ INSTALLED_APPS = [
     "djcelery",
     "django_hosts",
     "haystack",
+    "cumulus",
 
     # project
     "about",
