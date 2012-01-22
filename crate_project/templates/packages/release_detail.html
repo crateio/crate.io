@@ -135,7 +135,7 @@
                                             <td><a href="{{ file.get_absolute_url }}">{{ file.file.name|filename }}</a> (<a data-toggle="modal" href="#digest-{{ file.pk }}">{{ file.digest|digest_type }}</a>)</td>
                                             <td>{{ file.get_type_display }}</td>
                                             <td>{{ file.get_python_version_display }}</td>
-                                            <td>@@@ Upload Date</td>
+                                            <td>{{ file.created|date:"DATE_FORMAT" }}</td>
                                             <td>{{ file.file.size|filesizeformat }}</td>
                                             <td>{{ file.downloads|intcomma }}</td>
                                         </tr>
