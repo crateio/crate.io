@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # @@@ We Need to be sure to remove Packages/Releases/Files if they've been removed in PyPI Proper
 #       There's multiple ways to go about this; We could just do what PyPI does and allow release files to be
 #       deleted. Another option is to do something similar to rubygems and translate deleting a file to yanking
-#       a file. This way the fact it existed is still recorded?
+#       a file. This way the fact it existed is still recorded?  (This is Almost Done).
 # @@@ Do We need to mirror The Server Sig's as well? (Our Simple Pages have different markup)
 # @@@ We could make mirroring smarter (Don't reprocess on simple things like doc updates, or owner add/remove etc.)
 # @@@ We want to log why a particular package is failing,
@@ -41,6 +41,9 @@ logger = logging.getLogger(__name__)
 # @@@ If we APIize accessing the Crate site (updating metadata, saving files etc), we can set this up so that
 #       these tasks can run anywhere, including S3/Cloud Servers/A Linode Box. Currently they require DB access.
 # @@@ Update the Created of Package and Release based on oldest files
+# @@@ Make Updating Download Counts Smarter. We don't need to sync all packages on every sync. We should do something
+#       Like figure out how volatile a package's download counts are, and the more volatile they are, the more often they
+#       get synced.
 
 _md5_fragment_re = re.compile(r"#md5=([a-zA-Z0-9]{32})")
 _disutils2_version_capture = re.compile("^(.*?)(?:\(([^()]+)\))?$")
@@ -421,8 +424,8 @@ def synchronize_downloads(index=None):
         index = "http://pypi.python.org/"
 
     try:
+        # @@@ This Query is Slow, need to make it better
         for release in Release.objects.exclude(files=None).select_related("package").prefetch_related("files"):
-            print release.package.name, release.version
             update_download_counts.delay(release.package.name, release.version, {x.filename: x.pk for x in release.files.all()}, index=index)
     except Exception:
         raise
