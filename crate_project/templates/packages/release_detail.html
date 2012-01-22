@@ -171,7 +171,7 @@
 
                     <h3>Versions</h3>
                     <div class="versions">
-                        {% package_versions release.package.name as latest_versions %}
+                        {% package_versions release.package.name 5 as latest_versions %}
 
                         <ul class="unstyled">
                             {% for version in latest_versions %}
