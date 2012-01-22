@@ -1,0 +1,47 @@
+{% extends "site_base.html" %}
+
+{% load staticfiles %}
+
+{% block body %}
+    <style>
+        body { padding-top: 30px;}
+    </style>
+    <div id="beta" style="background: url({% static 'img/beta.png' %}); width: 988px; height: 465px;" >
+    </div>
+
+    <div id="betasignup" class="modal hide">
+        <div class="modal-header">
+            <h3>Crate Private Beta</h3>
+        </div>
+
+        <div class="modal-body">
+            {% if not submitted %}
+                <h4>Hi There!</h4>
+                <p>As you can probably see, we are currently in private beta. We are trying to work out the kinks
+                and we hope to be available soon. If you wish to be notified when we launch, or you want a chance for
+                a beta invite, please add your email to the list!</p>
+
+                <form class="well form-search" action="." method="POST">
+                    {% csrf_token %}
+
+                    {{ form.non_field_errors }}
+
+                    {% for field in form %}
+                            {{ field }}
+                            {% if field.errors %}
+                                <span class="help-inline">{{ field.errors }}</span>
+                            {% endif %}
+                    {% endfor %}
+                    <button type="submit" class="btn primary">Let Me Know!</button>
+                </form>
+            {% else %}
+                <h4>Thanks!</h4>
+                <p>Thanks for showing interest! We should be ready soon, and we'll let you know ASAP!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        $("#betasignup").modal({keyboard: false, backdrop: false});
+    </script>
+{% endblock %}

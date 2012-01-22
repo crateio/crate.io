@@ -9,7 +9,8 @@
 
 # Django==1.4  # Wait for Django 1.4 to be released
 -e git+https://github.com/django/django.git@22f676e9e0d67886bdc287322a300c5107bfa756#egg=Django
-Pinax
+-e git+https://github.com/dstufft/pinax.git#egg=Pinax
+
 
 django-debug-toolbar==0.9.4
 django-staticfiles==1.1.2
