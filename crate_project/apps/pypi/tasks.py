@@ -12,6 +12,7 @@ import requests
 from celery.exceptions import SoftTimeLimitExceeded
 from celery.task import task
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.utils.timezone import utc
@@ -317,6 +318,7 @@ def process_release_urls(package_name, version, index=None):
 
 @task(time_limit=650, soft_time_limit=600)
 def download_release(package_name, version, data):
+    SAVE_FILE = getattr(settings, "PYPI_SAVE_FILE", True)
     try:
         with transaction.commit_on_success():
             package, _ = Package.objects.get_or_create(name=package_name)
@@ -378,7 +380,10 @@ def download_release(package_name, version, data):
                 # @@@ There's No Rollbacks on this. Is there a way we can postpone this?
                 release_file.file.delete()
 
-            release_file.file.save(data["filename"], ContentFile(resp.content), save=True)
+            if SAVE_FILE:
+                release_file.file.save(data["filename"], ContentFile(resp.content), save=True)
+            else:
+                release_file.save()
 
             package_modified.md5 = data["md5_digest"].lower()
             package_modified.last_modified = resp.headers.get("Last-Modified")
