@@ -152,6 +152,7 @@ INSTALLED_APPS = [
     "pypi",
     "search",
     "crate",
+    "privatebeta",
 ]
 
 FIXTURE_DIRS = [
