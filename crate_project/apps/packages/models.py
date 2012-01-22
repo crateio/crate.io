@@ -169,6 +169,9 @@ class ReleaseFile(TimeStampedModel):
     def __unicode__(self):
         return os.path.basename(self.file.name)
 
+    def get_absolute_url(self):
+        return self.file.url
+
     def get_python_version_display(self):
         if self.python_version.lower() == "source":
             return ""
