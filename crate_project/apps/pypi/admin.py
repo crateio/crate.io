@@ -22,7 +22,9 @@ class PackageModifiedAdmin(admin.ModelAdmin):
 
 
 class TaskLogAdmin(admin.ModelAdmin):
-    pass
+    list_display = ["task_id", "status", "name", "created", "modified"]
+    list_filter = ["status", "name", "created", "modified"]
+    search_fields = ["task_id"]
 
 
 admin.site.register(ChangeLog, ChangeLogAdmin)
