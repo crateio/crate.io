@@ -95,7 +95,7 @@ class Release(TimeStampedModel):
     requires_python = models.CharField(max_length=25, blank=True)
 
     download_uri = models.URLField(max_length=1024, blank=True)
-    uris = hstore.DictionaryField()
+    # uris = hstore.DictionaryField()
 
     classifiers = models.ManyToManyField(TroveClassifier, related_name="releases", blank=True)
 
