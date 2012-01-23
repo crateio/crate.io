@@ -98,7 +98,7 @@ class Release(TimeStampedModel):
 
     classifiers = models.ManyToManyField(TroveClassifier, related_name="releases", blank=True)
 
-    raw_data = JSONField(null=True)
+    raw_data = JSONField(null=True, blank=True)
 
     class Meta:
         unique_together = ("package", "version")
