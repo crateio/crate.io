@@ -1,4 +1,6 @@
 import os
+import posixpath
+import uuid
 
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -11,6 +13,16 @@ from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
 from packages.utils import verlib
+
+
+def release_file_upload_to(instance, filename):
+    dsplit = instance.digest.split("$")
+    if len(dsplit) == 2:
+        directory = dsplit[1]
+    else:
+        directory = str(uuid.uuid4()).replace("-", "")
+
+    return posixpath.join("packages", directory, filename)
 
 
 # @@@ These are by Nature Hierarchical. Would we benefit from a tree structure?
@@ -151,7 +163,7 @@ class ReleaseFile(TimeStampedModel):
     release = models.ForeignKey(Release, related_name="files")
 
     type = models.CharField(max_length=25, choices=TYPES)
-    file = models.FileField(upload_to="packages", max_length=512)
+    file = models.FileField(upload_to=release_file_upload_to, max_length=512)
     filename = models.CharField(max_length=200, help_text="This is the file name given to us by PyPI", blank=True, null=True, default=None)
     digest = models.CharField(max_length=512)
 
