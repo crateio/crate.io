@@ -64,3 +64,9 @@ def deploy(instance=None):
     compile()
 
     local("gondor deploy %(instance)s %(branch)s" % {"instance": instance, "branch": branch})
+
+
+@task
+def host():
+    BASE_DIR = os.path.dirname(env["real_fabfile"])
+    local("%s runserver" % os.path.join(BASE_DIR, "manage.py"))
