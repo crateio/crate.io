@@ -10,13 +10,17 @@ from packages.models import Package
 class PackageIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField(model_attr="name", boost=1.5)
-    summary = indexes.CharField(model_attr="summary", null=True)
+    summary = indexes.CharField(null=True)
 
     downloads = indexes.IntegerField(model_attr="downloads", indexed=False)
     url = indexes.CharField(model_attr="get_absolute_url", indexed=False)
 
     def get_model(self):
         return Package
+
+    def prepare_summary(self, obj):
+        if obj.latest:
+            return obj.latest.summary
 
     def prepare(self, obj):
         data = super(PackageIndex, self).prepare(obj)
