@@ -8,3 +8,6 @@ migrations = south
 staticfiles = on
 site_media_url = /site_media
 settings_module = crate_project.settings.production.gondor
+
+[files]
+include = secret_settings.py

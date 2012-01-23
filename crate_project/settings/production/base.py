@@ -8,6 +8,10 @@ DEFAULT_FROM_EMAIL = "support@crate.io"
 
 MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
+DEFAULT_FILE_STORAGE = "cumulus.storage.CloudFilesStorage"
+
+CUMULUS_CONTAINER = "crate-production"
+
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
     "/account/signup/",

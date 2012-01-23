@@ -1,6 +1,7 @@
 from .base import *
 
 from local_settings import *
+from secret_settings import *
 
 # Fix Database Engine for hstore
 DATABASES["default"]["ENGINE"] = "django_hstore.postgresql_psycopg2"
