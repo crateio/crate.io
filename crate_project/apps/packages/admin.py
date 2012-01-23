@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from packages.models import Package, Release, ReleaseFile, TroveClassifier
-from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete
+from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
 
 
 class PackageAdmin(admin.ModelAdmin):
@@ -30,8 +30,13 @@ class ReleaseFileInline(admin.TabularInline):
     extra = 0
 
 
+class ReleaseURIInline(admin.TabularInline):
+    model = ReleaseURI
+    extra = 0
+
+
 class ReleaseAdmin(admin.ModelAdmin):
-    inlines = [ReleaseFileInline, ReleaseRequireInline, ReleaseProvideInline, ReleaseObsoleteInline]
+    inlines = [ReleaseURIInline, ReleaseFileInline, ReleaseRequireInline, ReleaseProvideInline, ReleaseObsoleteInline]
     list_display = ["__unicode__", "package", "version", "summary", "author", "author_email", "maintainer", "maintainer_email", "created", "modified"]
     list_filter = ["created", "modified", "hidden"]
     search_fields = ["package__name", "version", "summary", "author", "author_email", "maintainer", "maintainer_email"]

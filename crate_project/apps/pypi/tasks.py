@@ -19,7 +19,7 @@ from django.db import transaction
 from django.utils.timezone import utc
 
 from packages.models import Package, Release, TroveClassifier
-from packages.models import ReleaseFile, ReleaseRequire, ReleaseProvide, ReleaseObsolete
+from packages.models import ReleaseFile, ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
 from pypi.models import ChangeLog, Log, PackageModified, TaskLog
 
 
@@ -200,12 +200,13 @@ def process_release_data(package_name, version, index=None):
                     current_obsoletes = set(release.provides.all())
 
                     # Cleanup URI's
-                    release.uris = {}
+                    current_uris = set([x.label for x in release.uris.all()])
                 else:
                     current_classifiers = set()
                     current_requires = set()
                     current_provides = set()
                     current_obsoletes = set()
+                    current_uris = set()
 
                 release.summary = get_release_data(data, "summary")
                 release.description = get_release_data(data, "description")
@@ -217,14 +218,20 @@ def process_release_data(package_name, version, index=None):
                 release.maintainer_email = get_release_data(data, "maintainer_email")
 
                 if get_release_data(data, "home_page"):
-                    release.uris["Home Page"] = get_release_data(data, "home_page")
-                elif "Home Page" in release.uris:
-                    del release.uris["Home Page"]
+                    ru, c = ReleaseURI.objects.get_or_create(release=release, label="Home Page", defaults={"uri": get_release_data(data, "home_page")})
+                    if not c and ru.uri != get_release_data(data, "home_page"):
+                        ru.uri = get_release_data(data, "home_page")
+                        ru.save()
+                elif "Home Page" in current_uris:
+                    ReleaseURI.objects.filter(release=release, label="Home Page").delete()
 
                 if get_release_data(data, "bugtrack_url"):
-                    release.uris["Bug Tracker"] = get_release_data(data, "bugtrack_url")
-                elif "Bug Tracker" in release.uris:
-                    del release.uris["Bug Tracker"]
+                    ru, c = ReleaseURI.objects.get_or_create(release=release, label="Bug Tracker", defaults={"uri": get_release_data(data, "bugtrack_url")})
+                    if not c and ru.uri != get_release_data(data, "bugtrack_url"):
+                        ru.uri = get_release_data(data, "bugtrack_url")
+                        ru.save()
+                elif "Bug Tracker" in current_uris:
+                    ReleaseURI.objects.filter(release=release, label="Bug Tracker").delete()
 
                 release.license = get_release_data(data, "license")
 
@@ -245,7 +252,13 @@ def process_release_data(package_name, version, index=None):
                     release.classifiers.remove(*current_classifiers)
 
                 for key, url in [x.split(",", 1) for x in get_release_data(data, "project_url", [])]:
-                    release.uris[key] = url
+                    ru, c = ReleaseURI.objects.get_or_create(release=release, label=key, defaults={"uri": url})
+
+                    if key in current_uris:
+                        current_uris.remove(url)
+
+                if current_uris:
+                    ReleaseURI.object.filter(release=release, uri__in=current_uris).delete()
 
                 release.requires_python = get_release_data(data, "required_python")
 

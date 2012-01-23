@@ -5,7 +5,6 @@
 
 # Database
 psycopg2==2.4.1
--e git+https://github.com/jordanm/django-hstore.git#egg=django-hstore
 -e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
 django-uuidfield==0.2
 

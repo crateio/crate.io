@@ -6,7 +6,6 @@ from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from django_hstore import hstore
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
@@ -101,8 +100,6 @@ class Release(TimeStampedModel):
 
     raw_data = JSONField(null=True)
 
-    objects = hstore.Manager()
-
     class Meta:
         unique_together = ("package", "version")
 
@@ -176,6 +173,12 @@ class ReleaseFile(TimeStampedModel):
         if self.python_version.lower() == "source":
             return ""
         return self.python_version
+
+
+class ReleaseURI(models.Model):
+    release = models.ForeignKey(Release, related_name="uris")
+    label = models.CharField(max_length=64)
+    uri = models.URLField(max_length=500)
 
 
 class ReleaseRequire(models.Model):
