@@ -31,7 +31,7 @@ def compile():
         for f in files_to_compile:
             filename = os.path.splitext(os.path.basename(f))[0] + ".css"
             output_file = os.path.join(BASE_DIR, "crate_project", "static", "css", filename)
-            local(" ".join(["lessc", f, output_file]))
+            local(" ".join(["lessc -x", f, output_file]))
             local("git add %s" % output_file)
 
         pending = False
