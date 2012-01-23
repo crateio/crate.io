@@ -379,6 +379,16 @@ def download_release(package_name, version, data):
                 # The Server Didn't give us Last Modified Information so we shouldn't
                 # store it anymore.
                 package_modified.delete()
+
+            # Update the Creation Dates of Release
+            if release.created > release_file.created:
+                release.created = release_file.created
+                release.save()
+
+            # Update the Creation Dates of Package
+            if package.created > release_file.created:
+                package.created = release_file.created
+                package.save()
     except (SoftTimeLimitExceeded, OSError, socket.error) as e:
         download_release.retry(exc=e)
     except Exception as e:
