@@ -15,6 +15,8 @@ STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
 AWS_STORAGE_BUCKET_NAME = "crate-production"
 
+AWS_S3_CUSTOM_DOMAIN = "packages.crate.io"
+
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
     "/account/signup/",
