@@ -12,7 +12,7 @@ MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
 DEFAULT_FILE_STORAGE = "cumulus.storage.CloudFilesStorage"
 
-CUMULUS_CONTAINER = "crate-production"
+CUMULUS_CONTAINER = "crate-primary"
 
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
