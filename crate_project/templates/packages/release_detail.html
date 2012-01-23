@@ -136,7 +136,7 @@
                                             <td>{{ file.get_type_display }}</td>
                                             <td>{{ file.get_python_version_display }}</td>
                                             <td>{{ file.created|date:"DATE_FORMAT" }}</td>
-                                            <td>{{ file.file.size|filesizeformat }}</td>
+                                            <td>{# {{ file.file.size|filesizeformat }} #}</td>
                                             <td>{{ file.downloads|intcomma }}</td>
                                         </tr>
                                     {% endfor %}
