@@ -20,20 +20,78 @@
         <form method="GET" action="." class="well form-search">
             {{ form.non_field_errors }}
 
-            {% for field in form %}
-                {{ field }}
-            {% endfor %}
+            <div class="field-wrapper">
+                {{ form.q.errors }}
+                <label for="id-search" style="display: none;">Search:</label>
+                {{ form.q }}
+            </div>
+
+            <fieldset>
+                <title>Advanced Options</title>
+
+                <div class="field-wrapper">
+                    {{ form.has_releases.errors }}
+                    <label for="id-has_releases">Has Releases:</label>
+                    {{ form.has_releases }}
+                </div>
+
+                <div class="field-wrapper">
+                    {{ form.start_date.errors }}
+                    <label for="id-start_date">Start Date:</label>
+                    {{ form.start_date }}
+                </div>
+
+                <div class="field-wrapper">
+                    {{ form.end_date.errors }}
+                    <label for="id-end_date">End Date:</label>
+                    {{ form.end_date }}
+                </div>
+            </fieldset>
 
             <input type="submit" class="btn primary" value="Search">
         </form>
 
-        {% for result in results %}
-            <div class="results">
-                {% include "search/partials/package.html" with result=result %}
-            </div>
-        {% empty %}
-            <p>No results found.</p>
-        {% endfor %}
+        <div class="facets" style="background-color: #F5F5F5; border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 4px 4px 4px 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset; float: left; padding: 10px; margin: 0 20px 20px 0; width: 200px;">
+            {% if facets.fields and facets.fields.platform %}
+            <h3>By Platform</h3>
+
+            <ul>
+                {% for plat in facets.fields.platform %}
+                <li><a href="?platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} - {{ plat.1 }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if facets.fields and facets.fields.license %}
+            <h3>By License</h3>
+
+            <ul>
+                {% for lice in facets.fields.license %}
+                <li><a href="?license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+
+            {% if facets.dates and facets.dates.modified %}
+            <h3>By Date</h3>
+
+            <ul>
+                {% for mod in facets.dates.modified %}
+                <li><a href="?start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+
+        <div class="results-wrapper" style="float: left; width: 690px;">
+            {% for result in results %}
+                <div class="results">
+                    {% include "search/partials/package.html" with result=result %}
+                </div>
+            {% empty %}
+                <p>No results found.</p>
+            {% endfor %}
+        </div>
 
         {% if is_paginated %}
             <div class="pagination">

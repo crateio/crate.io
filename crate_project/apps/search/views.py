@@ -1,3 +1,4 @@
+import datetime
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404
@@ -6,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import FormMixin
 
+from model_utils.fields import now
 from search.forms import SearchForm
 
 
@@ -89,12 +91,27 @@ class Search(TemplateResponseMixin, FormMixin, View):
     def form_valid(self, form):
         query = form.cleaned_data["q"]
         results = form.search()
+        narrow = []
+
+        # Check for facets.
+        if self.request.GET.get('platform'):
+            narrow.append('platform:%s' % self.request.GET.get('platform'))
+
+        if self.request.GET.get('license'):
+            narrow.append('license:%s' % self.request.GET.get('license'))
+
+        if len(narrow):
+            results = results.narrow(' AND '.join(narrow))
 
         page_size = self.get_paginate_by()
 
         if page_size:
+            start_date = form.cleaned_data['start_date'] or datetime.date(1980, 1, 1)
+            end_date = form.cleaned_data['end_date'] or now()
+            facets = results.facet('platform').facet('license').date_facet('modified', start_date, end_date, 'month').facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
         else:
+            facets = {}
             paginator, page, is_paginated = None, None, False
 
         ctx = {
@@ -104,6 +121,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
             "page": page,
             "paginator": paginator,
             "is_paginated": is_paginated,
+            "facets": facets
         }
 
         return self.render_to_response(self.get_context_data(**ctx))
