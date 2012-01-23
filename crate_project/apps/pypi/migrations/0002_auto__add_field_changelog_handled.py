@@ -46,7 +46,6 @@ class Migration(SchemaMigration):
             'raw_data': ('crate.fields.json.JSONField', [], {'null': 'True'}),
             'requires_python': ('django.db.models.fields.CharField', [], {'max_length': '25', 'blank': 'True'}),
             'summary': ('django.db.models.fields.TextField', [], {}),
-            'uris': ('django_hstore.hstore.DictionaryField', [], {}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '512'})
         },
         'packages.releasefile': {
