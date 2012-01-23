@@ -26,7 +26,7 @@ INTERNAL_IPS = [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django_hstore.postgresql_psycopg2",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "crate",
     }
 }
