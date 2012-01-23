@@ -237,6 +237,7 @@ LOGGING = {
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
 
 AWS_QUERYSTRING_AUTH = False
+AWS_S3_SECURE_URLS = False
 
 AWS_HEADERS = {
     "Expires": lambda: http_date(time.mktime((datetime.datetime.now() + datetime.timedelta(days=365)).timetuple())),
