@@ -2,7 +2,10 @@
 # Django settings for basic pinax project.
 
 import os.path
-import posixpath
+import datetime
+import time
+
+from django.utils.http import http_date
 
 import djcelery
 
@@ -232,3 +235,8 @@ LOGGING = {
 }
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
+
+AWS_HEADERS = {
+    "Expires": lambda x: http_date(time.mktime((datetime.datetime.now() + datetime.timedelta(days=365)).timetuple())),
+    "Cache-Control": "max-age=31556926",
+}

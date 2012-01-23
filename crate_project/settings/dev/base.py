@@ -40,3 +40,7 @@ HAYSTACK_CONNECTIONS = {
         "INDEX_NAME": "crate",
     },
 }
+
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+
+AWS_STORAGE_BUCKET_NAME = "crate-dev"

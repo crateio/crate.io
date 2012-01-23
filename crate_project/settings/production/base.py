@@ -1,5 +1,3 @@
-import datetime
-
 from ..base import *
 
 SITE_ID = 3
@@ -15,13 +13,7 @@ MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
-AWS_STORAGE_BUCKET_NAME = ""
-
-AWS_HEADERS = {
-    "Expires": lambda x: (datetime.datetime.now() + datetime.timedelta(days=365)).strftime("%a, %d %b %Y %H:%M:%S GMT"),
-    "Cache-Control": "max-age=31556926",
-}
-
+AWS_STORAGE_BUCKET_NAME = "crate-production"
 
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
