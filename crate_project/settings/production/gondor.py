@@ -7,8 +7,7 @@ from secret_settings import *
 SERVER_EMAIL = "server@crate.io"
 DEFAULT_FROM_EMAIL = "donald@crate.io"
 
-# Fix Database Engine for hstore
-DATABASES["default"]["ENGINE"] = "django_hstore.postgresql_psycopg2"
+DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql_psycopg2"
 
 # Configure Celery
 BROKER_TRANSPORT = "redis"
