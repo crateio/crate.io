@@ -30,9 +30,13 @@
                     <form method="GET" action="." class="form-search">
                         {{ form.non_field_errors }}
 
-                        {% for field in form %}
-                            {{ field }}
-                        {% endfor %}
+                        <div class="field-wrapper">
+                            {{ form.q.errors }}
+                            <label for="id-search" style="display: none;">Search:</label>
+                            {{ form.q }}
+                        </div>
+
+                        <input type="hidden" name="has_releases" value="on">
 
                         <input type="submit" class="btn primary" value="Search">
                     </form>
