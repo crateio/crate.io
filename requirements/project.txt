@@ -42,8 +42,8 @@ pysolr==2.1.0-beta
 docutils==0.8.1
 
 # Storage
-python-cloudfiles==1.7.9.3
-django-cumulus==1.0.4
+boto==2.1.1
+django-storages==1.1.4
 
 # Management
 gondor==1.0.1

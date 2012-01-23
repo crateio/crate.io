@@ -1,3 +1,5 @@
+import datetime
+
 from ..base import *
 
 SITE_ID = 3
@@ -10,9 +12,16 @@ CONTACT_EMAIL = "donald@crate.io"
 
 MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
-DEFAULT_FILE_STORAGE = "cumulus.storage.CloudFilesStorage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
-CUMULUS_CONTAINER = "crate-primary"
+AWS_STORAGE_BUCKET_NAME = ""
+
+AWS_HEADERS = {
+    "Expires": lambda x: (datetime.datetime.now() + datetime.timedelta(days=365)).strftime("%a, %d %b %Y %H:%M:%S GMT"),
+    "Cache-Control": "max-age=31556926",
+}
+
 
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
