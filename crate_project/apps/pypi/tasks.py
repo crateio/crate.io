@@ -23,23 +23,11 @@ from pypi.models import ChangeLog, Log, PackageModified
 
 logger = logging.getLogger(__name__)
 
-# @@@ Mirror Non PyPI Hosted Packages (Requires Link Scraping; Maybe Pip has something we can use.)
 # @@@ Do We need to mirror The Server Sig's as well? (Our Simple Pages have different markup)
-# @@@ We could make mirroring smarter (Don't reprocess on simple things like doc updates, or owner add/remove etc.)
 # @@@ We want to log why a particular package is failing,
 #       Should We Present this Information to the Average User? The Package Owner?
 # @@@ Can we use the has_sig or the server sig (are they the same?) to verify a file download
 #       on top of the md5 hash?
-# @@@ PyPI Parses links out of the body of long description and includes them on the simple page, we should do the same.
-# @@@ Need The Special Pages that PyPI requires (stats, last refreshed ETC)
-# @@@ Network Issues can cause missing packages; Somehow we should catch these exceptions and add them for later
-#       retry (outside of celery's normal retry methods)
-# @@@ If we APIize accessing the Crate site (updating metadata, saving files etc), we can set this up so that
-#       these tasks can run anywhere, including S3/Cloud Servers/A Linode Box. Currently they require DB access.
-# @@@ Update the Created of Package and Release based on oldest files
-# @@@ Make Updating Download Counts Smarter. We don't need to sync all packages on every sync. We should do something
-#       Like figure out how volatile a package's download counts are, and the more volatile they are, the more often they
-#       get synced.
 
 _md5_fragment_re = re.compile(r"#md5=([a-zA-Z0-9]{32})")
 _disutils2_version_capture = re.compile("^(.*?)(?:\(([^()]+)\))?$")
@@ -213,7 +201,6 @@ def process_release_data(package_name, version, index=None):
 
                 release.license = get_release_data(data, "license")
 
-                # @@@ I'd Love for this to be tags
                 release.keywords = get_release_data(data, "keywords")
 
                 release.platform = get_release_data(data, "platform")
