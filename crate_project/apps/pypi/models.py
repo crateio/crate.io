@@ -29,6 +29,7 @@ class ChangeLog(TimeStampedModel):
     version = models.CharField(max_length=150, null=True, blank=True)
     timestamp = models.DateTimeField()
     action = models.TextField(blank=True, null=True)
+    handled = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["-timestamp"]

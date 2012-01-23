@@ -24,10 +24,6 @@ from pypi.models import ChangeLog, Log, PackageModified
 logger = logging.getLogger(__name__)
 
 # @@@ Mirror Non PyPI Hosted Packages (Requires Link Scraping; Maybe Pip has something we can use.)
-# @@@ We Need to be sure to remove Packages/Releases/Files if they've been removed in PyPI Proper
-#       There's multiple ways to go about this; We could just do what PyPI does and allow release files to be
-#       deleted. Another option is to do something similar to rubygems and translate deleting a file to yanking
-#       a file. This way the fact it existed is still recorded?  (This is Almost Done).
 # @@@ Do We need to mirror The Server Sig's as well? (Our Simple Pages have different markup)
 # @@@ We could make mirroring smarter (Don't reprocess on simple things like doc updates, or owner add/remove etc.)
 # @@@ We want to log why a particular package is failing,
@@ -106,33 +102,36 @@ def synchronize_mirror(index=None, since=None):
             for item in changelog:
                 name, version, timestamp, action = item
 
-                # @@@ Eventually We Probably Want To Get Rid of This?
-                dt = datetime.datetime.fromtimestamp(timestamp).replace(tzinfo=utc)
-                ChangeLog.objects.create(package=name, version=version, timestamp=dt, action=action)
+                handled = False
 
                 if action.startswith("new") or action.startswith("add") or action.startswith("create"):
                     names.add(name)
+                    handled = True
                 elif action.startswith("update"):
                     # This techincally doesn't need to trigger a download, but it's the best way currently to
                     #   get the updated meta data.
                     names.add(name)
+                    handled = True
                 elif action == "remove":
-                    print " ".join([str(x) for x in ["-", name, version, timestamp, action]])
                     if version is None:
                         Package.objects.filter(name=name).delete()
                     else:
                         Release.objects.filter(package__name=name, version=version).delete()
+                    handled = True
                 elif action.startswith("remove file"):
-                    print " ".join([str(x) for x in ["--", name, version, timestamp, action]])
                     filename = action[12:]
                     ReleaseFile.objects.filter(release__package__name=name, release__version=version, filename=filename).delete()
+                    handled = True
                 elif action == "docupdate":
-                    continue
+                    handled = True
                 elif action.startswith("remove Owner"):
-                    continue
+                    handled = True
                 else:
                     names.add(name)
-                    print " ".join([str(x) for x in ["=", name, version, timestamp, action]])
+
+                # @@@ Eventually We Probably Want To Get Rid of This?
+                dt = datetime.datetime.fromtimestamp(timestamp).replace(tzinfo=utc)
+                ChangeLog.objects.create(package=name, version=version, timestamp=dt, action=action, handled=handled)
 
         for name in names:
             process_package.delay(name, index=index)

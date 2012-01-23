@@ -4,8 +4,8 @@ from pypi.models import ChangeLog, Log, PackageModified
 
 
 class ChangeLogAdmin(admin.ModelAdmin):
-    list_display = ["package", "version", "timestamp", "action"]
-    list_filter = ["timestamp"]
+    list_display = ["package", "version", "timestamp", "action", "handled"]
+    list_filter = ["timestamp", "handled"]
     search_fields = ["package", "action"]
 
 
