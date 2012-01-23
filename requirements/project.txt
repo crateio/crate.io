@@ -36,6 +36,7 @@ django-hosts==0.4.1
 # Search
 -e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
 -e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
+pysolr==2.1.0-beta
 
 # Markup
 docutils==0.8.1
