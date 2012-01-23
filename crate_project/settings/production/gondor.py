@@ -3,6 +3,10 @@ from .base import *
 from local_settings import *
 from secret_settings import *
 
+# Fix Email Settings
+SERVER_EMAIL = "server@crate.io"
+DEFAULT_FROM_EMAIL = "donald@crate.io"
+
 # Fix Database Engine for hstore
 DATABASES["default"]["ENGINE"] = "django_hstore.postgresql_psycopg2"
 
