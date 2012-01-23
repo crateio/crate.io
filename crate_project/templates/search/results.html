@@ -57,7 +57,7 @@
 
             <ul>
                 {% for plat in facets.fields.platform %}
-                <li><a href="?platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} - {{ plat.1 }}</a></li>
+                <li><a href="?{{ query_params }}&amp;platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} - {{ plat.1 }}</a></li>
                 {% endfor %}
             </ul>
             {% endif %}
@@ -67,7 +67,7 @@
 
             <ul>
                 {% for lice in facets.fields.license %}
-                <li><a href="?license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
+                <li><a href="?{{ query_params }}&amp;license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
                 {% endfor %}
             </ul>
             {% endif %}
@@ -77,7 +77,7 @@
 
             <ul>
                 {% for mod in facets.dates.modified %}
-                <li><a href="?start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
+                <li><a href="?{{ query_params }}&amp;start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
                 {% endfor %}
             </ul>
             {% endif %}

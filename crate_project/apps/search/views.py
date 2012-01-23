@@ -1,4 +1,5 @@
 import datetime
+import urllib
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404
@@ -110,8 +111,17 @@ class Search(TemplateResponseMixin, FormMixin, View):
             end_date = form.cleaned_data['end_date'] or now()
             facets = results.facet('platform').facet('license').date_facet('modified', start_date, end_date, 'month').facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
+
+            # Grumble.
+            duped = self.request.GET.copy()
+            try:
+                del duped['page']
+            except KeyError:
+                pass
+            query_params = urllib.urlencode(duped, doseq=True)
         else:
             facets = {}
+            query_params = ''
             paginator, page, is_paginated = None, None, False
 
         ctx = {
@@ -121,7 +131,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
             "page": page,
             "paginator": paginator,
             "is_paginated": is_paginated,
-            "facets": facets
+            "facets": facets,
+            "query_params": query_params,
         }
 
         return self.render_to_response(self.get_context_data(**ctx))
