@@ -9,7 +9,7 @@ psycopg2==2.4.1
 -e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
 
 # Utility
--e git+git@github.com:dstufft/django-model-utils.git@31e5fb3c4a8a33cb88165ef4e1025c4647ec6b4a#egg=django-model-utils
+-e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
 
 # Celery
 redis==2.4.11
@@ -21,7 +21,7 @@ celery==2.4.6
 
 # Django Celery
 django-picklefield==0.1.9
--e git+git@github.com:dstufft/django-celery.git@e9a1d4d2f9e76e30c917b4bdb3c3a1b872e61816#egg=django-celery
+-e git+https://github.com/ask/django-celery.git@1031e4251e9df1f16b9d2bf50c3441402317f738#egg=django-celery
 
 # Private Beta
 privatebeta==0.4.1
