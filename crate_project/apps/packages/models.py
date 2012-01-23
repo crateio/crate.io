@@ -29,7 +29,7 @@ class Package(TimeStampedModel):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("package_detail", kwargs={"name": self.name})
+        return reverse("package_detail", kwargs={"package": self.name})
 
     @property
     def downloads(self):
