@@ -4,7 +4,9 @@ import logging
 import posixpath
 import re
 import socket
+import sys
 import time
+import traceback
 import xmlrpclib
 
 import requests
@@ -18,7 +20,7 @@ from django.utils.timezone import utc
 
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseFile, ReleaseRequire, ReleaseProvide, ReleaseObsolete
-from pypi.models import ChangeLog, Log, PackageModified
+from pypi.models import ChangeLog, Log, PackageModified, TaskLog
 
 
 logger = logging.getLogger(__name__)
@@ -55,6 +57,28 @@ class PackageHashMismatch(Exception):
     """
     Raised when the hash on the package didn't match what we expected.
     """
+
+
+def task_log(task_id, status, name, args, kwargs, exception=None):
+    defaults = {
+        "status": status,
+        "name": name,
+        "args": str(args),
+        "kwargs": str(kwargs),
+    }
+
+    if exception is not None:
+        exc = "".join(traceback.format_exception(*exception))
+        defaults.update({"exception": exc})
+
+    tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
+
+    if not c:
+        tlog.status = TaskLog.STATUS.retry
+        tlog.exception = exc
+        tlog.save()
+
+    return tlog
 
 
 @task(time_limit=120, soft_time_limit=60)
@@ -142,9 +166,12 @@ def process_package(name, index=None):
         for release in releases:
             process_release_data.delay(name, release)
     except (SoftTimeLimitExceeded, socket.error, xmlrpclib.ProtocolError) as e:
+        task_log(process_package.request.id, TaskLog.STATUS.retry, process_package.name, [name], {"index": index}, exception=sys.exc_info())
         process_package.retry(exc=e)
     except Exception:
-        raise
+        task_log(process_package.request.id, TaskLog.STATUS.failed, process_package.name, [name], {"index": index}, exception=sys.exc_info())
+    else:
+        task_log(process_package.request.id, TaskLog.STATUS.success, process_package.name, [name], {"index": index})
 
 
 @task(default_retry_delay=30 * 60)
@@ -280,9 +307,13 @@ def process_release_data(package_name, version, index=None):
 
             process_release_urls.delay(package_name, version)
     except (SoftTimeLimitExceeded, socket.error, xmlrpclib.ProtocolError) as e:
+        task_log(process_release_data.request.id, TaskLog.STATUS.retry, process_release_data.name, [package_name, version], {"index": index}, exception=sys.exc_info())
         process_release_data.retry(exc=e)
     except Exception as e:
+        task_log(process_release_data.request.id, TaskLog.STATUS.failed, process_release_data.name, [package_name, version], {"index": index}, exception=sys.exc_info())
         raise
+    else:
+        task_log(process_release_data.request.id, TaskLog.STATUS.success, process_release_data.name, [package_name, version], {"index": index})
 
 
 @task(default_retry_delay=30 * 60)
@@ -299,9 +330,13 @@ def process_release_urls(package_name, version, index=None):
         for url_data in urls:
             download_release.delay(package_name, version, url_data)
     except (SoftTimeLimitExceeded, socket.error, xmlrpclib.ProtocolError) as e:
+        task_log(process_release_urls.request.id, TaskLog.STATUS.retry, process_release_urls.name, [package_name, version], {"index": index}, exception=sys.exc_info())
         process_release_urls.retry(exc=e)
     except Exception as e:
+        task_log(process_release_urls.request.id, TaskLog.STATUS.failed, process_release_urls.name, [package_name, version], {"index": index}, exception=sys.exc_info())
         raise
+    else:
+        task_log(process_release_urls.request.id, TaskLog.STATUS.success, process_release_urls.name, [package_name, version], {"index": index})
 
 
 @task(time_limit=650, soft_time_limit=600)
@@ -390,9 +425,13 @@ def download_release(package_name, version, data):
                 package.created = release_file.created
                 package.save()
     except (SoftTimeLimitExceeded, OSError, socket.error) as e:
+        task_log(download_release.request.id, TaskLog.STATUS.retry, download_release.name, [package_name, version, data], {}, exception=sys.exc_info())
         download_release.retry(exc=e)
     except Exception as e:
+        task_log(download_release.request.id, TaskLog.STATUS.failed, download_release.name, [package_name, version, data], {}, exception=sys.exc_info())
         raise
+    else:
+        task_log(download_release.request.id, TaskLog.STATUS.success, download_release.name, [package_name, version, data], {})
 
 
 @task
@@ -410,7 +449,10 @@ def synchronize_troves(index=None):
             for classifier in resp.content.splitlines():
                 TroveClassifier.objects.get_or_create(trove=classifier.strip())
     except Exception:
+        task_log(synchronize_troves.request.id, TaskLog.STATUS.failed, synchronize_troves.name, [], {"index": index}, exception=sys.exc_info())
         raise
+    else:
+        task_log(synchronize_troves.request.id, TaskLog.STATUS.success, synchronize_troves.name, [], {"index": index})
 
 
 @task(time_limit=300, soft_time_limit=120)
@@ -424,7 +466,10 @@ def synchronize_downloads(index=None):
         for release in Release.objects.exclude(files=None).select_related("package").prefetch_related("files"):
             update_download_counts.delay(release.package.name, release.version, {x.filename: x.pk for x in release.files.all()}, index=index)
     except Exception:
+        task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
         raise
+    else:
+        task_log(synchronize_downloads.request.id, TaskLog.STATUS.success, synchronize_downloads.name, [], {"index": index})
 
 
 @task
@@ -443,4 +488,7 @@ def update_download_counts(package_name, version, files, index=None):
             if filename in files:
                 ReleaseFile.objects.filter(pk=files[filename]).update(downloads=download_count)
     except Exception:
+        task_log(update_download_counts.request.id, TaskLog.STATUS.failed, update_download_counts.name, [package_name, version, files], {"index": index}, exception=sys.exc_info())
         raise
+    else:
+        task_log(update_download_counts.request.id, TaskLog.STATUS.success, update_download_counts.name, [package_name, version, files], {"index": index})

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from pypi.models import ChangeLog, Log, PackageModified
+from pypi.models import ChangeLog, Log, PackageModified, TaskLog
 
 
 class ChangeLogAdmin(admin.ModelAdmin):
@@ -21,6 +21,11 @@ class PackageModifiedAdmin(admin.ModelAdmin):
     raw_id_fields = ["release_file"]
 
 
+class TaskLogAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(Log, LogAdmin)
 admin.site.register(PackageModified, PackageModifiedAdmin)
+admin.site.register(TaskLog, TaskLogAdmin)

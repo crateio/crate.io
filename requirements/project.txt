@@ -7,6 +7,7 @@
 psycopg2==2.4.1
 -e git+https://github.com/jordanm/django-hstore.git#egg=django-hstore
 -e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
+django-uuidfield==0.2
 
 # Utility
 -e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils

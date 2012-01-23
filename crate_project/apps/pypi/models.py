@@ -1,7 +1,10 @@
 from django.db import models
 
 from model_utils import Choices
+from model_utils.fields import StatusField
 from model_utils.models import TimeStampedModel
+
+from uuidfield import UUIDField
 
 from packages.models import ReleaseFile
 
@@ -56,3 +59,18 @@ class PackageModified(TimeStampedModel):
             "modified": self.last_modified,
             "hash": self.md5,
         }
+
+
+class TaskLog(TimeStampedModel):
+    STATUS = Choices(
+        ("success", "Success"),
+        ("failed", "Failed"),
+        ("retry", "Retry"),
+    )
+
+    task_id = UUIDField(auto=False, editable=True, unique=True)
+    status = StatusField()
+    name = models.CharField(max_length=300)
+    args = models.TextField()
+    kwargs = models.TextField()
+    exception = models.TextField(blank=True)
