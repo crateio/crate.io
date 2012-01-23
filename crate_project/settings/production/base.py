@@ -11,7 +11,7 @@ CONTACT_EMAIL = "donald@crate.io"
 MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+# STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
 AWS_STORAGE_BUCKET_NAME = "crate-production"
 
