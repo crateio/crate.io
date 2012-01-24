@@ -2,7 +2,7 @@ from haystack import indexes
 from packages.models import Package
 
 
-class PackageIndex(indexes.SearchIndex, indexes.Indexable):
+class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField(model_attr="name", boost=1.5)
     summary = indexes.CharField(null=True)

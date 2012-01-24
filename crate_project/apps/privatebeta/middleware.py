@@ -11,7 +11,10 @@ class PrivateBetaMiddleware(object):
     def process_request(self, request):
         ALLOWED_URLS = getattr(settings, "PRIVATE_BETA_ALLOWED_URLS", [])
 
-        if request.user.is_authenticated() or request.path in ALLOWED_URLS:
+        if request.user.is_authenticated():
+            return
+
+        if [x for x in ALLOWED_URLS if request.path.startswith(x)]:
             return
 
         if request.method == "POST":
