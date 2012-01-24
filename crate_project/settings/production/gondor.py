@@ -5,7 +5,7 @@ from secret_settings import *
 
 # Fix Email Settings
 SERVER_EMAIL = "server@crate.io"
-DEFAULT_FROM_EMAIL = "donald@crate.io"
+DEFAULT_FROM_EMAIL = "support@crate.io"
 
 DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql_psycopg2"
 
