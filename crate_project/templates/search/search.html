@@ -1,0 +1,76 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load humanize %}
+{% load ifsetting_tag %}
+{% load bootstrap_tags %}
+{% load package_tags %}
+
+{% block head_title %}{% trans "Welcome" %}{% endblock %}
+
+{% block body_id %}search{% endblock %}
+
+{% block body_base %}
+    <div class="container">
+
+        {% include "_messages.html" %}
+
+        <div class="hero-unit">
+            {% block banner %}
+                <div class="package-stats">
+                    {% package_download_count as download_count %}
+                    {% package_count as total_packages %}
+                    {% get_oldest_package as oldest_package %}
+
+                    <span class="downloads">{{ download_count|intcomma }} downloads</span>
+                    of {{ total_packages|intcomma }} packages since {{ oldest_package.created|date:"YEAR_MONTH_FORMAT" }}
+                </div>
+
+                <div id="main-search2">
+                    <form method="GET" action="." class="form-search">
+                        {{ form.non_field_errors }}
+
+                        <div class="field-wrapper">
+                            {{ form.q.errors }}
+                            <label for="id-search" style="display: none;">Search:</label>
+                            {{ form.q }}
+                        </div>
+
+                        <input type="hidden" name="has_releases" value="on">
+
+                        <input type="submit" class="btn primary" value="Search">
+                    </form>
+                </div>
+            {% endblock %}
+        </div>
+
+        <div class="row">
+            <div class="span4">
+                <h2>New Packages</h2>
+                {% new_releases 5 as releases %}
+                {% include "packages/partials/small_list.html" with releases=releases only %}
+            </div>
+
+            <div class="span4">
+                <h2>Most Downloaded Today</h2>
+                <ul class="unstyled">
+                    <li>Coming Soon</li>
+                </ul>
+            </div>
+
+            <div class="span4">
+                <h2>Just Updated</h2>
+                {% updated_releases 5 as releases %}
+                {% include "packages/partials/small_list.html" with releases=releases only %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_body %}
+    <script>
+        $(function() {
+            $("#id_q").focus();
+        });
+    </script>
+{% endblock %}

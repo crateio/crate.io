@@ -1,0 +1,50 @@
+# project.txt is a pip requirements file which describes the distributions
+# required by your project to run.
+
+--requirement=base.txt
+
+# Database
+psycopg2==2.4.1
+-e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
+django-uuidfield==0.2
+
+# Utility
+-e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
+
+# Celery
+redis==2.4.11
+anyjson==0.3.1
+amqplib==1.0.2
+kombu==1.5.1
+python-dateutil==1.5
+celery==2.4.6
+
+# Django Celery
+django-picklefield==0.1.9
+-e git+https://github.com/ask/django-celery.git@1031e4251e9df1f16b9d2bf50c3441402317f738#egg=django-celery
+
+# Private Beta
+privatebeta==0.4.1
+
+# Scraping & Processing Utils
+requests==0.9.1
+lxml==2.3
+
+# Domain Name Utilities
+django-hosts==0.4.1
+
+# Search
+-e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
+-e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
+pysolr==2.1.0-beta
+
+# Markup
+docutils==0.8.1
+
+# Storage
+boto==2.1.1
+-e hg+https://bitbucket.org/dstufft/django-storages@7f9fd318450fa86110944a9890fd0e4ac10e6bde#egg=django-storages
+
+# Management
+gondor==1.0.1
+Fabric==1.3.4

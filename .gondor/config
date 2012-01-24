@@ -1,0 +1,13 @@
+[gondor]
+vcs = git
+
+[app]
+requirements_file = requirements/project.txt
+wsgi_entry_point = crate_project.wsgi:application
+migrations = south
+staticfiles = on
+site_media_url = /site_media
+settings_module = crate_project.settings.production.gondor
+
+[files]
+include = secret_settings.py

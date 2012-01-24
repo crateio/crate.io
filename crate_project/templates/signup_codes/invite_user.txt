@@ -1,0 +1,14 @@
+Hello!
+
+You're getting this email because you've expressed interest in Crate.io. I would like to officially invite you to the private beta!
+
+I want to hear your feedback, so please give it to me. You can find me on Freenode as dstufft or you can email me at donald@crate.io.
+
+I'm managing the development of Crate on Trello. I've made the board visible to the public, as well as allowing the public to vote on card, and comment on card. If you're interested you can visit this at https://trello.com/board/crate-site/4f1ce86e2309d79e2a0141c3
+
+With no further ado, click here to signup:
+    http://{{ domain }}/account/signup/?code={{ signup_code.code }}
+
+
+Donald Stufft
+donald@crate.io
