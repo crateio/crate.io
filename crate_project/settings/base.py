@@ -243,3 +243,10 @@ AWS_HEADERS = {
     "Expires": lambda: http_date(time.mktime((datetime.datetime.now() + datetime.timedelta(days=365)).timetuple())),
     "Cache-Control": "max-age=31556926",
 }
+
+
+METRON_SETTINGS = {
+    # "mixpanel": {"1": ""},
+    # "google": {"1": ""},
+    "gauges": {"3": "4f1e4cd0613f5d7003000002"}
+}
