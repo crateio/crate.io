@@ -22,3 +22,5 @@ PRIVATE_BETA_ALLOWED_URLS = [
     "/account/signup/",
     "/account/confirm_email/",
 ]
+
+INTERCOM_APP_ID = "79qt2qu3"

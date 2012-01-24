@@ -2,6 +2,7 @@
 
 {% load staticfiles %}
 {% load metron_tags %}
+{% load intercom_tags %}
 {% load ifsetting_tag %}
 {% load i18n %}
 
@@ -41,5 +42,6 @@
 
 {% block extra_body_base %}
     {% analytics %}
+    {% intercom_js request.user %}
     {% block extra_body %}{% endblock %}
 {% endblock %}

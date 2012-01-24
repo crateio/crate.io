@@ -48,3 +48,6 @@ boto==2.1.1
 # Management
 gondor==1.0.1
 Fabric==1.3.4
+
+# Tracking
+django-intercom-io==0.1.1
