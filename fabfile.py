@@ -1,7 +1,7 @@
 import datetime
 import os
 
-from fabric.api import abort, env, hide, local, task
+from fabric.api import abort, env, hide, local, task, settings
 
 
 @task
@@ -46,7 +46,8 @@ def compile():
         if pending:
             local("git commit -m 'automatically compiled CSS files on %sZ'" % datetime.datetime.utcnow().isoformat())
 
-        local("git stash pop")
+        with settings(warn_only=True):
+            local("git stash pop")
 
 
 @task
