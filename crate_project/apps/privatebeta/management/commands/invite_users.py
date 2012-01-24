@@ -11,7 +11,8 @@ class Command(NoArgsCommand):
     def handle_noargs(self, **options):
         count = 0
         for wl in WaitingList.objects.filter(invited=False):
-            SignupCode.create(wl.email, 24 * 14, group=self.group)
+            sc = SignupCode.create(wl.email, 24 * 14)
+            sc.send()
 
             wl.invited = True
             wl.save()
