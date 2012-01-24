@@ -20,4 +20,5 @@ AWS_S3_CUSTOM_DOMAIN = "packages.crate.io"
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",
     "/account/signup/",
+    "/account/confirm_email/",
 ]
