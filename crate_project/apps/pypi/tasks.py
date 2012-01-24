@@ -70,12 +70,15 @@ def task_log(task_id, status, name, args, kwargs, exception=None):
     if exception is not None:
         exc = "".join(traceback.format_exception(*exception))
         defaults.update({"exception": exc})
+    else:
+        exc = None
 
     tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
 
     if not c:
         tlog.status = TaskLog.STATUS.retry
-        tlog.exception = exc
+        if exc is not None:
+            tlog.exception = exc
         tlog.save()
 
     return tlog
@@ -258,7 +261,7 @@ def process_release_data(package_name, version, index=None):
                         current_uris.remove(url)
 
                 if current_uris:
-                    ReleaseURI.object.filter(release=release, uri__in=current_uris).delete()
+                    ReleaseURI.objects.filter(release=release, uri__in=current_uris).delete()
 
                 release.requires_python = get_release_data(data, "required_python")
 
