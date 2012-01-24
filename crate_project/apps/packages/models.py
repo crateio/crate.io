@@ -7,8 +7,10 @@ from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from model_utils import Choices
+from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
@@ -80,7 +82,10 @@ class Package(TimeStampedModel):
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
 
-class Release(TimeStampedModel):
+class Release(models.Model):
+    created = AutoCreatedField(_("created"), db_index=True)
+    modified = AutoLastModifiedField(_("modified"))
+
     package = models.ForeignKey(Package, related_name="releases")
     version = models.CharField(max_length=512)
 
@@ -148,7 +153,7 @@ class Release(TimeStampedModel):
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
 
 
-class ReleaseFile(TimeStampedModel):
+class ReleaseFile(models.Model):
 
     TYPES = Choices(
         ("sdist", "Source"),
@@ -159,6 +164,9 @@ class ReleaseFile(TimeStampedModel):
         ("bdist_dumb", "bdist_dumb"),
         ("bdist_wininst", "bdist_wininst"),
     )
+
+    created = AutoCreatedField(_("created"), db_index=True)
+    modified = AutoLastModifiedField(_("modified"))
 
     release = models.ForeignKey(Release, related_name="files")
 
