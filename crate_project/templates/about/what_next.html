@@ -7,17 +7,17 @@
 
 {% block body %}
     <h1>{% trans "What Next?" %}</h1>
-    
+
     {% if user.is_authenticated %}
         <p>Here are some things to do to get started with this site:</p>
-        
+
         <dl class="what_next">
             <dt><a href="{% url acct_email %}">verify an email address</a></dt>
             <dd>so you can receive notifications, reset your password and so people can find you more easily.</dd>
-            
-            <dt><a href="{% url profile_detail user.username %}">fill out your profile</a></dt>
-            <dd>to tell the world a little about yourself.</dd>
-            
+
+            <!-- <dt><a href="{% url profile_detail user.username %}">fill out your profile</a></dt>
+            <dd>to tell the world a little about yourself.</dd> -->
+
             {% ifsetting ACCOUNT_OPEN_SIGNUP %}
             {% else %}
                 {% if user.is_staff %}
@@ -28,7 +28,7 @@
         </dl>
         {% else %}
             {% url acct_login as login_url %}
-            
+
             <p class="what_next">
                 {% ifsetting ACCOUNT_OPEN_SIGNUP %}
                     {% url acct_signup as signup_url %}
