@@ -26,4 +26,8 @@
             {% endif %}
         {% endfor %}
     {% endfor %}
+
+    {% for link in object.description_links %}
+        <a href="{{ link }}">{{ link }}</a>
+    {% endfor %}
 {% endblock %}
