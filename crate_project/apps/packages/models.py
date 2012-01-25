@@ -5,7 +5,7 @@ import uuid
 
 import lxml.html
 
-from docutils.core import publish_parts
+from docutils.core import publish_string
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -144,17 +144,22 @@ class Release(models.Model):
         # Update the Project's URIs
         docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
 
+        docutils_settings.update({"warning_stream": os.devnull})
+
         try:
-            parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+            html_string = publish_string(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+            if html_string.strip():
+                html = lxml.html.fromstring(html_string)
+
+                for link in html.xpath("//a/@href"):
+                    try:
+                        if any(urlparse.urlparse(link)[:5]):
+                            PackageURI.objects.get_or_create(package=self.package, uri=link)
+                    except ValueError:
+                        pass
         except Exception:
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
-        else:
-            if parts["fragment"].strip():
-                html = lxml.html.fromstring(parts["fragment"])
-
-                for link in [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]:
-                    PackageURI.objects.get_or_create(package=self.package, uri=link)
 
         return super(Release, self).save(*args, **kwargs)
 
