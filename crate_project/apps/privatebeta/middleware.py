@@ -1,5 +1,3 @@
-import logging
-
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -7,20 +5,16 @@ from django.shortcuts import render
 from privatebeta.forms import WaitingListForm
 from privatebeta.models import WaitingList
 
-logger = logging.getLogger(__name__)
-
 
 class PrivateBetaMiddleware(object):
 
     def process_request(self, request):
         ALLOWED_URLS = getattr(settings, "PRIVATE_BETA_ALLOWED_URLS", [])
 
-        logger.error(request.get_host())
-
         if request.user.is_authenticated():
             return
 
-        if request.get_host().lower() in [x.lower() for x in getattr(settings, "PRIVATE_BETA_ALLOWS_HOSTS", [])]:
+        if request.get_host().lower() in [x.lower() for x in getattr(settings, "PRIVATE_BETA_ALLOWED_HOSTS", [])]:
             return
 
         if [x for x in ALLOWED_URLS if request.path.startswith(x)]:
