@@ -1,12 +1,19 @@
 import os
 import posixpath
+import urlparse
 import uuid
 
+import lxml.html
+
+from docutils.core import publish_parts
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 
 from model_utils import Choices
@@ -81,6 +88,13 @@ class Package(TimeStampedModel):
                 }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
+    def description_links(self):
+        links = set()
+        for release in self.releases.all():
+            for link in release.description_links():
+                links.add(link)
+        return links
+
 
 class Release(models.Model):
     created = AutoCreatedField(_("created"), db_index=True)
@@ -150,6 +164,12 @@ class Release(models.Model):
                 "next_version": next_version,
             }
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
+
+    def description_links(self):
+        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+        parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+        html = lxml.html.fromstring(parts["fragment"])
+        return [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]
 
 
 class ReleaseFile(models.Model):
