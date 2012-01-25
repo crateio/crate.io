@@ -168,8 +168,12 @@ class Release(models.Model):
     def description_links(self):
         docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
         parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
-        html = lxml.html.fromstring(parts["fragment"])
-        return [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]
+
+        if parts["fragment"].strip():
+            html = lxml.html.fromstring(parts["fragment"])
+            return [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]
+        else:
+            return []
 
 
 class ReleaseFile(models.Model):
