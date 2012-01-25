@@ -9,7 +9,7 @@
 
     {% for release in object.releases.all %}
         {% for file in release.files.all %}
-            <a href="{{ file.file.url }}" rel="package">{{ file.file.name|filename }}</a>
+            <a href="{{ file.file.url }}{% if file.digest %}#{{ file.digest|digest_type }}={{ file.digest|digest_value }}{% endif %}" rel="package">{{ file.file.name|filename }}</a>
         {% endfor %}
     {% endfor %}
 

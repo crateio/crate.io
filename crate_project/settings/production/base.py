@@ -23,4 +23,8 @@ PRIVATE_BETA_ALLOWED_URLS = [
     "/account/confirm_email/",
 ]
 
+PRIVATE_BETA_ALLOWED_HOSTS = [
+    "simple.crate.io",
+]
+
 INTERCOM_APP_ID = "79qt2qu3"

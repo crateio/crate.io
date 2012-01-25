@@ -1,9 +1,13 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponsePermanentRedirect
+from django.http import HttpResponseNotFound, HttpResponsePermanentRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
 from packages.models import Package
+
+
+def not_found(request):
+    return HttpResponseNotFound("Not Found")
 
 
 class PackageIndex(ListView):
