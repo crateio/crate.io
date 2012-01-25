@@ -18,11 +18,11 @@
             <a href="{{ release.download_uri }}" rel="download">{{ release.version }} download_url</a>
         {% endif %}
 
-        {% for key, value in release.uris.iteritems %}
-            {% if key|lower == "home page" or key|lower == "homepage" %}
-                <a href="{{ value }}" rel="homepage">{{ release.version }} home_page</a>
+        {% for uri in release.uris.all %}
+            {% if uri.label|lower == "home page" or uri.label|lower == "homepage" %}
+                <a href="{{ uri.uri }}" rel="homepage">{{ release.version }} home_page</a>
             {% else %}
-                <a href="{{ value }}" rel="{{ key }}">{{ release.version }} {{ key }}</a>
+                <a href="{{ uri.uri }}" rel="{{ uri.label }}">{{ release.version }} {{ uri.label }}</a>
             {% endif %}
         {% endfor %}
     {% endfor %}
