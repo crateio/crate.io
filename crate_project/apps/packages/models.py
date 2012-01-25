@@ -96,6 +96,17 @@ class Package(TimeStampedModel):
         return links
 
 
+class PackageURI(models.Model):
+    package = models.ForeignKey(Package)
+    uri = models.URLField(max_length=400)
+
+    class Meta:
+        unique_together = ["package", "uri"]
+
+    def __unicode__(self):
+        return self.uri
+
+
 class Release(models.Model):
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
