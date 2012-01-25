@@ -14,6 +14,9 @@ class PrivateBetaMiddleware(object):
         if request.user.is_authenticated():
             return
 
+        if request.get_host().lower() in [x.lower() for x in getattr(settings, "PRIVATE_BETA_ALLOWS_HOSTS", [])]:
+            return
+
         if [x for x in ALLOWED_URLS if request.path.startswith(x)]:
             return
 
