@@ -95,6 +95,7 @@ class Package(TimeStampedModel):
                 release.save()
             self.package_uri_migrated = True
             self.save()
+            return PackageURI.objects.filter(package=self)
         return self.package_links.all()
 
 
