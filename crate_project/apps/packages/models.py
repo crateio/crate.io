@@ -88,16 +88,9 @@ class Package(TimeStampedModel):
                 }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
-    def description_links(self):
-        links = set()
-        for release in self.releases.all():
-            for link in release.description_links():
-                links.add(link)
-        return links
-
 
 class PackageURI(models.Model):
-    package = models.ForeignKey(Package)
+    package = models.ForeignKey(Package, related_name="package_links")
     uri = models.URLField(max_length=400)
 
     class Meta:
@@ -147,6 +140,24 @@ class Release(models.Model):
     def __unicode__(self):
         return u"%(package)s %(version)s" % {"package": self.package.name, "version": self.version}
 
+    def save(self, *args, **kwargs):
+        # Update the Project's URIs
+        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+
+        try:
+            parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+        except Exception:
+            # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
+            pass
+        else:
+            if parts["fragment"].strip():
+                html = lxml.html.fromstring(parts["fragment"])
+
+                for link in [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]:
+                    PackageURI.objects.get_or_create(package=self.package, uri=link)
+
+        return super(Release, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.package.name, "version": self.version})
 
@@ -175,16 +186,6 @@ class Release(models.Model):
                 "next_version": next_version,
             }
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
-
-    def description_links(self):
-        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
-        parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
-
-        if parts["fragment"].strip():
-            html = lxml.html.fromstring(parts["fragment"])
-            return [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]
-        else:
-            return []
 
 
 class ReleaseFile(models.Model):
