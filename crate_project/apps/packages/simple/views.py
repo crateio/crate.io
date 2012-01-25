@@ -10,6 +10,6 @@ class PackageIndex(ListView):
 
 
 class PackageDetail(DetailView):
-    model = Package
+    queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files")
     slug_field = "name"
     template_name = "packages/simple/package_detail.html"
