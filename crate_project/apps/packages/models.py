@@ -9,7 +9,7 @@ from docutils.core import publish_string
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -91,10 +91,11 @@ class Package(TimeStampedModel):
 
     def get_package_links(self):
         if not self.package_uri_migrated:
-            for release in self.releases.all():
-                release.save()
-            self.package_uri_migrated = True
-            self.save()
+            with transaction.commit_on_success():
+                for release in self.releases.all():
+                    release.save()
+                self.package_uri_migrated = True
+                self.save()
             return PackageURI.objects.filter(package=self)
         return self.package_links.all()
 
