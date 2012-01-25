@@ -1,10 +1,16 @@
 from django.contrib import admin
 
-from packages.models import Package, Release, ReleaseFile, TroveClassifier
+from packages.models import Package, Release, ReleaseFile, TroveClassifier, PackageURI
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
 
 
+class PackageURIAdmin(admin.TabularInline):
+    model = PackageURI
+    extra = 0
+
+
 class PackageAdmin(admin.ModelAdmin):
+    inlines = [PackageURIAdmin]
     list_display = ["name", "created", "modified"]
     list_filter = ["created", "modified"]
     search_fields = ["name"]

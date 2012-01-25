@@ -5,7 +5,7 @@ import uuid
 
 import lxml.html
 
-from docutils.core import publish_parts
+from docutils.core import publish_string
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -88,12 +88,16 @@ class Package(TimeStampedModel):
                 }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
-    def description_links(self):
-        links = set()
-        for release in self.releases.all():
-            for link in release.description_links():
-                links.add(link)
-        return links
+
+class PackageURI(models.Model):
+    package = models.ForeignKey(Package, related_name="package_links")
+    uri = models.URLField(max_length=400)
+
+    class Meta:
+        unique_together = ["package", "uri"]
+
+    def __unicode__(self):
+        return self.uri
 
 
 class Release(models.Model):
@@ -136,6 +140,29 @@ class Release(models.Model):
     def __unicode__(self):
         return u"%(package)s %(version)s" % {"package": self.package.name, "version": self.version}
 
+    def save(self, *args, **kwargs):
+        # Update the Project's URIs
+        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+
+        docutils_settings.update({"warning_stream": os.devnull})
+
+        try:
+            html_string = publish_string(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+            if html_string.strip():
+                html = lxml.html.fromstring(html_string)
+
+                for link in html.xpath("//a/@href"):
+                    try:
+                        if any(urlparse.urlparse(link)[:5]):
+                            PackageURI.objects.get_or_create(package=self.package, uri=link)
+                    except ValueError:
+                        pass
+        except Exception:
+            # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
+            pass
+
+        return super(Release, self).save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.package.name, "version": self.version})
 
@@ -164,16 +191,6 @@ class Release(models.Model):
                 "next_version": next_version,
             }
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
-
-    def description_links(self):
-        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
-        parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
-
-        if parts["fragment"].strip():
-            html = lxml.html.fromstring(parts["fragment"])
-            return [x for x in html.xpath("//a/@href") if any(urlparse.urlparse(x)[:5])]
-        else:
-            return []
 
 
 class ReleaseFile(models.Model):

@@ -27,7 +27,7 @@
         {% endfor %}
     {% endfor %}
 
-    {% for link in object.description_links %}
-        <a href="{{ link }}">{{ link }}</a>
+    {% for link in object.package_links.all %}
+        <a href="{{ link.uri }}">{{ link.uri }}</a>
     {% endfor %}
 {% endblock %}

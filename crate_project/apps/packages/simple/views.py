@@ -16,7 +16,7 @@ class PackageIndex(ListView):
 
 
 class PackageDetail(DetailView):
-    queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files")
+    queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files", "package_links")
     slug_field = "name__iexact"
     template_name = "packages/simple/package_detail.html"
 
