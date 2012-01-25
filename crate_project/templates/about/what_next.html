@@ -25,6 +25,9 @@
                     <dd>so more people can share in the fun.</dd>
                 {% endif %}
             {% endifsetting %}
+
+            <dt>Try to Install Packages from Crate.io</dt>
+            <dd>Just add <code>-i http://simple.crate.io/</code> to your pip command (e.g. <code>pip install -i http://simple.crate.io/ Django</code>)</dd>
         </dl>
         {% else %}
             {% url acct_login as login_url %}
