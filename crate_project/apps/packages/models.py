@@ -44,7 +44,6 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
-    package_uri_migrated = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -88,15 +87,6 @@ class Package(TimeStampedModel):
                     "next_version": next_version,
                 }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
-
-    def get_package_links(self):
-        if not self.package_uri_migrated:
-            for release in self.releases.all():
-                release.save()
-            self.package_uri_migrated = True
-            self.save()
-            return PackageURI.objects.filter(package=self)
-        return self.package_links.all()
 
 
 class PackageURI(models.Model):
