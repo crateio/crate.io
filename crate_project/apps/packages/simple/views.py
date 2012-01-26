@@ -11,7 +11,7 @@ def not_found(request):
 
 
 class PackageIndex(ListView):
-    queryset = Package.objects.all().order_by("name")
+    queryset = Package.objects.all()
     template_name = "packages/simple/package_list.html"
 
 
