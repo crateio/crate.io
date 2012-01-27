@@ -50,7 +50,11 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
                     implementations.append(classifier.trove.rsplit("::", 1)[1].strip())
                 elif classifier.trove.startswith("Programming Language :: Python ::"):
                     if classifier.trove == "Programming Language :: Python :: 2 :: Only":
-                        python_versions.append("2 Only")
+                        python_versions.append("2.x Only")
+                    elif classifier.trove == "Programming Language :: Python :: 2":
+                        python_versions.append("2.x")
+                    elif classifier.trove == "Programming Language :: Python :: 3":
+                        python_versions.append("3.x")
                     else:
                         python_versions.append(classifier.trove.rsplit("::", 1)[1].strip())
 
