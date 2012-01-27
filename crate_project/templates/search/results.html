@@ -64,14 +64,14 @@
                         {% if facets.fields and facets.fields.platform %}
                             <li class="nav-header">By Platform</li>
                             {% for plat in facets.fields.platform %}
-                                <li><a href="?{{ query_params }}&amp;platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} - {{ plat.1 }}</a></li>
+                                <li><a href="?{{ query_params }}&amp;platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} ({{ plat.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
 
                         {% if facets.fields and facets.fields.licenses %}
                             <li class="nav-header">By License</li>
                             {% for lice in facets.fields.licenses %}
-                                <li><a href="?{{ query_params }}&amp;license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
+                                <li><a href="?{{ query_params }}&amp;license={{ lice.0 }}">{{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
 

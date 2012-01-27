@@ -1,6 +1,15 @@
 from haystack import indexes
 from packages.models import Package
 
+LICENSES = {
+    "GNU General Public License (GPL)": "GPL",
+    "GNU Library or Lesser General Public License (LGPL)": "LGPL",
+    "GNU Affero General Public License v3": "Affero GPL",
+    "Apache Software License": "Apache License",
+    "ISC License (ISCL)": "ISC License",
+    "Other/Proprietary License": "Other/Proprietary",
+}
+
 
 class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
@@ -33,6 +42,9 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
             if not licenses:
                 licenses = ["Unknown"]
+
+            licenses = [x for x in licenses if x not in ["OSI Approved"]]
+            licenses = [LICENSES.get(x, x) for x in licenses]
 
             data["licenses"] = licenses
 
