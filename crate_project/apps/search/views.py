@@ -92,17 +92,28 @@ class Search(TemplateResponseMixin, FormMixin, View):
         results = form.search()
         narrow = []
 
+        faceted_by = {
+            "python": None,
+            "os": None,
+            "license": None,
+            "implementation": None,
+        }
+
         # Check for facets.
         if self.request.GET.get("python"):
+            faceted_by["python"] = self.request.GET["python"]
             narrow.append("python_versions:%s" % self.request.GET["python"])
 
         if self.request.GET.get("os"):
+            faceted_by["os"] = self.request.GET["os"]
             narrow.append("operating_systems:%s" % self.request.GET["os"])
 
         if self.request.GET.get("license"):
+            faceted_by["license"] = self.request.GET["license"]
             narrow.append("licenses:%s" % self.request.GET.get("license"))
 
         if self.request.GET.get("implementation"):
+            faceted_by["implementation"] = self.request.GET["implementation"]
             narrow.append("implementations:%s" % self.request.GET.get("implementation"))
 
         if len(narrow):
@@ -126,6 +137,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
             query_params = ""
             paginator, page, is_paginated = None, None, False
 
+        print faceted_by
+
         ctx = {
             "form": form,
             "query": query,
@@ -134,6 +147,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
             "paginator": paginator,
             "is_paginated": is_paginated,
             "facets": facets,
+            "faceted_by": faceted_by,
             "query_params": query_params,
         }
 
