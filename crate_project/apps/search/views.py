@@ -96,8 +96,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
         if self.request.GET.get("python"):
             narrow.append("python_versions:%s" % self.request.GET["python"])
 
-        if self.request.GET.get("operating_system"):
-            narrow.append("operating_systems:%s" % self.request.GET.get("operating_system"))
+        if self.request.GET.get("os"):
+            narrow.append("operating_systems:%s" % self.request.GET["os"])
 
         if self.request.GET.get("license"):
             narrow.append("licenses:%s" % self.request.GET.get("license"))
