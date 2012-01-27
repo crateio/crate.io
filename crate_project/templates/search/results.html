@@ -72,11 +72,11 @@
             </ul>
             {% endif %}
 
-            {% if facets.dates and facets.dates.modified %}
+            {% if facets.dates and facets.dates.created %}
             <h3>By Date</h3>
 
             <ul>
-                {% for mod in facets.dates.modified %}
+                {% for mod in facets.dates.created %}
                 <li><a href="?{{ query_params }}&amp;start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
                 {% endfor %}
             </ul>
