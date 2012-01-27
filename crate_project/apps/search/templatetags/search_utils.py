@@ -22,3 +22,20 @@ def repage(value, new_page):
             _data.append((key, item))
 
     return urlunparse([parsed.scheme, parsed.netloc, parsed.path, parsed.params, urlencode(_data), parsed.fragment])
+
+
+@register.filter(name="facet_python")
+@stringfilter
+def facet_python(value, new):
+    parsed = urlparse(value)
+    data = parse_qs(parsed.query)
+    data.update({
+        "python": [new],
+    })
+
+    _data = []
+    for key, value in data.iteritems():
+        for item in value:
+            _data.append((key, item))
+
+    return urlunparse([parsed.scheme, parsed.netloc, parsed.path, parsed.params, urlencode(_data), parsed.fragment])

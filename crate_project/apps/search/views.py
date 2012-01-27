@@ -1,9 +1,7 @@
-import datetime
 import urllib
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404
-from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from django.views.generic.base import TemplateResponseMixin, View
@@ -95,8 +93,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
         narrow = []
 
         # Check for facets.
-        if self.request.GET.get("python_version"):
-            narrow.append("python_versions:%s" % self.request.GET.get("python_version"))
+        if self.request.GET.get("python"):
+            narrow.append("python_versions:%s" % self.request.GET["python"])
 
         if self.request.GET.get("operating_system"):
             narrow.append("operating_systems:%s" % self.request.GET.get("operating_system"))

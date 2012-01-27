@@ -56,7 +56,7 @@
                         {% if facets.fields and facets.fields.python_versions %}
                             <li class="nav-header">By Python Version</li>
                             {% for ver in facets.fields.python_versions %}
-                                <li><a href="?{{ query_params }}&amp;python_version={{ ver.0 }}">{{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                <li><a href="{{ request.get_full_path|facet_python:ver.0 }}">{{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
 
