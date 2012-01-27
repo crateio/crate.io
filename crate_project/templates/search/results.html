@@ -77,6 +77,13 @@
                             {% endfor %}
                         {% endif %}
 
+                        {% if facets.fields and facets.fields.implementations %}
+                            <li class="nav-header">By Implementation</li>
+                            {% for lice in facets.fields.implementations %}
+                                <li><a href="?{{ query_params }}&amp;implementation={{ lice.0 }}">{{ lice.0|default:'No implementation' }} ({{ lice.1 }})</a></li>
+                            {% endfor %}
+                        {% endif %}
+
                         {% comment %}
                         {% if facets.dates and facets.dates.created %}
                             <li class="nav-header">By Date</li>

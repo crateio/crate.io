@@ -19,6 +19,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     url = indexes.CharField(model_attr="get_absolute_url", indexed=False)
     operating_systems = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     licenses = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
+    implementations = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
     created = indexes.DateTimeField(null=True, faceted=True)
@@ -35,6 +36,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
             operating_systems = []
             licenses = []
+            implementations = []
 
             for classifier in obj.latest.classifiers.all():
                 if classifier.trove.startswith("License ::"):
@@ -42,6 +44,8 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
                     licenses.append(classifier.trove.rsplit("::", 1)[1].strip())
                 elif classifier.trove.startswith("Operating System ::"):
                     operating_systems.append(classifier.trove.rsplit("::", 1)[1].strip())
+                elif classifier.trove.startswith("Programming Language :: Python :: Implementation ::"):
+                    implementations.append(classifier.trove.rsplit("::", 1)[1].strip())
 
             if not licenses:
                 licenses = ["Unknown"]
@@ -53,8 +57,11 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
             if not operating_systems:
                 operating_systems = ["Unknown"]
-
             data["operating_systems"] = operating_systems
+
+            if not implementations:
+                implementations = ["Unknown"]
+            data["implementations"] = implementations
 
         # Pack in all the versions in decending order.
         releases = obj.releases.order_by("-order")
