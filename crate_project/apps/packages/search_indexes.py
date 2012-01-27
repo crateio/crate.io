@@ -20,6 +20,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     operating_systems = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     licenses = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     implementations = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
+    python_versions = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
     created = indexes.DateTimeField(null=True, faceted=True)
@@ -37,6 +38,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
             operating_systems = []
             licenses = []
             implementations = []
+            python_versions = []
 
             for classifier in obj.latest.classifiers.all():
                 if classifier.trove.startswith("License ::"):
@@ -46,6 +48,11 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
                     operating_systems.append(classifier.trove.rsplit("::", 1)[1].strip())
                 elif classifier.trove.startswith("Programming Language :: Python :: Implementation ::"):
                     implementations.append(classifier.trove.rsplit("::", 1)[1].strip())
+                elif classifier.trove.startswith("Programming Language :: Python ::"):
+                    if classifier.trove == "Programming Language :: Python :: 2 :: Only":
+                        python_versions.append("2 Only")
+                    else:
+                        python_versions.append(classifier.trove.rsplit("::", 1)[1].strip())
 
             if not licenses:
                 licenses = ["Unknown"]
@@ -62,6 +69,10 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
             if not implementations:
                 implementations = ["Unknown"]
             data["implementations"] = implementations
+
+            if not python_versions:
+                python_versions = ["Unknown"]
+            data["python_versions"] = python_versions
 
         # Pack in all the versions in decending order.
         releases = obj.releases.order_by("-order")

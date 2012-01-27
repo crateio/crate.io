@@ -63,6 +63,13 @@
                     <h3>Refine Results</h3>
 
                     <ul class="nav list">
+                        {% if facets.fields and facets.fields.python_versions %}
+                            <li class="nav-header">By Python Version</li>
+                            {% for ver in facets.fields.python_versions %}
+                                <li><a href="?{{ query_params }}&amp;python_version={{ ver.0 }}">{{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                            {% endfor %}
+                        {% endif %}
+
                         {% if facets.fields and facets.fields.operating_systems %}
                             <li class="nav-header">By Operating System</li>
                             {% for plat in facets.fields.operating_systems %}
