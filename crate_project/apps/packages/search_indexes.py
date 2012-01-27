@@ -23,7 +23,6 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     python_versions = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
-    created = indexes.DateTimeField(null=True, faceted=True)
 
     def get_model(self):
         return Package
@@ -33,7 +32,6 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
         if obj.latest:
             data["summary"] = obj.latest.summary
-            data["created"] = obj.latest.created
 
             operating_systems = []
             licenses = []

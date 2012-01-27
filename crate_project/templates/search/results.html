@@ -37,18 +37,6 @@
                                 <label for="id-has_releases">Has Releases:</label>
                                 {{ form.has_releases }}
                             </div>
-
-                            <div class="field-wrapper">
-                                {{ form.start_date.errors }}
-                                <label for="id-start_date">Start Date:</label>
-                                {{ form.start_date }}
-                            </div>
-
-                            <div class="field-wrapper">
-                                {{ form.end_date.errors }}
-                                <label for="id-end_date">End Date:</label>
-                                {{ form.end_date }}
-                            </div>
                         </fieldset>
 
                         <input type="submit" class="btn primary" value="Search">
@@ -90,15 +78,6 @@
                                 <li><a href="?{{ query_params }}&amp;implementation={{ impl.0 }}">{{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
-
-                        {% comment %}
-                        {% if facets.dates and facets.dates.created %}
-                            <li class="nav-header">By Date</li>
-                            {% for mod in facets.dates.created %}
-                                <li><a href="?{{ query_params }}&amp;start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
-                            {% endfor %}
-                        {% endif %}
-                        {% endcomment %}
                     </ul>
                 </div>
             </div>

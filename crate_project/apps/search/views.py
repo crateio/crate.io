@@ -113,9 +113,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
         page_size = self.get_paginate_by()
 
         if page_size:
-            start_date = form.cleaned_data["start_date"] or datetime.date(1980, 1, 1)
-            end_date = form.cleaned_data["end_date"] or now()
-            facets = results.facet("python_versions").facet("operating_systems").facet("licenses").facet("implementations").date_facet("created", start_date, end_date, "month").facet_counts()
+            facets = results.facet("python_versions").facet("operating_systems").facet("licenses").facet("implementations").facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
 
             # Grumble.
