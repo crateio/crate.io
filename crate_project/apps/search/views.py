@@ -95,8 +95,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
         narrow = []
 
         # Check for facets.
-        if self.request.GET.get("platform"):
-            narrow.append("platform:%s" % self.request.GET.get("platform"))
+        if self.request.GET.get("operating_system"):
+            narrow.append("operating_systems:%s" % self.request.GET.get("operating_system"))
 
         if self.request.GET.get("license"):
             narrow.append("licenses:%s" % self.request.GET.get("license"))
@@ -109,7 +109,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
         if page_size:
             start_date = form.cleaned_data["start_date"] or datetime.date(1980, 1, 1)
             end_date = form.cleaned_data["end_date"] or now()
-            facets = results.facet("platform").facet("licenses").date_facet("created", start_date, end_date, "month").facet_counts()
+            facets = results.facet("operating_systems").facet("licenses").date_facet("created", start_date, end_date, "month").facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
 
             # Grumble.
