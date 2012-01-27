@@ -72,8 +72,8 @@
 
                         {% if facets.fields and facets.fields.operating_systems %}
                             <li class="nav-header">By Operating System</li>
-                            {% for plat in facets.fields.operating_systems %}
-                                <li><a href="?{{ query_params }}&amp;operating_system={{ plat.0 }}">{{ plat.0|default:'No operating system' }} ({{ plat.1 }})</a></li>
+                            {% for os in facets.fields.operating_systems %}
+                                <li><a href="?{{ query_params }}&amp;operating_system={{ os.0 }}">{{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
 
@@ -86,8 +86,8 @@
 
                         {% if facets.fields and facets.fields.implementations %}
                             <li class="nav-header">By Implementation</li>
-                            {% for lice in facets.fields.implementations %}
-                                <li><a href="?{{ query_params }}&amp;implementation={{ lice.0 }}">{{ lice.0|default:'No implementation' }} ({{ lice.1 }})</a></li>
+                            {% for impl in facets.fields.implementations %}
+                                <li><a href="?{{ query_params }}&amp;implementation={{ impl.0 }}">{{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
                             {% endfor %}
                         {% endif %}
 
