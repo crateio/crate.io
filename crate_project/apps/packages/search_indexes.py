@@ -26,7 +26,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
             data['license'] = obj.latest.license
 
         # Pack in all the versions in decending order.
-        releases = obj.releases.order_by('-created')
+        releases = obj.releases.order_by("-order")
         data['versions'] = [release.version for release in releases if release.version]
         data['release_count'] = releases.count()
 
