@@ -77,12 +77,14 @@
                             {% endfor %}
                         {% endif %}
 
-                        <!-- {% if facets.dates and facets.dates.created %}
+                        {% comment %}
+                        {% if facets.dates and facets.dates.created %}
                             <li class="nav-header">By Date</li>
                             {% for mod in facets.dates.created %}
                                 <li><a href="?{{ query_params }}&amp;start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
                             {% endfor %}
-                        {% endif %} -->
+                        {% endif %}
+                        {% endcomment %}
                     </ul>
                 </div>
             </div>
