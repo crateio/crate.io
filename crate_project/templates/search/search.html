@@ -26,19 +26,21 @@
                     of {{ total_packages|intcomma }} packages since {{ oldest_package.created|date:"YEAR_MONTH_FORMAT" }}
                 </div>
 
-                <div id="main-search2">
-                    <form method="GET" action="." class="form-search">
+                <div id="main-search">
+                    <form class="form-inline" method="GET" action=".">
                         {{ form.non_field_errors }}
-
-                        <div class="field-wrapper">
-                            {{ form.q.errors }}
-                            <label for="id-search" style="display: none;">Search:</label>
-                            {{ form.q }}
-                        </div>
 
                         <input type="hidden" name="has_releases" value="on">
 
-                        <input type="submit" class="btn primary" value="Search">
+                        <div class="control-group{% if form.q.errors %} error{% endif %}">
+                            <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
+                            <div class="controls">
+                                {{ form.q.errors }}
+                                {{ form.q }}
+
+                                <input type="submit" class="btn primary" value="Search">
+                            </div>
+                        </div>
                     </form>
                 </div>
             {% endblock %}

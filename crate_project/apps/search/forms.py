@@ -5,9 +5,7 @@ from haystack.query import SQ
 
 
 class SearchForm(HaystackSearchForm):
-    has_releases = forms.BooleanField(required=False, initial=True)
-    start_date = forms.DateField(required=False)
-    end_date = forms.DateField(required=False)
+    has_releases = forms.BooleanField(label="Has Releases", required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
@@ -26,14 +24,8 @@ class SearchForm(HaystackSearchForm):
 
         sqs = self.searchqueryset.filter(SQ(content=AutoQuery(self.cleaned_data["q"])) | SQ(name=AutoQuery(self.cleaned_data["q"])))
 
-        if self.cleaned_data.get('has_releases'):
+        if self.cleaned_data.get("has_releases"):
             sqs = sqs.filter(release_count__gt=0)
-
-        if self.cleaned_data['start_date']:
-            sqs = sqs.filter(modified__gte=self.cleaned_data['start_date'])
-
-        if self.cleaned_data['end_date']:
-            sqs = sqs.filter(modified__lte=self.cleaned_data['end_date'])
 
         if self.load_all:
             sqs = sqs.load_all()

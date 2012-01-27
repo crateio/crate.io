@@ -1,9 +1,14 @@
 <div class="result row">
-        <div class="span6"><a href="{{ result.url }}">{{ result.name }}</a></div>
+        <div class="span12 package-name"><a href="{{ result.url }}">{{ result.name }}</a></div>
 
-        <div class="span10">
+        <div class="span3">
+            <div class="author"><em>by Bob</em></div>
+        </div>
+        <div class="span3">
             <div class="downloads"><span class="count">{{ result.downloads }}</span> downloads</div>
         </div>
+        <div class="span3">{# @@@ Link to Source #}</div>
+        <div class="span3">{# @@@ Link to Documentation #}</div>
 
-        <div class="offset1 span14">{{ result.summary }}</div>
+        <div class="span12 summary">{{ result.summary }}</div>
 </div>
