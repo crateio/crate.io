@@ -19,8 +19,6 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
 
     def prepare(self, obj):
         data = super(PackageIndex, self).prepare(obj)
-        # We want to scale the boost for this document based on how many downloads have
-        #   been recorded for this package.
 
         if obj.latest:
             data['summary'] = obj.latest.summary
@@ -32,6 +30,8 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
         data['versions'] = [release.version for release in releases if release.version]
         data['release_count'] = releases.count()
 
+        # We want to scale the boost for this document based on how many downloads have
+        #   been recorded for this package.
         # @@@ Might want to actually tier these values instead of percentage them.
         # Cap out downloads at 100k
         capped_downloads = min(data["downloads"], 10000)
