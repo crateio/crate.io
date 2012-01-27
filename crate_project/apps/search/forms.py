@@ -5,7 +5,7 @@ from haystack.query import SQ
 
 
 class SearchForm(HaystackSearchForm):
-    has_releases = forms.BooleanField(required=False, initial=True)
+    has_releases = forms.BooleanField(label="Has Releases", required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)

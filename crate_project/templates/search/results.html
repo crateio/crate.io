@@ -20,26 +20,28 @@
         <div class="row">
             <div class="span12">
                 <div class="well">
-                    <form method="GET" action="." class="form-search">
+                    <form class="form-inline" method="GET" action=".">
                         {{ form.non_field_errors }}
 
-                        <div class="field-wrapper">
-                            {{ form.q.errors }}
-                            <label for="id-search" style="display: none;">Search:</label>
-                            {{ form.q }}
+                        <div class="control-group{% if form.q.errors %} error{% endif %}">
+                            <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
+                            <div class="controls">
+                                {{ form.q.errors }}
+                                {{ form.q }}
+
+                                <input type="submit" class="btn primary" value="Search">
+                            </div>
                         </div>
 
-                        <fieldset>
-                            <title>Advanced Options</title>
-
-                            <div class="field-wrapper">
+                        <div class="control-group{% if form.has_releases.errors %} error{% endif %}">
+                            <div class="controls">
                                 {{ form.has_releases.errors }}
-                                <label for="id-has_releases">Has Releases:</label>
-                                {{ form.has_releases }}
+                                <label class="checkbox inline">
+                                    {{ form.has_releases }}
+                                    {{ form.has_releases.label }}
+                                </label>
                             </div>
-                        </fieldset>
-
-                        <input type="submit" class="btn primary" value="Search">
+                        </div>
                     </form>
                 </div>
             </div>
