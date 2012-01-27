@@ -1,4 +1,3 @@
-import datetime
 import urllib
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
@@ -8,7 +7,6 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import FormMixin
 
-from model_utils.fields import now
 from search.forms import SearchForm
 
 
@@ -44,7 +42,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
         Get the number of items to paginate by, or ``None`` for no pagination.
         """
         if self.paginate_by is None:
-            return getattr(settings, 'HAYSTACK_SEARCH_RESULTS_PER_PAGE', 20)
+            return getattr(settings, "HAYSTACK_SEARCH_RESULTS_PER_PAGE", 20)
         return self.paginate_by
 
     def get_paginator(self, results, per_page, orphans=0, allow_empty_first_page=True):
@@ -58,11 +56,11 @@ class Search(TemplateResponseMixin, FormMixin, View):
         Paginate the results, if needed.
         """
         paginator = self.get_paginator(results, page_size, allow_empty_first_page=self.get_allow_empty())
-        page = self.kwargs.get('page') or self.request.GET.get('page') or 1
+        page = self.kwargs.get("page") or self.request.GET.get("page") or 1
         try:
             page_number = int(page)
         except ValueError:
-            if page == 'last':
+            if page == "last":
                 page_number = paginator.num_pages
             else:
                 raise Http404(_(u"Page is not 'last', nor can it be converted to an int."))
@@ -70,8 +68,8 @@ class Search(TemplateResponseMixin, FormMixin, View):
             page = paginator.page(page_number)
             return (paginator, page, page.object_list, page.has_other_pages())
         except InvalidPage:
-            raise Http404(_(u'Invalid page (%(page_number)s)') % {
-                                'page_number': page_number
+            raise Http404(_(u"Invalid page (%(page_number)s)") % {
+                                "page_number": page_number
             })
 
     def get_form_kwargs(self):
@@ -94,35 +92,52 @@ class Search(TemplateResponseMixin, FormMixin, View):
         results = form.search()
         narrow = []
 
-        # Check for facets.
-        if self.request.GET.get('platform'):
-            narrow.append('platform:%s' % self.request.GET.get('platform'))
+        faceted_by = {
+            "python": None,
+            "os": None,
+            "license": None,
+            "implementation": None,
+        }
 
-        if self.request.GET.get('license'):
-            narrow.append('license:%s' % self.request.GET.get('license'))
+        # Check for facets.
+        if self.request.GET.get("python"):
+            faceted_by["python"] = self.request.GET["python"]
+            narrow.append("python_versions:%s" % self.request.GET["python"])
+
+        if self.request.GET.get("os"):
+            faceted_by["os"] = self.request.GET["os"]
+            narrow.append("operating_systems:%s" % self.request.GET["os"])
+
+        if self.request.GET.get("license"):
+            faceted_by["license"] = self.request.GET["license"]
+            narrow.append("licenses:%s" % self.request.GET.get("license"))
+
+        if self.request.GET.get("implementation"):
+            faceted_by["implementation"] = self.request.GET["implementation"]
+            narrow.append("implementations:%s" % self.request.GET.get("implementation"))
 
         if len(narrow):
-            results = results.narrow(' AND '.join(narrow))
+            results = results.narrow(" AND ".join(narrow))
 
         page_size = self.get_paginate_by()
 
         if page_size:
-            start_date = form.cleaned_data['start_date'] or datetime.date(1980, 1, 1)
-            end_date = form.cleaned_data['end_date'] or now()
-            facets = results.facet('platform').facet('license').date_facet('modified', start_date, end_date, 'month').facet_counts()
+            facets = results.facet("python_versions").facet("operating_systems").facet("licenses").facet("implementations").facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
 
             # Grumble.
             duped = self.request.GET.copy()
             try:
-                del duped['page']
+                del duped["page"]
             except KeyError:
                 pass
             query_params = urllib.urlencode(duped, doseq=True)
         else:
             facets = {}
-            query_params = ''
+            query_params = ""
             paginator, page, is_paginated = None, None, False
+
+        print faceted_by
 
         ctx = {
             "form": form,
@@ -132,6 +147,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
             "paginator": paginator,
             "is_paginated": is_paginated,
             "facets": facets,
+            "faceted_by": faceted_by,
             "query_params": query_params,
         }
 

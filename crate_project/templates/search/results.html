@@ -17,94 +17,130 @@
 
         {% include "_messages.html" %}
 
-        <form method="GET" action="." class="well form-search">
-            {{ form.non_field_errors }}
+        <div class="row">
+            <div class="span12">
+                <div class="well">
+                    <form class="form-inline" method="GET" action=".">
+                        {{ form.non_field_errors }}
 
-            <div class="field-wrapper">
-                {{ form.q.errors }}
-                <label for="id-search" style="display: none;">Search:</label>
-                {{ form.q }}
+                        <div class="control-group{% if form.q.errors %} error{% endif %}">
+                            <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
+                            <div class="controls">
+                                {{ form.q.errors }}
+                                {{ form.q }}
+
+                                <input type="submit" class="btn primary" value="Search">
+                            </div>
+                        </div>
+
+                        <div class="control-group{% if form.has_releases.errors %} error{% endif %}">
+                            <div class="controls">
+                                {{ form.has_releases.errors }}
+                                <label class="checkbox inline">
+                                    {{ form.has_releases }}
+                                    {{ form.has_releases.label }}
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="span3">
+                <div class="well">
+                    <h3>Refine Results</h3>
+
+                    <ul class="nav list">
+                        {% if facets.fields and facets.fields.python_versions %}
+                            <li class="nav-header">By Python Version</li>
+                            {% if faceted_by.python %}
+                                {% for ver in facets.fields.python_versions %}
+                                    {% if ver.0 == faceted_by.python %}
+                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon remove"></i> {{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for ver in facets.fields.python_versions %}
+                                    <li><a href="{{ request.get_full_path|facet_python:ver.0 }}">{{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if facets.fields and facets.fields.operating_systems %}
+                            <li class="nav-header">By Operating System</li>
+                            {% if faceted_by.os %}
+                                {% for os in facets.fields.operating_systems %}
+                                    {% if os.0 == faceted_by.os %}
+                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon remove"></i> {{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for os in facets.fields.operating_systems %}
+                                    <li><a href="{{ request.get_full_path|facet_os:os.0 }}">{{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if facets.fields and facets.fields.licenses %}
+                            <li class="nav-header">By License</li>
+                            {% if faceted_by.license %}
+                                {% for lice in facets.fields.licenses %}
+                                    {% if lice.0 == faceted_by.license %}
+                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon remove"></i> {{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for lice in facets.fields.licenses %}
+                                    <li><a href="{{ request.get_full_path|facet_license:lice.0 }}">{{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if facets.fields and facets.fields.implementations %}
+                            <li class="nav-header">By Implementation</li>
+                            {% if faceted_by.implementation %}
+                                {% for impl in facets.fields.implementations %}
+                                    {% if impl.0 == faceted_by.implementation %}
+                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon remove"></i> {{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for impl in facets.fields.implementations %}
+                                    <li><a href="{{ request.get_full_path|facet_implementation:impl.0 }}">{{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
 
-            <fieldset>
-                <title>Advanced Options</title>
-
-                <div class="field-wrapper">
-                    {{ form.has_releases.errors }}
-                    <label for="id-has_releases">Has Releases:</label>
-                    {{ form.has_releases }}
-                </div>
-
-                <div class="field-wrapper">
-                    {{ form.start_date.errors }}
-                    <label for="id-start_date">Start Date:</label>
-                    {{ form.start_date }}
-                </div>
-
-                <div class="field-wrapper">
-                    {{ form.end_date.errors }}
-                    <label for="id-end_date">End Date:</label>
-                    {{ form.end_date }}
-                </div>
-            </fieldset>
-
-            <input type="submit" class="btn primary" value="Search">
-        </form>
-
-        <div class="facets" style="background-color: #F5F5F5; border: 1px solid rgba(0, 0, 0, 0.05); border-radius: 4px 4px 4px 4px; box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset; float: left; padding: 10px; margin: 0 20px 20px 0; width: 200px;">
-            {% if facets.fields and facets.fields.platform %}
-            <h3>By Platform</h3>
-
-            <ul>
-                {% for plat in facets.fields.platform %}
-                <li><a href="?{{ query_params }}&amp;platform={{ plat.0 }}">{{ plat.0|default:'No platform' }} - {{ plat.1 }}</a></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-
-            {% if facets.fields and facets.fields.license %}
-            <h3>By License</h3>
-
-            <ul>
-                {% for lice in facets.fields.license %}
-                <li><a href="?{{ query_params }}&amp;license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-
-            {% if facets.dates and facets.dates.modified %}
-            <h3>By Date</h3>
-
-            <ul>
-                {% for mod in facets.dates.modified %}
-                <li><a href="?{{ query_params }}&amp;start_date={{ mod.0 }}">{{ mod.0 }} - {{ mod.1 }}</a></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        </div>
-
-        <div class="results-wrapper" style="float: left; width: 690px;">
-            {% for result in results %}
-                <div class="results">
-                    {% include "search/partials/package.html" with result=result %}
-                </div>
-            {% empty %}
-                <p>No results found.</p>
-            {% endfor %}
-        </div>
-
-        {% if is_paginated %}
-            <div class="pagination">
-                <ul>
-                    <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; Previous</a></li>
-
-                    {% for page_num in paginator.page_range|paginate_numbers:page.number %}
-                        <li{% if page_num == page.number %} class="active"{% endif %}><a href="{{ request.get_full_path|repage:page_num }}">{{ page_num }}</a></li>
+            <div class="span9">
+                <div class="results-wrapper">
+                    {% for result in results %}
+                        <div class="results">
+                            {% include "search/partials/package.html" with result=result %}
+                        </div>
+                    {% empty %}
+                        <p>No results found.</p>
                     {% endfor %}
+                </div>
 
-                    <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">Next &rarr;</a></li>
-                </ul>
+                {% if is_paginated %}
+                    <div class="pagination">
+                        <ul>
+                            <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; Previous</a></li>
+
+                            {% for page_num in paginator.page_range|paginate_numbers:page.number %}
+                                <li{% if page_num == page.number %} class="active"{% endif %}><a href="{{ request.get_full_path|repage:page_num }}">{{ page_num }}</a></li>
+                            {% endfor %}
+
+                            <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">Next &rarr;</a></li>
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
     </div>
 {% endblock %}
