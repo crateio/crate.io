@@ -9,7 +9,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     downloads = indexes.IntegerField(model_attr="downloads", indexed=False)
     url = indexes.CharField(model_attr="get_absolute_url", indexed=False)
     platform = indexes.CharField(null=True, faceted=True)
-    license = indexes.CharField(null=True, faceted=True)
+    licenses = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
     created = indexes.DateTimeField(null=True, faceted=True)
@@ -23,8 +23,18 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
         if obj.latest:
             data["summary"] = obj.latest.summary
             data["platform"] = obj.latest.platform
-            data["license"] = obj.latest.license
             data["created"] = obj.latest.created
+
+            licenses = []
+            for classifier in obj.latest.classifiers.all():
+                if classifier.trove.startswith("License ::"):
+                    # We Have a License for This Project
+                    licenses.append(classifier.trove.rsplit("::", 1)[1].strip())
+
+            if not licenses:
+                licenses = ["Unknown"]
+
+            data["licenses"] = licenses
 
         # Pack in all the versions in decending order.
         releases = obj.releases.order_by("-order")

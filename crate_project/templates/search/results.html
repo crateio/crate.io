@@ -62,11 +62,11 @@
             </ul>
             {% endif %}
 
-            {% if facets.fields and facets.fields.license %}
+            {% if facets.fields and facets.fields.licenses %}
             <h3>By License</h3>
 
             <ul>
-                {% for lice in facets.fields.license %}
+                {% for lice in facets.fields.licenses %}
                 <li><a href="?{{ query_params }}&amp;license={{ lice.0 }}">{{ lice.0|default:'No license' }} - {{ lice.1 }}</a></li>
                 {% endfor %}
             </ul>
