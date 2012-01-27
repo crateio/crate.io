@@ -26,14 +26,14 @@ class SearchForm(HaystackSearchForm):
 
         sqs = self.searchqueryset.filter(SQ(content=AutoQuery(self.cleaned_data["q"])) | SQ(name=AutoQuery(self.cleaned_data["q"])))
 
-        if self.cleaned_data.get('has_releases'):
+        if self.cleaned_data.get("has_releases"):
             sqs = sqs.filter(release_count__gt=0)
 
-        if self.cleaned_data['start_date']:
-            sqs = sqs.filter(modified__gte=self.cleaned_data['start_date'])
+        if self.cleaned_data["start_date"]:
+            sqs = sqs.filter(modified__gte=self.cleaned_data["start_date"])
 
         if self.cleaned_data['end_date']:
-            sqs = sqs.filter(modified__lte=self.cleaned_data['end_date'])
+            sqs = sqs.filter(modified__lte=self.cleaned_data["end_date"])
 
         if self.load_all:
             sqs = sqs.load_all()

@@ -12,7 +12,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     license = indexes.CharField(null=True, faceted=True)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
-    modified = indexes.DateTimeField(model_attr='modified', faceted=True)
+    modified = indexes.DateTimeField(model_attr="modified", faceted=True)
 
     def get_model(self):
         return Package
@@ -21,14 +21,14 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
         data = super(PackageIndex, self).prepare(obj)
 
         if obj.latest:
-            data['summary'] = obj.latest.summary
-            data['platform'] = obj.latest.platform
-            data['license'] = obj.latest.license
+            data["summary"] = obj.latest.summary
+            data["platform"] = obj.latest.platform
+            data["license"] = obj.latest.license
 
         # Pack in all the versions in decending order.
         releases = obj.releases.order_by("-order")
-        data['versions'] = [release.version for release in releases if release.version]
-        data['release_count'] = releases.count()
+        data["versions"] = [release.version for release in releases if release.version]
+        data["release_count"] = releases.count()
 
         # We want to scale the boost for this document based on how many downloads have
         #   been recorded for this package.
