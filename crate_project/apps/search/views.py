@@ -3,12 +3,12 @@ import urllib
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.http import Http404
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import FormMixin
 
-from model_utils.fields import now
 from search.forms import SearchForm
 
 
@@ -109,7 +109,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
         if page_size:
             start_date = form.cleaned_data['start_date'] or datetime.date(1980, 1, 1)
             end_date = form.cleaned_data['end_date'] or now()
-            facets = results.facet('platform').facet('license').date_facet('modified', start_date, end_date, 'month').facet_counts()
+            facets = results.facet('platform').facet('license').date_facet('created', start_date, end_date, 'month').facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
 
             # Grumble.

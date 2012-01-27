@@ -12,7 +12,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
     license = indexes.CharField(null=True, faceted=True)
     versions = indexes.MultiValueField(null=True)
     release_count = indexes.IntegerField(default=0)
-    modified = indexes.DateTimeField(model_attr="modified", faceted=True)
+    created = indexes.DateTimeField(null=True, faceted=True)
 
     def get_model(self):
         return Package
@@ -24,6 +24,7 @@ class PackageIndex(indexes.RealTimeSearchIndex, indexes.Indexable):
             data["summary"] = obj.latest.summary
             data["platform"] = obj.latest.platform
             data["license"] = obj.latest.license
+            data["created"] = obj.latest.created
 
         # Pack in all the versions in decending order.
         releases = obj.releases.order_by("-order")

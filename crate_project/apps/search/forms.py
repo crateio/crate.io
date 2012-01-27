@@ -30,10 +30,10 @@ class SearchForm(HaystackSearchForm):
             sqs = sqs.filter(release_count__gt=0)
 
         if self.cleaned_data["start_date"]:
-            sqs = sqs.filter(modified__gte=self.cleaned_data["start_date"])
+            sqs = sqs.filter(created__gte=self.cleaned_data["start_date"])
 
         if self.cleaned_data['end_date']:
-            sqs = sqs.filter(modified__lte=self.cleaned_data["end_date"])
+            sqs = sqs.filter(created__lte=self.cleaned_data["end_date"])
 
         if self.load_all:
             sqs = sqs.load_all()
