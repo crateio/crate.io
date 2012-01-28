@@ -153,6 +153,7 @@ def synchronize_mirror(index=None, since=None):
                 process_package.delay(name, index=index)
     except Exception:
         task_log(synchronize_mirror.request.id, TaskLog.STATUS.failed, synchronize_mirror.name, [], {"index": index}, exception=sys.exc_info())
+        raise
 
 
 @task(default_retry_delay=30 * 60)
