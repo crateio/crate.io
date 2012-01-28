@@ -484,10 +484,10 @@ def synchronize_downloads(index=None):
         releases = set()
 
         for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:25]:
-            releases.add(rf.release)
-
-        for release in releases:
-            update_download_counts.delay(release.package.name, release.version, {x.filename: x.pk for x in release.files.all()}, index=index)
+            if rf.release not in releases:
+                update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
+                rf.release.save()
+                releases.add(rf.release)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
         raise
