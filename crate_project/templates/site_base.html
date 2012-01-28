@@ -6,17 +6,18 @@
 {% load ifsetting_tag %}
 {% load i18n %}
 
-{% block less_base %}
-    {% ifsetting SERVE_MEDIA %}
-        {{ block.super }}
-    {% else %}
-        <link rel="stylesheet" href="{% static 'css/theme.css' %}" />
+{% block extra_style %}
+    {% ifsetting SERVE_LESS %}
         <link rel="stylesheet" href="{% static 'css/crate.css' %}" />
+    {% else %}
+        <link rel="stylesheet/less" type="text/css" href="{% static 'less/crate.less' %}" />
     {% endifsetting %}
 {% endblock %}
 
-{% block less_extra %}
-    <link rel="stylesheet/less" type="text/css" href="{% static 'less/crate.less' %}" />
+{% block extra_script %}
+    {% ifsetting SERVE_LESS %}
+        <script src="{% static 'pinax/js/less-1.2.1.min.js' %}" type="text/javascript"></script>
+    {% endifsetting %}
 {% endblock %}
 
 {% block topbar %}
