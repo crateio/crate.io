@@ -18,20 +18,32 @@ class Migration(SchemaMigration):
         # Adding model 'Package'
         db.create_table('packages_package', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 734515))),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 734619))),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 227535))),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 227680))),
             ('name', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=150)),
         ))
         db.send_create_signal('packages', ['Package'])
 
+        # Adding model 'PackageURI'
+        db.create_table('packages_packageuri', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('package', self.gf('django.db.models.fields.related.ForeignKey')(related_name='package_links', to=orm['packages.Package'])),
+            ('uri', self.gf('django.db.models.fields.URLField')(max_length=400)),
+        ))
+        db.send_create_signal('packages', ['PackageURI'])
+
+        # Adding unique constraint on 'PackageURI', fields ['package', 'uri']
+        db.create_unique('packages_packageuri', ['package_id', 'uri'])
+
         # Adding model 'Release'
         db.create_table('packages_release', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 732304))),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 732408))),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 229663), db_index=True)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 229762))),
             ('package', self.gf('django.db.models.fields.related.ForeignKey')(related_name='releases', to=orm['packages.Package'])),
             ('version', self.gf('django.db.models.fields.CharField')(max_length=512)),
             ('hidden', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('order', self.gf('django.db.models.fields.IntegerField')(default=0)),
             ('platform', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('summary', self.gf('django.db.models.fields.TextField')()),
             ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
@@ -43,8 +55,7 @@ class Migration(SchemaMigration):
             ('maintainer_email', self.gf('django.db.models.fields.TextField')(blank=True)),
             ('requires_python', self.gf('django.db.models.fields.CharField')(max_length=25, blank=True)),
             ('download_uri', self.gf('django.db.models.fields.URLField')(max_length=1024, blank=True)),
-            ('uris', self.gf('django_hstore.hstore.DictionaryField')()),
-            ('raw_data', self.gf('crate.fields.json.JSONField')(null=True)),
+            ('raw_data', self.gf('crate.fields.json.JSONField')(null=True, blank=True)),
         ))
         db.send_create_signal('packages', ['Release'])
 
@@ -62,8 +73,8 @@ class Migration(SchemaMigration):
         # Adding model 'ReleaseFile'
         db.create_table('packages_releasefile', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 730782))),
-            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 8, 3, 18, 4, 730909))),
+            ('created', self.gf('model_utils.fields.AutoCreatedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 228759), db_index=True)),
+            ('modified', self.gf('model_utils.fields.AutoLastModifiedField')(default=datetime.datetime(2012, 1, 28, 13, 38, 31, 228860))),
             ('release', self.gf('django.db.models.fields.related.ForeignKey')(related_name='files', to=orm['packages.Release'])),
             ('type', self.gf('django.db.models.fields.CharField')(max_length=25)),
             ('file', self.gf('django.db.models.fields.files.FileField')(max_length=512)),
@@ -77,6 +88,15 @@ class Migration(SchemaMigration):
 
         # Adding unique constraint on 'ReleaseFile', fields ['release', 'type', 'python_version', 'filename']
         db.create_unique('packages_releasefile', ['release_id', 'type', 'python_version', 'filename'])
+
+        # Adding model 'ReleaseURI'
+        db.create_table('packages_releaseuri', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('release', self.gf('django.db.models.fields.related.ForeignKey')(related_name='uris', to=orm['packages.Release'])),
+            ('label', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('uri', self.gf('django.db.models.fields.URLField')(max_length=500)),
+        ))
+        db.send_create_signal('packages', ['ReleaseURI'])
 
         # Adding model 'ReleaseRequire'
         db.create_table('packages_releaserequire', (
@@ -118,11 +138,17 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'Release', fields ['package', 'version']
         db.delete_unique('packages_release', ['package_id', 'version'])
 
+        # Removing unique constraint on 'PackageURI', fields ['package', 'uri']
+        db.delete_unique('packages_packageuri', ['package_id', 'uri'])
+
         # Deleting model 'TroveClassifier'
         db.delete_table('packages_troveclassifier')
 
         # Deleting model 'Package'
         db.delete_table('packages_package')
+
+        # Deleting model 'PackageURI'
+        db.delete_table('packages_packageuri')
 
         # Deleting model 'Release'
         db.delete_table('packages_release')
@@ -132,6 +158,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'ReleaseFile'
         db.delete_table('packages_releasefile')
+
+        # Deleting model 'ReleaseURI'
+        db.delete_table('packages_releaseuri')
 
         # Deleting model 'ReleaseRequire'
         db.delete_table('packages_releaserequire')
@@ -145,17 +174,23 @@ class Migration(SchemaMigration):
     models = {
         'packages.package': {
             'Meta': {'object_name': 'Package'},
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 750649)'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 248043)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 750758)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 248163)'}),
             'name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '150'})
+        },
+        'packages.packageuri': {
+            'Meta': {'unique_together': "(['package', 'uri'],)", 'object_name': 'PackageURI'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'package': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'package_links'", 'to': "orm['packages.Package']"}),
+            'uri': ('django.db.models.fields.URLField', [], {'max_length': '400'})
         },
         'packages.release': {
             'Meta': {'unique_together': "(('package', 'version'),)", 'object_name': 'Release'},
             'author': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'author_email': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'classifiers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'releases'", 'blank': 'True', 'to': "orm['packages.TroveClassifier']"}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 748620)'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 250204)', 'db_index': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'download_uri': ('django.db.models.fields.URLField', [], {'max_length': '1024', 'blank': 'True'}),
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -164,25 +199,25 @@ class Migration(SchemaMigration):
             'license': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'maintainer': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'maintainer_email': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 748719)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 250319)'}),
+            'order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'package': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'releases'", 'to': "orm['packages.Package']"}),
             'platform': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'raw_data': ('crate.fields.json.JSONField', [], {'null': 'True'}),
+            'raw_data': ('crate.fields.json.JSONField', [], {'null': 'True', 'blank': 'True'}),
             'requires_python': ('django.db.models.fields.CharField', [], {'max_length': '25', 'blank': 'True'}),
             'summary': ('django.db.models.fields.TextField', [], {}),
-            'uris': ('django_hstore.hstore.DictionaryField', [], {}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '512'})
         },
         'packages.releasefile': {
             'Meta': {'unique_together': "(('release', 'type', 'python_version', 'filename'),)", 'object_name': 'ReleaseFile'},
             'comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 747112)'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 249244)', 'db_index': 'True'}),
             'digest': ('django.db.models.fields.CharField', [], {'max_length': '512'}),
             'downloads': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '512'}),
             'filename': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 8, 3, 18, 4, 747216)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 13, 38, 31, 249368)'}),
             'python_version': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
             'release': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'files'", 'to': "orm['packages.Release']"}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '25'})
@@ -213,6 +248,13 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '150'}),
             'release': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'requires'", 'to': "orm['packages.Release']"}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '50'})
+        },
+        'packages.releaseuri': {
+            'Meta': {'object_name': 'ReleaseURI'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'label': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'release': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'uris'", 'to': "orm['packages.Release']"}),
+            'uri': ('django.db.models.fields.URLField', [], {'max_length': '500'})
         },
         'packages.troveclassifier': {
             'Meta': {'object_name': 'TroveClassifier'},
