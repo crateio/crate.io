@@ -17,9 +17,6 @@ INSTALLED_APPS += [
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-#CELERY_ALWAYS_EAGER = True  # When Testing Locally Use Eager
-#CELERY_EAGER_PROPAGATES_EXCEPTIONS = True  # Show Us Exceptions that Occur As Well
-
 # Configure Celery
 BROKER_TRANSPORT = "redis"
 BROKER_HOST = "localhost"
