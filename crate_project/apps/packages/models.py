@@ -40,7 +40,17 @@ def release_file_upload_to(instance, filename):
     else:
         directory = str(uuid.uuid4()).replace("-", "")
 
-    return posixpath.join("packages", directory, filename)
+    if getattr(settings, "PACKAGE_FILE_STORAGE_BASE_DIR", None):
+        path_items = [settings.PACKAGE_FILE_STORAGE_BASE_DIR]
+    else:
+        path_items = []
+
+    for char in directory[:4]:
+        path_items.append(char)
+
+    path_items += [directory, filename]
+
+    return posixpath.join(*path_items)
 
 
 # @@@ These are by Nature Hierarchical. Would we benefit from a tree structure?
