@@ -2,7 +2,13 @@
         <div class="span9 package-name"><a href="{{ result.url }}">{{ result.name }}</a></div>
 
         <div class="span3">
-            <div class="author"><em>by Bob</em></div>
+            {% if result.author %}
+                <div class="author"><em>by {{ result.author }}</em></div>
+            {% elif result.maintainer %}
+                <div class="maintainer"><em>by {{ result.maintainer }}</em></div>
+            {% else %}
+                &nbsp;
+            {% endif %}
         </div>
         <div class="span2">
             <div class="downloads"><span class="count">{{ result.downloads }}</span> downloads</div>
