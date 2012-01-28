@@ -78,6 +78,8 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
+    "pagination.middleware.PaginationMiddleware",
+
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
 ]
@@ -130,6 +132,7 @@ INSTALLED_APPS = [
     # external (Pinax)
     # "notification",  # must be first
     "staticfiles",
+    "pagination",
     "compressor",
     "django_openid",
     "timezones",
