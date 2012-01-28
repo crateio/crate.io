@@ -91,65 +91,68 @@ def synchronize_mirror(index=None, since=None):
         index = "http://pypi.python.org/"
     index_url = posixpath.join(index, "pypi")
 
-    if since is None:
-        try:
-            # Try to Sync from Our Last Time
-            dt = Log.objects.filter(type=Log.TYPES.sync, index=index).order_by("-created")[:1][0].created
-            since = int(time.mktime(dt.timetuple())) - 1
-        except IndexError:
-            # Default to the Unix Epoch
-            since = 0
+    try:
+        if since is None:
+            try:
+                # Try to Sync from Our Last Time
+                dt = Log.objects.filter(type=Log.TYPES.sync, index=index).order_by("-created")[:1][0].created
+                since = int(time.mktime(dt.timetuple())) - 1
+            except IndexError:
+                # Default to the Unix Epoch
+                since = 0
 
-    client = xmlrpclib.ServerProxy(index_url)
+        client = xmlrpclib.ServerProxy(index_url)
 
-    with transaction.commit_on_success():
-        Log.objects.create(type=Log.TYPES.sync, index=index, message="Synchronizing with %s" % index)
+        with transaction.commit_on_success():
+            Log.objects.create(type=Log.TYPES.sync, index=index, message="Synchronizing with %s" % index)
 
-        names = set()
+            names = set()
 
-        if since == 0:  # @@@ Should We Do This If since is too far in the past instead of just 0?
-            # This is an initial Synchronize and change log will not work
-            for name in client.list_packages():
-                names.add(name)
-        else:
-            changelog = client.changelog(since)
-
-            for item in changelog:
-                name, version, timestamp, action = item
-
-                handled = False
-
-                if action.startswith("new") or action.startswith("add") or action.startswith("create"):
+            if since == 0:  # @@@ Should We Do This If since is too far in the past instead of just 0?
+                # This is an initial Synchronize and change log will not work
+                for name in client.list_packages():
                     names.add(name)
-                    handled = True
-                elif action.startswith("update"):
-                    # This techincally doesn't need to trigger a download, but it's the best way currently to
-                    #   get the updated meta data.
-                    names.add(name)
-                    handled = True
-                elif action == "remove":
-                    if version is None:
-                        Package.objects.filter(name=name).delete()
+            else:
+                changelog = client.changelog(since)
+
+                for item in changelog:
+                    name, version, timestamp, action = item
+
+                    handled = False
+
+                    if action.startswith("new") or action.startswith("add") or action.startswith("create"):
+                        names.add(name)
+                        handled = True
+                    elif action.startswith("update"):
+                        # This techincally doesn't need to trigger a download, but it's the best way currently to
+                        #   get the updated meta data.
+                        names.add(name)
+                        handled = True
+                    elif action == "remove":
+                        if version is None:
+                            Package.objects.filter(name=name).delete()
+                        else:
+                            Release.objects.filter(package__name=name, version=version).delete()
+                        handled = True
+                    elif action.startswith("remove file"):
+                        filename = action[12:]
+                        ReleaseFile.objects.filter(release__package__name=name, release__version=version, filename=filename).delete()
+                        handled = True
+                    elif action == "docupdate":
+                        handled = True
+                    elif action.startswith("remove Owner"):
+                        handled = True
                     else:
-                        Release.objects.filter(package__name=name, version=version).delete()
-                    handled = True
-                elif action.startswith("remove file"):
-                    filename = action[12:]
-                    ReleaseFile.objects.filter(release__package__name=name, release__version=version, filename=filename).delete()
-                    handled = True
-                elif action == "docupdate":
-                    handled = True
-                elif action.startswith("remove Owner"):
-                    handled = True
-                else:
-                    names.add(name)
+                        names.add(name)
 
-                # @@@ Eventually We Probably Want To Get Rid of This?
-                dt = datetime.datetime.fromtimestamp(timestamp).replace(tzinfo=utc)
-                ChangeLog.objects.create(package=name, version=version, timestamp=dt, action=action, handled=handled)
+                    # @@@ Eventually We Probably Want To Get Rid of This?
+                    dt = datetime.datetime.fromtimestamp(timestamp).replace(tzinfo=utc)
+                    ChangeLog.objects.create(package=name, version=version, timestamp=dt, action=action, handled=handled)
 
-        for name in names:
-            process_package.delay(name, index=index)
+            for name in names:
+                process_package.delay(name, index=index)
+    except Exception:
+        task_log(synchronize_mirror.request.id, TaskLog.STATUS.failed, synchronize_mirror.name, [], {"index": index}, exception=sys.exc_info())
 
 
 @task(default_retry_delay=30 * 60)
