@@ -1,3 +1,4 @@
+import hashlib
 import os
 import posixpath
 import urlparse
@@ -8,6 +9,7 @@ import lxml.html
 from docutils.core import publish_string
 
 from django.conf import settings
+from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
@@ -179,6 +181,18 @@ class Release(models.Model):
         except Exception:
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
+
+        # @@@ Temporary Code to  Migrate Files to The New Location
+        for f in self.files.all():
+            dirs = f.file.name.split("/")
+            if len(dirs) > 1:
+                if dirs[0] == "packages":
+                    cf = ContentFile(f.file.read())
+                    if "sha256$" + hashlib.sha256(cf.read()).hexdigest().lower() == f.digest:
+                        f.file.delete()
+                        f.file.save(f.filename, cf)
+                    else:
+                        print "sha256$" + hashlib.sha256(cf.read()).hexdigest().lower(), "did not match", f.digest
 
         return super(Release, self).save(*args, **kwargs)
 
