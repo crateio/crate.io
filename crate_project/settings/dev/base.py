@@ -13,9 +13,30 @@ MIDDLEWARE_CLASSES += [
 
 INSTALLED_APPS += [
     "debug_toolbar",
+    "devserver",
 ]
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+DEVSERVER_ARGS = [
+    "--dozer",
+]
+
+DEVSERVER_IGNORED_PREFIXES = [
+    "/site_media/",
+]
+
+DEVSERVER_MODULES = [
+    # "devserver.modules.sql.SQLRealTimeModule",
+    "devserver.modules.sql.SQLSummaryModule",
+    "devserver.modules.profile.ProfileSummaryModule",
+
+    # Modules not enabled by default
+    "devserver.modules.ajax.AjaxDumpModule",
+    "devserver.modules.profile.MemoryUseModule",
+    "devserver.modules.cache.CacheSummaryModule",
+    "devserver.modules.profile.LineProfilerModule",
+]
 
 # Configure Celery
 BROKER_TRANSPORT = "redis"
@@ -38,6 +59,12 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+# Storage for Packages
+PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+PACKAGE_FILE_STORAGE_OPTIONS = {
+    "bucket": "crate-dev",
+}
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
-AWS_STORAGE_BUCKET_NAME = "crate-dev"
+AWS_STORAGE_BUCKET_NAME = "crate-media-dev"

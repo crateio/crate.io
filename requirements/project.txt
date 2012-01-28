@@ -9,6 +9,7 @@ psycopg2==2.4.1
 django-uuidfield==0.2
 
 # Utility
+PIL==1.1.7
 -e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
 
 # Celery
@@ -44,6 +45,15 @@ docutils==0.8.1
 # Storage
 boto==2.1.1
 -e hg+https://bitbucket.org/dstufft/django-storages@7f9fd318450fa86110944a9890fd0e4ac10e6bde#egg=django-storages
+
+# Dev Tools
+WebOb==1.2b2
+Paste==1.7.5.1
+Dozer==0.1
+sqlparse==0.1.3
+-e svn+https://guppy-pe.svn.sourceforge.net/svnroot/guppy-pe/trunk/guppy@90#egg=guppy
+line_profiler==1.0b3
+django-devserver==0.3.1
 
 # Management
 gondor==1.0.1

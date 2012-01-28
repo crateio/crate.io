@@ -49,12 +49,17 @@ CONTACT_EMAIL = "support@crate.io"
 
 MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
+PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+PACKAGE_FILE_STORAGE_OPTIONS = {
+    "bucket": "crate-production",
+    "custom_domain": "packages.crate.io",
+}
+
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 # STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
-AWS_STORAGE_BUCKET_NAME = "crate-production"
-
-AWS_S3_CUSTOM_DOMAIN = "packages.crate.io"
+AWS_STORAGE_BUCKET_NAME = "crate-media-production"
+AWS_S3_CUSTOM_DOMAIN = "media.crate.io"
 
 PRIVATE_BETA_ALLOWED_URLS = [
     "/account/login/",

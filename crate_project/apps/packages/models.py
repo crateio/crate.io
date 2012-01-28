@@ -14,6 +14,7 @@ from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.encoding import smart_str
+from django.utils.importlib import import_module
 from django.utils.translation import ugettext_lazy as _
 
 from model_utils import Choices
@@ -23,6 +24,14 @@ from model_utils.models import TimeStampedModel
 from crate.fields import JSONField
 from packages.utils import verlib
 
+# Get the Storage Engine for Packages
+if getattr(settings, "PACKAGE_FILE_STORAGE", None):
+    mod_name, engine_name = settings.PACKAGE_FILE_STORAGE.rsplit(".", 1)
+    mod = import_module(mod_name)
+    package_storage = getattr(mod, engine_name)(**getattr(settings, "PACKAGE_FILE_STORAGE_OPTIONS", {}))
+else:
+    package_storage = None
+
 
 def release_file_upload_to(instance, filename):
     dsplit = instance.digest.split("$")
@@ -31,7 +40,17 @@ def release_file_upload_to(instance, filename):
     else:
         directory = str(uuid.uuid4()).replace("-", "")
 
-    return posixpath.join("packages", directory, filename)
+    if getattr(settings, "PACKAGE_FILE_STORAGE_BASE_DIR", None):
+        path_items = [settings.PACKAGE_FILE_STORAGE_BASE_DIR]
+    else:
+        path_items = []
+
+    for char in directory[:4]:
+        path_items.append(char)
+
+    path_items += [directory, filename]
+
+    return posixpath.join(*path_items)
 
 
 # @@@ These are by Nature Hierarchical. Would we benefit from a tree structure?
@@ -211,7 +230,7 @@ class ReleaseFile(models.Model):
     release = models.ForeignKey(Release, related_name="files")
 
     type = models.CharField(max_length=25, choices=TYPES)
-    file = models.FileField(upload_to=release_file_upload_to, max_length=512)
+    file = models.FileField(upload_to=release_file_upload_to, storage=package_storage, max_length=512)
     filename = models.CharField(max_length=200, help_text="This is the file name given to us by PyPI", blank=True, null=True, default=None)
     digest = models.CharField(max_length=512)
 
