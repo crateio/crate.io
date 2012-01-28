@@ -5,7 +5,7 @@
 
 # Database
 psycopg2==2.4.1
--e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
+-e hg+https://bitbucket.org/andrewgodwin/south@15f38765d6680c35f338f88b61a33ede7bf8f1838#egg=South
 django-uuidfield==0.2
 
 # Utility
@@ -21,7 +21,7 @@ celery==2.4.6
 
 # Django Celery
 django-picklefield==0.1.9
--e git+https://github.com/ask/django-celery.git@1031e4251e9df1f16b9d2bf50c3441402317f738#egg=django-celery
+-e git+https://github.com/ask/django-celery.git@d4e2f60331d7cfdc8d9f13eb7ad74da5338694f4#egg=django-celery
 
 # Private Beta
 privatebeta==0.4.1
@@ -34,8 +34,8 @@ lxml==2.3
 django-hosts==0.4.1
 
 # Search
--e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
--e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
+-e git+https://github.com/toastdriven/django-haystack.git@570785fdccb7373a3eec2ea3dbca8a3197e1c9c4#egg=django-haystack
+-e git+https://github.com/toastdriven/pyelasticsearch.git@b1c8c6193560807e9f0e756dd1898b281076eea8#egg=pyelasticsearch
 celery-haystack==0.4
 
 # Markup
