@@ -384,7 +384,7 @@ def download_release(package_name, version, data):
                 #   * We have an Already Existing File for this Release
                 headers = {"If-Modified-Since": package_modified.last_modified}
             else:
-                headers = None
+                headers = {}
 
             resp = requests.get(data["url"], headers=headers, prefetch=True)
 
