@@ -302,7 +302,7 @@ class ReleaseObsolete(models.Model):
 @receiver(post_save, sender=Release)
 def version_ordering(sender, **kwargs):
     instance = kwargs.get("instance")
-    if instance is not None and kwargs.get("created", True):
+    if instance is not None:
         releases = Release.objects.filter(package__pk=instance.package.pk)
 
         versions = []
