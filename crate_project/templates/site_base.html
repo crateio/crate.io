@@ -10,7 +10,7 @@
     {% ifsetting SERVE_MEDIA %}
         {{ block.super }}
     {% else %}
-        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+        <link rel="stylesheet" href="{% static 'css/theme.css' %}" />
         <link rel="stylesheet" href="{% static 'css/crate.css' %}" />
     {% endifsetting %}
 {% endblock %}

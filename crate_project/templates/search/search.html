@@ -30,8 +30,6 @@
                     <form class="form-inline" method="GET" action=".">
                         {{ form.non_field_errors }}
 
-                        <input type="hidden" name="has_releases" value="on">
-
                         <div class="control-group{% if form.q.errors %} error{% endif %}">
                             <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
                             <div class="controls">
@@ -41,6 +39,8 @@
                                 <input type="submit" class="btn primary" value="Search">
                             </div>
                         </div>
+
+                        <input type="hidden" name="has_releases" value="on">
                     </form>
                 </div>
             {% endblock %}

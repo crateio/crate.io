@@ -24,7 +24,7 @@ def compile():
 
         # Compile the Less Files
         files_to_compile = set([
-            os.path.join(BASE_DIR, "crate_project", "site_media", "static", "less", "bootstrap.less"),
+            os.path.join(BASE_DIR, "crate_project", "site_media", "static", "pinax", "less", "theme.less"),
             os.path.join(BASE_DIR, "crate_project", "site_media", "static", "less", "crate.less"),
         ])
 
