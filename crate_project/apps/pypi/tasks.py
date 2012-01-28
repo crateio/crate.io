@@ -481,8 +481,12 @@ def synchronize_downloads(index=None):
         index = "http://pypi.python.org/"
 
     try:
-        # @@@ This Query is Slow, need to make it better
-        for release in Release.objects.exclude(files=None).select_related("package").prefetch_related("files"):
+        releases = set()
+
+        for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:25]:
+            releases.add(rf.release)
+
+        for release in releases:
             update_download_counts.delay(release.package.name, release.version, {x.filename: x.pk for x in release.files.all()}, index=index)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
