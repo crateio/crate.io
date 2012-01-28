@@ -61,9 +61,6 @@ def deploy(instance=None):
     if branch.failed:
         abort("Unable to get the current branch name")
 
-    # Compile Less Files
-    compile()
-
     local("gondor deploy %(instance)s %(branch)s" % {"instance": instance, "branch": branch})
 
 
