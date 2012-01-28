@@ -5,7 +5,7 @@
 
 # Database
 psycopg2==2.4.1
--e hg+https://bitbucket.org/andrewgodwin/south@fcf464bd036f5dfdfba939cb34a3c7f3df1adeb8#egg=South
+-e hg+https://bitbucket.org/andrewgodwin/south@9338757f8b9a9defa579cb81f2aea2c17158d26#egg=South
 django-uuidfield==0.2
 
 # Utility
@@ -15,28 +15,28 @@ django-uuidfield==0.2
 redis==2.4.11
 anyjson==0.3.1
 amqplib==1.0.2
-kombu==1.5.1
+kombu==2.0
 python-dateutil==1.5
 celery==2.4.6
 
 # Django Celery
 django-picklefield==0.1.9
--e git+https://github.com/ask/django-celery.git@1031e4251e9df1f16b9d2bf50c3441402317f738#egg=django-celery
+-e git+https://github.com/ask/django-celery.git@d4e2f60331d7cfdc8d9f13eb7ad74da5338694f4#egg=django-celery
 
 # Private Beta
 privatebeta==0.4.1
 
 # Scraping & Processing Utils
-requests==0.9.1
+requests==0.10.1
 lxml==2.3
 
 # Domain Name Utilities
 django-hosts==0.4.1
 
 # Search
--e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
--e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
-pysolr==2.1.0-beta
+-e git+https://github.com/toastdriven/django-haystack.git@570785fdccb7373a3eec2ea3dbca8a3197e1c9c4#egg=django-haystack
+-e git+https://github.com/toastdriven/pyelasticsearch.git@b1c8c6193560807e9f0e756dd1898b281076eea8#egg=pyelasticsearch
+celery-haystack==0.4
 
 # Markup
 docutils==0.8.1

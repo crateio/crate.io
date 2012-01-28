@@ -37,7 +37,7 @@ DATABASES = {
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
 
-USE_I18N = False
+USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
@@ -77,6 +77,8 @@ MIDDLEWARE_CLASSES = [
     "django_openid.consumer.SessionConsumer",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    "pagination.middleware.PaginationMiddleware",
 
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
@@ -130,6 +132,7 @@ INSTALLED_APPS = [
     # external (Pinax)
     # "notification",  # must be first
     "staticfiles",
+    "pagination",
     "compressor",
     "django_openid",
     "timezones",
@@ -149,6 +152,7 @@ INSTALLED_APPS = [
     "haystack",
     "storages",
     "intercom",
+    "celery_haystack",
 
     # project
     "about",
@@ -195,10 +199,6 @@ DEBUG_TOOLBAR_CONFIG = {
     "INTERCEPT_REDIRECTS": False,
 }
 
-SOUTH_DATABASE_ADAPTERS = {
-    "default": "south.db.postgresql_psycopg2",
-}
-
 CELERY_SEND_TASK_ERROR_EMAILS = True
 CELERY_DISABLE_RATE_LIMITS = True
 CELERY_TASK_PUBLISH_RETRY = True
@@ -210,30 +210,6 @@ CELERYD_TASK_SOFT_TIME_LIMIT = 30
 CELERYD_HIJACK_ROOT_LOGGER = False
 
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
-
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {
-        "require_debug_false": {
-            "()": "django.utils.log.RequireDebugFalse",
-        },
-    },
-    "handlers": {
-        "mail_admins": {
-            "level": "ERROR",
-            "filters": ["require_debug_false"],
-            "class": "django.utils.log.AdminEmailHandler",
-        }
-    },
-    "loggers": {
-        "django.request": {
-            "handlers": ["mail_admins"],
-            "level": "ERROR",
-            "propagate": True,
-        },
-    }
-}
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 15
 

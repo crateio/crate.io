@@ -8,7 +8,7 @@
 --extra-index-url=http://dist.pinaxproject.com/fresh-start/
 
 # Django==1.4  # Wait for Django 1.4 to be released
--e git+https://github.com/django/django.git@22f676e9e0d67886bdc287322a300c5107bfa756#egg=Django
+-e git+https://github.com/django/django.git@dec08c3424b91672b412ce0c70131195191904e8#egg=Django
 -e git+https://github.com/dstufft/pinax.git@4f325913db26deaf723397aacb239de2ed24a75e#egg=Pinax
 
 
@@ -22,9 +22,10 @@ pytz==2011n
 django-openid==0.3a1
 python-openid==2.2.5
 
+django-pagination==1.0.7
 django-announcements==0.1.2
 django-notification==0.2
 idios==0.2a1
 metron==0.1
 
--e git+git://github.com/dstufft/pinax-theme-bootstrap.git@crate-less#egg=pinax-theme-bootstrap
+-e git+git://github.com/crateio/pinax-theme-bootstrap.git@less-bootstrap-modal#egg=pinax-theme-bootstrap
