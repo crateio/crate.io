@@ -186,7 +186,7 @@ class Release(models.Model):
         for f in self.files.all():
             dirs = f.file.name.split("/")
             if len(dirs) > 1:
-                if dirs[0] == "packages2":
+                if dirs[0] == "packages":
                     cf = ContentFile(f.file.read())
                     if "sha256$" + hashlib.sha256(cf.read()).hexdigest().lower() == f.digest:
                         f.file.delete()
