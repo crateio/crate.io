@@ -17,6 +17,8 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField(model_attr="name", boost=1.5)
     summary = indexes.CharField(null=True)
+    author = indexes.CharField(null=True)
+    maintainer = indexes.CharField(null=True)
     downloads = indexes.IntegerField(model_attr="downloads", indexed=False)
     url = indexes.CharField(model_attr="get_absolute_url", indexed=False)
     operating_systems = indexes.MultiValueField(null=True, faceted=True, facet_class=indexes.FacetMultiValueField)
@@ -34,6 +36,8 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
 
         if obj.latest:
             data["summary"] = obj.latest.summary
+            data["author"] = obj.latest.author if obj.latest.author else None
+            data["maintainer"] = obj.latest.maintainer if obj.latest.maintainer else None
 
             operating_systems = []
             licenses = []
