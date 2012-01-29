@@ -189,7 +189,9 @@
                         </ul>
 
                         {% package_version_count release.package.name as total_versions %}
-                        <a data-toggle="modal" href="#all-versions" title="All Versions for {{ release.package.name }}">Show All Versions ({{ total_versions }} total)</a>
+                        {% if total_versions > 5 %}
+                            <a data-toggle="modal" href="#all-versions" title="All Versions for {{ release.package.name }}">Show All Versions ({{ total_versions }} total)</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
