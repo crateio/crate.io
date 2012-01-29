@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     "search",
     "crate",
     "privatebeta",
+    "helpdocs",
 ]
 
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True

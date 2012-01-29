@@ -22,6 +22,7 @@ urlpatterns = patterns("",
     url(r"^announcements/", include("announcements.urls")),
 
     url(r"^packages/", include("packages.urls")),
+    url(r"^help/", include("helpdocs.urls"))
 )
 
 
