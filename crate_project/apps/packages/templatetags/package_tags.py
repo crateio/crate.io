@@ -47,6 +47,11 @@ def updated_packages(num):
 
 
 @register.assignment_tag
+def featured_packages(num):
+    return Package.objects.filter(featured=True).order_by("?")[:num]
+
+
+@register.assignment_tag
 def package_versions(package_name, num=None):
     qs = Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")
     if num is not None:

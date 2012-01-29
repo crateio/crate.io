@@ -92,13 +92,9 @@
             </div>
 
             <div class="span4">
-                {% comment %}
-                <h2>Most Downloaded Today</h2>
-                <ul class="unstyled">
-                    <li>Coming Soon</li>
-                </ul>
-                {% endcomment %}
-                &nbsp;
+                <h2>Featured Packages</h2>
+                {% featured_packages 5 as packages %}
+                {% include "packages/partials/small_package_list.html" with packages=packages only %}
             </div>
 
             <div class="span4">
