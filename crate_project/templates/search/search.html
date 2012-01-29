@@ -16,7 +16,8 @@
 {% block body_base %}
     <div class="container">
         <div class="alert alert-block alert-info">
-            <p>Thanks for checking out Crate.io. We are currently in beta and are trying to improve everyday! If you have any feedback please email <a href="mailto:support@crate.io">support@crate.io</a> or pop into IRC (<a href="irc://irc.freenode.net:6667/crate">#crate on Freenode</a>).</p>
+            <h4 class="alert-header">Thanks for checking out Crate.io.</h4>
+            <p>We are currently in beta and are trying to improve everyday! If you have any feedback please email <a href="mailto:support@crate.io">support@crate.io</a> or pop into IRC (<a href="irc://irc.freenode.net:6667/crate">#crate on Freenode</a>).</p>
             <p>By the way, Crate.io is open source! Check it out on <a href="https://github.com/crateio/crate-site/">Github</a>.</p>
         </div>
         {% include "_messages.html" %}
@@ -27,9 +28,6 @@
                 <p>Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.</p>
             {% endblock %}
             <div class="row">
-            <div class="span6">
-
-            </div>
             <div id="main-search" class="span6">
                 <form class="form-search" method="GET" action=".">
                     {{ form.non_field_errors }}
@@ -56,24 +54,23 @@
                     </div>
                 {% endcache %}
             </div>
-        </div>
-        </div>
-        <div class="row">
-            <div class="span3">
-                <h3>New Packages</h3>
-                {% new_packages 5 as changelogs %}
-                {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
+            <div class="row">
+                <div class="span2">
+                    <h4>New Packages</h4>
+                    {% new_packages 5 as changelogs %}
+                    {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
+                </div>
+                <div class="span2">
+                    <h4>Just Updated</h4>
+                    {% updated_packages 5 as changelogs %}
+                    {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
+                </div>
             </div>
-            <div class="span3">
-                <h3>Just Updated</h3>
-                {% updated_packages 5 as changelogs %}
-                {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
-            </div>
         </div>
-
+        </div>
         <div class="row">
             <div class="span4">
-                <h2>Package Discovery</h2>
+                <h3>Package Discovery</h3>
                 <ul>
                     <li>Advanced Search Based on <a href="http://www.elasticsearch.org/">Elastic Search</a></li>
                     <li>Stats that Matter - See how many times a package has been installed across all versions or for a particular version</li>
@@ -81,7 +78,7 @@
                 </ul>
             </div>
             <div class="span4">
-                <h2>Reliability</h2>
+                <h3>Reliability</h3>
                 <ul>
                     <li>Package Hosting on <a href="http://aws.amazon.com/s3/">Amazon S3</a> and <a href="http://aws.amazon.com/cloudfront/">CloudFront</a></li>
                     <li>Cache Safe Urls - All Package Urls include the package's sha256 hash, allowing you to cache them without worrying about a re upload invalidating your cache.</li>
@@ -89,7 +86,7 @@
                 </ul>
             </div>
             <div class="span4">
-                <h2>Other Features</h2>
+                <h3>Other Features</h3>
                 <ul>
                     <li>Complete Mirror of <a href="http://pypi.python.org/">PyPI</a></li>
                     <li>pip compatible API available at <a href="http://simple.crate.io/">http://simple.crate.io/</a> (<a href="{% url helpdocs_pip %}">See Instructions Here</a>)</li>
