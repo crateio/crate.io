@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from pypi.models import ChangeLog, Log, PackageModified, TaskLog
+from pypi.models import ChangeLog, Log, PackageModified, TaskLog, DownloadChange
 
 
 class ChangeLogAdmin(admin.ModelAdmin):
@@ -27,7 +27,14 @@ class TaskLogAdmin(admin.ModelAdmin):
     search_fields = ["task_id", "args", "kwargs"]
 
 
+class DownloadChangeAdmin(admin.ModelAdmin):
+    list_display = ["release", "change", "created", "modified"]
+    list_filter = ["created", "modified"]
+    search_fields = ["release__package__name"]
+
+
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(Log, LogAdmin)
 admin.site.register(PackageModified, PackageModifiedAdmin)
 admin.site.register(TaskLog, TaskLogAdmin)
+admin.site.register(DownloadChange, DownloadChangeAdmin)
