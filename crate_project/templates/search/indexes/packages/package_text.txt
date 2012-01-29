@@ -1,3 +1,7 @@
 {{ object.name }}
 
 {{ object.latest.summary }}
+
+{{ object.latest.author }}
+
+{{ object.latest.maintainer }}

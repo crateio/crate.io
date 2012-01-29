@@ -22,7 +22,10 @@ class SearchForm(HaystackSearchForm):
         if not self.cleaned_data.get("q"):
             return self.no_query_found()
 
-        sqs = self.searchqueryset.filter(SQ(content=AutoQuery(self.cleaned_data["q"])) | SQ(name=AutoQuery(self.cleaned_data["q"])))
+        sqs = self.searchqueryset.filter(
+                SQ(content=AutoQuery(self.cleaned_data["q"])) |
+                SQ(name=AutoQuery(self.cleaned_data["q"]))
+            )
 
         if self.cleaned_data.get("has_releases"):
             sqs = sqs.filter(release_count__gt=0)
