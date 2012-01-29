@@ -69,7 +69,6 @@ TEMPLATE_LOADERS = [
 ]
 
 MIDDLEWARE_CLASSES = [
-    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django_hosts.middleware.HostsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -83,7 +82,6 @@ MIDDLEWARE_CLASSES = [
 
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
-    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "crate_project.urls"
@@ -166,8 +164,6 @@ INSTALLED_APPS = [
     "privatebeta",
     "helpdocs",
 ]
-
-CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
