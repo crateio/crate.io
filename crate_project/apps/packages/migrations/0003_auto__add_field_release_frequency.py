@@ -1,22 +1,28 @@
 # -*- coding: utf-8 -*-
-from south.v2 import DataMigration
+import datetime
+from south.db import db
+from south.v2 import SchemaMigration
+from django.db import models
 
 
-class Migration(DataMigration):
+class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        for r in orm["packages.Release"].objects.all():
-            r.save()
+        # Adding field 'Release.frequency'
+        db.add_column('packages_release', 'frequency',
+                      self.gf('django.db.models.fields.CharField')(default='hourly', max_length=25),
+                      keep_default=False)
 
     def backwards(self, orm):
-        pass
+        # Deleting field 'Release.frequency'
+        db.delete_column('packages_release', 'frequency')
 
     models = {
         'packages.package': {
             'Meta': {'object_name': 'Package'},
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 60358)'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 359519)'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 60461)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 359624)'}),
             'name': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '150'})
         },
         'packages.packageuri': {
@@ -30,16 +36,17 @@ class Migration(DataMigration):
             'author': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'author_email': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'classifiers': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'releases'", 'blank': 'True', 'to': "orm['packages.TroveClassifier']"}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 53155)', 'db_index': 'True'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 354846)', 'db_index': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'download_uri': ('django.db.models.fields.URLField', [], {'max_length': '1024', 'blank': 'True'}),
+            'frequency': ('django.db.models.fields.CharField', [], {'default': "'hourly'", 'max_length': '25'}),
             'hidden': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'keywords': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'license': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'maintainer': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'maintainer_email': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 53274)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 354960)'}),
             'order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'package': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'releases'", 'to': "orm['packages.Package']"}),
             'platform': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -51,13 +58,13 @@ class Migration(DataMigration):
         'packages.releasefile': {
             'Meta': {'unique_together': "(('release', 'type', 'python_version', 'filename'),)", 'object_name': 'ReleaseFile'},
             'comment': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 58963)', 'db_index': 'True'}),
+            'created': ('model_utils.fields.AutoCreatedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 356827)', 'db_index': 'True'}),
             'digest': ('django.db.models.fields.CharField', [], {'max_length': '512'}),
             'downloads': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '512'}),
             'filename': ('django.db.models.fields.CharField', [], {'default': 'None', 'max_length': '200', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 15, 37, 58, 59082)'}),
+            'modified': ('model_utils.fields.AutoLastModifiedField', [], {'default': 'datetime.datetime(2012, 1, 28, 21, 37, 17, 356937)'}),
             'python_version': ('django.db.models.fields.CharField', [], {'max_length': '25'}),
             'release': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'files'", 'to': "orm['packages.Release']"}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '25'})
@@ -104,4 +111,3 @@ class Migration(DataMigration):
     }
 
     complete_apps = ['packages']
-    symmetrical = True

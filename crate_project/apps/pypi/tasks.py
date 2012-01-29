@@ -20,7 +20,7 @@ from django.utils.timezone import utc
 
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseFile, ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
-from pypi.models import ChangeLog, Log, PackageModified, TaskLog
+from pypi.models import ChangeLog, Log, PackageModified, TaskLog, DownloadChange
 
 
 logger = logging.getLogger(__name__)
@@ -153,6 +153,7 @@ def synchronize_mirror(index=None, since=None):
                 process_package.delay(name, index=index)
     except Exception:
         task_log(synchronize_mirror.request.id, TaskLog.STATUS.failed, synchronize_mirror.name, [], {"index": index}, exception=sys.exc_info())
+        raise
 
 
 @task(default_retry_delay=30 * 60)
@@ -481,13 +482,15 @@ def synchronize_downloads(index=None):
         index = "http://pypi.python.org/"
 
     try:
+        freqencies = {"hourly": 5, "daily": 5, "weekly": 5, "monthly": 5, "yearly": 5}
         releases = set()
 
-        for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:25]:
-            if rf.release not in releases:
-                update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
-                rf.release.save()
-                releases.add(rf.release)
+        for freq, num in freqencies.iteritems():
+            for rf in ReleaseFile.objects.filter(release__frequency=freq).order_by("release__modified").select_related("release", "release__package")[:num]:
+                if rf.release not in releases:
+                    update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
+                    rf.release.save()
+                    releases.add(rf.release)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
         raise
@@ -507,9 +510,21 @@ def update_download_counts(package_name, version, files, index=None):
 
         downloads = client.release_downloads(package_name, version)
 
+        changed = 0
+
         for filename, download_count in downloads:
             if filename in files:
+                try:
+                    current_count = ReleaseFile.objects.get(pk=files[filename]).downloads
+                    changed += (download_count - current_count)
+                except ReleaseFile.DoesNotExist:
+                    pass
                 ReleaseFile.objects.filter(pk=files[filename]).update(downloads=download_count)
+
+        try:
+            DownloadChange.objects.create(release=Release.objects.get(package__name=package_name, version=version), change=changed)
+        except Release.DoesNotExist:
+            pass
     except Exception:
         task_log(update_download_counts.request.id, TaskLog.STATUS.failed, update_download_counts.name, [package_name, version, files], {"index": index}, exception=sys.exc_info())
         raise
