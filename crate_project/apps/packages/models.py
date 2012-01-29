@@ -371,5 +371,5 @@ def release_changelog(sender, **kwargs):
     if instance is not None:
         if kwargs.get("created", False):
             diff = instance.created - instance.package.created
-            if diff.days != 0 and diff.seconds > 600:
+            if diff.days != 0 or diff.seconds > 600:
                 ChangeLog.objects.create(type=ChangeLog.TYPES.updated, package=instance.package, release=instance)
