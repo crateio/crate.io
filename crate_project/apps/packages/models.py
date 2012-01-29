@@ -65,6 +65,7 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
+    featured = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name

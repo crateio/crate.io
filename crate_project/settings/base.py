@@ -37,7 +37,7 @@ DATABASES = {
 TIME_ZONE = "UTC"
 LANGUAGE_CODE = "en-us"
 
-USE_I18N = True
+USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 
@@ -164,6 +164,7 @@ INSTALLED_APPS = [
     "search",
     "crate",
     "privatebeta",
+    "helpdocs",
 ]
 
 CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True

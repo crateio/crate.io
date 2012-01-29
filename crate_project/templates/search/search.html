@@ -15,17 +15,34 @@
 
 {% block body_base %}
     <div class="container">
-
-        <div class="alert alert-info">
-            <p>Hey there!</p>
-            <p>Thanks for checking out Crate.io. We are currently in beta and are trying to improve everyday! If you have any feedback please email <a href="mailto:support@crate.io">support@crate.io</a> or pop into IRC (<a href="irc://irc.freenode.net:6667/crate">#crate on Freenode</a>).</p>
-            <p>By the way, Crate.io is open source! Check it out on <a href="https://github.com/crateio/crate-site/">Github</a><p>
+        <div class="alert alert-block alert-info">
+            <h4 class="alert-header">Thanks for checking out Crate.io.</h4>
+            <p>We are currently in beta and are trying to improve everyday! If you have any feedback please email <a href="mailto:support@crate.io">support@crate.io</a> or pop into IRC (<a href="irc://irc.freenode.net:6667/crate">#crate on Freenode</a>).</p>
+            <p>By the way, Crate.io is open source! Check it out on <a href="https://github.com/crateio/crate-site/">Github</a>.</p>
         </div>
-
         {% include "_messages.html" %}
 
         <div class="hero-unit">
             {% block banner %}
+                <h1>Crate.io</h1>
+                <p>Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.</p>
+            {% endblock %}
+            <div class="row">
+            <div id="main-search" class="span5">
+                <form class="form-search" method="GET" action=".">
+                    {{ form.non_field_errors }}
+                    <div class="control-group{% if form.q.errors %} error{% endif %}">
+                        <label class="control-label visuallyhidden" for="id_q">{{ form.q.label }}</label>
+                        <div class="controls">
+                            {{ form.q.errors }}
+                            <input id="id_q" type="text" placeholder="Search" class="span5" name="q">
+
+                            <input type="submit" class="btn primary" value="Search">
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="has_releases" value="on">
+                </form>
                 {% cache 3600 home:package:stats LANGUAGE_CODE %}
                     <div class="package-stats">
                         {% package_download_count as download_count %}
@@ -36,50 +53,54 @@
                         of {{ total_packages|intcomma }} packages since {{ oldest_package.created|date:"YEAR_MONTH_FORMAT" }}
                     </div>
                 {% endcache %}
-
-                <div id="main-search">
-                    <form class="form-inline" method="GET" action=".">
-                        {{ form.non_field_errors }}
-
-                        <div class="control-group{% if form.q.errors %} error{% endif %}">
-                            <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
-                            <div class="controls">
-                                {{ form.q.errors }}
-                                {{ form.q }}
-
-                                <input type="submit" class="btn primary" value="Search">
-                            </div>
-                        </div>
-
-                        <input type="hidden" name="has_releases" value="on">
-                    </form>
+            </div>
+            <div class="row">
+                <div class="span2">
+                    <h4>New Packages</h4>
+                    {% new_packages 5 as changelogs %}
+                    {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
                 </div>
-            {% endblock %}
+                <div class="span2">
+                    <h4>Just Updated</h4>
+                    {% updated_packages 5 as changelogs %}
+                    {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
+                </div>
+                <div class="span2">
+                    <h4>Featured Packages</h4>
+                    {% featured_packages 5 as packages %}
+                    {% include "packages/partials/small_package_list.html" with packages=packages only %}
+                </div>
+            </div>
         </div>
-
+        </div>
         <div class="row">
             <div class="span4">
-                <h2>New Packages</h2>
-                {% new_packages 5 as changelogs %}
-                {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
-            </div>
-
-            <div class="span4">
-                {% comment %}
-                <h2>Most Downloaded Today</h2>
-                <ul class="unstyled">
-                    <li>Coming Soon</li>
+                <h3>Package Discovery</h3>
+                <ul>
+                    <li>Advanced Search Based on <a href="http://www.elasticsearch.org/">Elastic Search</a></li>
+                    <li>Stats that Matter - See how many times a package has been installed across all versions or for a particular version</li>
+                    <li>Clean Detail Pages - Get to the data you care about faster with a simple copy and paste-able pip install command</li>
                 </ul>
-                {% endcomment %}
-                &nbsp;
             </div>
-
             <div class="span4">
-                <h2>Just Updated</h2>
-                {% updated_packages 5 as changelogs %}
-                {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
+                <h3>Reliability</h3>
+                <ul>
+                    <li>Package Hosting on <a href="http://aws.amazon.com/s3/">Amazon S3</a> and <a href="http://aws.amazon.com/cloudfront/">CloudFront</a></li>
+                    <li>Cache Safe Urls - All Package Urls include the package's sha256 hash, allowing you to cache them without worrying about a re upload invalidating your cache.</li>
+                    <li><span class="label warning">Coming Soon</span> pip compatible API hosted on EC2 across Multiple Availability Zones</li>
+                </ul>
+            </div>
+            <div class="span4">
+                <h3>Other Features</h3>
+                <ul>
+                    <li>Complete Mirror of <a href="http://pypi.python.org/">PyPI</a></li>
+                    <li>pip compatible API available at <a href="http://simple.crate.io/">http://simple.crate.io/</a> (<a href="{% url helpdocs_pip %}">See Instructions Here</a>)</li>
+                    <li><span class="label warning">Coming Soon</span> Link your PyPI account to Crate.io and gain control of your packages on Crate.io</li>
+                    <li><span class="label warning">Coming Soon</span> REST API allowing easy access to Package Data</li>
+                <ul>
             </div>
         </div>
+
     </div>
 {% endblock %}
 

@@ -8,6 +8,12 @@ SERVE_LESS = DEBUG
 
 SITE_ID = 1
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+}
+
 MIDDLEWARE_CLASSES += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
