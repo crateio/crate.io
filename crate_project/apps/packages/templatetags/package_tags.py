@@ -52,6 +52,11 @@ def featured_packages(num):
 
 
 @register.assignment_tag
+def random_packages(num):
+    return Package.objects.exclude(releases=None).order_by("?")[:num]
+
+
+@register.assignment_tag
 def package_versions(package_name, num=None):
     qs = Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")
     if num is not None:

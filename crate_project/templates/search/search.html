@@ -66,8 +66,8 @@
                     {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
                 </div>
                 <div class="span2">
-                    <h4>Featured Packages</h4>
-                    {% featured_packages 5 as packages %}
+                    <h4>Random Packages</h4>
+                    {% random_packages 5 as packages %}
                     {% include "packages/partials/small_package_list.html" with packages=packages only %}
                 </div>
             </div>
