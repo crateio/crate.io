@@ -57,6 +57,32 @@
             {% endblock %}
         </div>
 
+        <div>
+            <h3>Crate.io is a Python Package Host.</h3>
+            <p>It is similar to PyPI (infact every package that PyPI has we mirror) with a much heaver focus on improving the ability to both discover packages, and reliably install them.</p>
+
+            <h4>Package Discovery</h4>
+            <ul>
+                <li>Improved Search Based on <a href="http://www.elasticsearch.org/">Elastic Search</a></li>
+                <li>Stats that Matter - See how many times a package has been installed across all versions or for a particular version</li>
+                <li>Clean Detail Pages - Get to the data you care about faster with a simple copy and paste-able pip install command</li>
+            </ul>
+
+            <h4>Reliability</h4>
+            <ul>
+                <li>Package Hosting on <a href="http://aws.amazon.com/s3/">Amazon S3</a> and <a href="http://aws.amazon.com/cloudfront/">CloudFront</a></li>
+                <li>Cache Safe Urls - All Package Urls include the package's sha256 hash, allowing you to cache them without worrying about a re upload invalidating your cache.</li>
+                <li><span class="label warning">Coming Soon</span> pip compatible API hosted on EC2 across Multiple Availability Zones</li>
+            </ul>
+
+            <h4>Other Features</h4>
+            <ul>
+                <li>pip compatible API available at <a href="http://simple.crate.io/">http://simple.crate.io/</a> (<a href="">See Instructions Here</a>)</li>
+                <li><span class="label warning">Coming Soon</span> Link your PyPI account to Crate.io and gain control of your packages on Crate.io</li>
+                <li><span class="label warning">Coming Soon</span> REST API allowing easy access to Package Data</li>
+            <ul>
+        </div>
+
         <div class="row">
             <div class="span4">
                 <h2>New Packages</h2>
