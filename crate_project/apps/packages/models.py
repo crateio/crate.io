@@ -343,6 +343,18 @@ class ReleaseObsolete(models.Model):
         return self.name
 
 
+class ChangeLog(TimeStampedModel):
+
+    TYPES = Choices(
+        ("new", "New"),
+        ("updated", "Updated"),
+    )
+
+    type = models.CharField(max_length=25, choices=TYPES)
+    package = models.ForeignKey(Package)
+    release = models.ForeignKey(Release, blank=True, null=True)
+
+
 @receiver(post_save, sender=Release)
 def version_ordering(sender, **kwargs):
     instance = kwargs.get("instance")
@@ -365,3 +377,21 @@ def version_ordering(sender, **kwargs):
         for i, release in enumerate(dated + versions):
             if release.order != i:
                 Release.objects.filter(pk=release.pk).update(order=i)
+
+
+@receiver(post_save, sender=Package)
+def update_packages(sender, **kwargs):
+    instance = kwargs.get("instance")
+    if instance is not None:
+        if kwargs.get("created", False):
+            ChangeLog.objects.create(type=ChangeLog.TYPES.new, package=instance)
+
+
+@receiver(post_save, sender=Release)
+def release_changelog(sender, **kwargs):
+    instance = kwargs.get("instance")
+    if instance is not None:
+        if kwargs.get("created", False):
+            diff = instance.created - instance.package.created
+            if diff.days != 0 and diff.seconds > 600:
+                ChangeLog.objects.create(type=ChangeLog.TYPES.updated, package=instance.package, release=instance)
