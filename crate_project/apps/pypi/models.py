@@ -74,3 +74,8 @@ class TaskLog(TimeStampedModel):
     args = models.TextField()
     kwargs = models.TextField()
     exception = models.TextField(blank=True)
+
+
+class DownloadChange(TimeStampedModel):
+    release = models.ForeignKey("packages.Release")
+    change = models.IntegerField(default=0)
