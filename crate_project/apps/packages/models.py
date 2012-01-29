@@ -96,17 +96,6 @@ class Package(TimeStampedModel):
     @property
     def requirement_line(self):
         if self.latest is not None:
-            # @@@ Should This Be Major/Minor/Patch/Exact Version?
-            #       For Now we'll use Minor if verlib can parse it, else exact
-            normalized = verlib.suggest_normalized_version(self.latest.version)
-            if normalized is not None:
-                ver = verlib.NormalizedVersion(normalized)
-                next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
-                return "%(package)s>=%(current_version)s,<%(next_version)s" % {
-                    "package": self.name,
-                    "current_version": self.latest.version,
-                    "next_version": next_version,
-                }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
 
@@ -223,17 +212,6 @@ class Release(models.Model):
 
     @property
     def requirement_line(self):
-        # @@@ Should This Be Major/Minor/Patch/Exact Version?
-        #       For Now we'll use Minor if verlib can parse it, else exact
-        normalized = verlib.suggest_normalized_version(self.version)
-        if normalized is not None:
-            ver = verlib.NormalizedVersion(normalized)
-            next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
-            return "%(package)s>=%(current_version)s,<%(next_version)s" % {
-                "package": self.package.name,
-                "current_version": self.version,
-                "next_version": next_version,
-            }
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
 
 
