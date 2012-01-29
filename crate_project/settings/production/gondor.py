@@ -9,6 +9,18 @@ DEFAULT_FROM_EMAIL = "support@crate.io"
 
 DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql_psycopg2"
 
+CACHES = {
+    "default": {
+        "BACKEND": "redis_cache.RedisCache",
+        "LOCATION": ":".join([GONDOR_REDIS_HOST, str(GONDOR_REDIS_PORT)]),
+        "KEY_PREFIX": "cache",
+        "OPTIONS": {
+            "DB": 0,
+            "PASSWORD": GONDOR_REDIS_PASSWORD,
+        }
+    }
+}
+
 # Configure Celery
 BROKER_TRANSPORT = "redis"
 BROKER_HOST = GONDOR_REDIS_HOST
