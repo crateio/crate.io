@@ -1,5 +1,9 @@
 <ul class="unstyled">
-    {% for release in releases %}
-        <li><a href="{{ release.get_absolute_url }}">{{ release.package.name }} ({{ release.version }})</a></li>
+    {% for changelog in changelogs %}
+        {% if changelog.release %}
+            <li><a href="{{ changelog.release.get_absolute_url }}">{{ changelog.package.name }} ({{ changelog.release.version }})</a></li>
+        {% else %}
+            <li><a href="{{ changelog.package.get_absolute_url }}">{{ changelog.package.name }}</a></li>
+        {% endif %}
     {% endfor %}
 </ul>

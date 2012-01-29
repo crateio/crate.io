@@ -1,7 +1,7 @@
 from django import template
 from django.db.models import F, Sum
 
-from packages.models import Package, Release, ReleaseFile
+from packages.models import Package, Release, ReleaseFile, ChangeLog
 
 register = template.Library()
 
@@ -37,13 +37,13 @@ def get_oldest_package():
 
 
 @register.assignment_tag
-def new_releases(num):
-    return Release.objects.all().order_by("-created").select_related("package")[:num]
+def new_packages(num):
+    return ChangeLog.objects.filter(type=ChangeLog.TYPES.new).select_related("package", "release").order_by("-created")[:num]
 
 
 @register.assignment_tag
-def updated_releases(num):
-    return [x.release for x in ReleaseFile.objects.exclude(created=F("release__created")).order_by("-created")[:num]]
+def updated_packages(num):
+    return ChangeLog.objects.filter(type=ChangeLog.TYPES.updated).select_related("package", "release").order_by("-created")[:num]
 
 
 @register.assignment_tag

@@ -69,6 +69,7 @@ TEMPLATE_LOADERS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django_hosts.middleware.HostsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -82,6 +83,7 @@ MIDDLEWARE_CLASSES = [
 
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "crate_project.urls"
@@ -164,6 +166,8 @@ INSTALLED_APPS = [
     "privatebeta",
 ]
 
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
+
 FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
@@ -177,7 +181,7 @@ ABSOLUTE_URL_OVERRIDES = {
 AUTH_PROFILE_MODULE = "profiles.Profile"
 NOTIFICATION_LANGUAGE_MODULE = "account.Account"
 
-ACCOUNT_OPEN_SIGNUP = False
+ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_USE_OPENID = False
 ACCOUNT_REQUIRED_EMAIL = True
 ACCOUNT_EMAIL_VERIFICATION = True

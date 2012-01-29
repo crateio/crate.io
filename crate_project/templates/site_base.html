@@ -41,7 +41,7 @@
 {% endblock %}
 
 {% block topbar %}
-    <a class="brand" href="{% url search %}">{{ SITE_NAME }}</a>
+    <a class="brand" href="{% url search %}">{{ SITE_NAME }}</a><span class="label info" style="position: relative; top: 8px;">Beta</span>
 
     {% block nav %}
         {% if user.is_authenticated %}

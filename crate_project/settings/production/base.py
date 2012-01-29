@@ -47,7 +47,7 @@ SERVER_EMAIL = "server@crate.io"
 DEFAULT_FROM_EMAIL = "support@crate.io"
 CONTACT_EMAIL = "support@crate.io"
 
-MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
+# MIDDLEWARE_CLASSES += ["privatebeta.middleware.PrivateBetaMiddleware"]
 
 PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 PACKAGE_FILE_STORAGE_OPTIONS = {
@@ -61,14 +61,14 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
 AWS_S3_CUSTOM_DOMAIN = "media.crate.io"
 
-PRIVATE_BETA_ALLOWED_URLS = [
-    "/account/login/",
-    "/account/signup/",
-    "/account/confirm_email/",
-]
+# PRIVATE_BETA_ALLOWED_URLS = [
+#     "/account/login/",
+#     "/account/signup/",
+#     "/account/confirm_email/",
+# ]
 
-PRIVATE_BETA_ALLOWED_HOSTS = [
-    "simple.crate.io",
-]
+# PRIVATE_BETA_ALLOWED_HOSTS = [
+#     "simple.crate.io",
+# ]
 
 INTERCOM_APP_ID = "79qt2qu3"

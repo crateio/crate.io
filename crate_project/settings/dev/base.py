@@ -34,7 +34,6 @@ DEVSERVER_MODULES = [
 
     # Modules not enabled by default
     "devserver.modules.ajax.AjaxDumpModule",
-    "devserver.modules.profile.MemoryUseModule",
     "devserver.modules.cache.CacheSummaryModule",
     "devserver.modules.profile.LineProfilerModule",
 ]

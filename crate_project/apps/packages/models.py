@@ -96,17 +96,6 @@ class Package(TimeStampedModel):
     @property
     def requirement_line(self):
         if self.latest is not None:
-            # @@@ Should This Be Major/Minor/Patch/Exact Version?
-            #       For Now we'll use Minor if verlib can parse it, else exact
-            normalized = verlib.suggest_normalized_version(self.latest.version)
-            if normalized is not None:
-                ver = verlib.NormalizedVersion(normalized)
-                next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
-                return "%(package)s>=%(current_version)s,<%(next_version)s" % {
-                    "package": self.name,
-                    "current_version": self.latest.version,
-                    "next_version": next_version,
-                }
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
 
@@ -223,17 +212,6 @@ class Release(models.Model):
 
     @property
     def requirement_line(self):
-        # @@@ Should This Be Major/Minor/Patch/Exact Version?
-        #       For Now we'll use Minor if verlib can parse it, else exact
-        normalized = verlib.suggest_normalized_version(self.version)
-        if normalized is not None:
-            ver = verlib.NormalizedVersion(normalized)
-            next_version = "%(major)s.%(minor)s" % {"major": ver.parts[0][0], "minor": ver.parts[0][1] + 1}
-            return "%(package)s>=%(current_version)s,<%(next_version)s" % {
-                "package": self.package.name,
-                "current_version": self.version,
-                "next_version": next_version,
-            }
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
 
 
@@ -343,6 +321,18 @@ class ReleaseObsolete(models.Model):
         return self.name
 
 
+class ChangeLog(TimeStampedModel):
+
+    TYPES = Choices(
+        ("new", "New"),
+        ("updated", "Updated"),
+    )
+
+    type = models.CharField(max_length=25, choices=TYPES)
+    package = models.ForeignKey(Package)
+    release = models.ForeignKey(Release, blank=True, null=True)
+
+
 @receiver(post_save, sender=Release)
 def version_ordering(sender, **kwargs):
     instance = kwargs.get("instance")
@@ -365,3 +355,21 @@ def version_ordering(sender, **kwargs):
         for i, release in enumerate(dated + versions):
             if release.order != i:
                 Release.objects.filter(pk=release.pk).update(order=i)
+
+
+@receiver(post_save, sender=Package)
+def update_packages(sender, **kwargs):
+    instance = kwargs.get("instance")
+    if instance is not None:
+        if kwargs.get("created", False):
+            ChangeLog.objects.create(type=ChangeLog.TYPES.new, package=instance)
+
+
+@receiver(post_save, sender=Release)
+def release_changelog(sender, **kwargs):
+    instance = kwargs.get("instance")
+    if instance is not None:
+        if kwargs.get("created", False):
+            diff = instance.created - instance.package.created
+            if diff.days != 0 or diff.seconds > 600:
+                ChangeLog.objects.create(type=ChangeLog.TYPES.updated, package=instance.package, release=instance)
