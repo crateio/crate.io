@@ -34,9 +34,9 @@
 
 {% block extra_style %}
     {% ifsetting SERVE_LESS %}
-        <link rel="stylesheet" href="{% static 'css/crate.css' %}" />
-    {% else %}
         <link rel="stylesheet/less" type="text/css" href="{% static 'less/crate.less' %}" />
+    {% else %}
+        <link rel="stylesheet" href="{% static 'css/crate.css' %}" />
     {% endifsetting %}
 {% endblock %}
 
