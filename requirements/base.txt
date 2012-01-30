@@ -28,4 +28,4 @@ django-notification==0.2
 idios==0.2a1
 metron==0.1
 
--e git+git://github.com/pinax/pinax-theme-bootstrap.git@4ba840b0b82b5379ad73b502246645d31841d911#egg=pinax-theme-bootstrap
+pinax-theme-bootstrap==0.2a2
