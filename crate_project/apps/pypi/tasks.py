@@ -14,6 +14,7 @@ import requests
 from celery.exceptions import SoftTimeLimitExceeded
 from celery.task import task
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.utils.timezone import utc
@@ -377,7 +378,7 @@ def download_release(package_name, version, data):
                                                 defaults={"md5": data["md5_digest"], "release_file": release_file}
                                             )
 
-            if not new_package and package_modified.md5.lower() == data["md5_digest"].lower() and release_file.file:
+            if not new_package and package_modified.md5.lower() == data["md5_digest"].lower() and release_file.file and package_modified.last_modified:
                 # Only ask for If-Modified Since if:
                 #   * This is not a New Package in Our System
                 #   * The Claimed Hash of the New Package Matches the Stored Hash
@@ -418,7 +419,7 @@ def download_release(package_name, version, data):
             release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
             # Do We Have an Existing File for this?
-            if release_file.file:
+            if getattr(settings, "PACKAGE_DELETE_REQUIRED", True) and release_file.file.read():
                 # @@@ There's No Rollbacks on this. Is there a way we can postpone this?
                 release_file.file.delete()
 

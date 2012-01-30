@@ -174,18 +174,6 @@ class Release(models.Model):
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
 
-        # @@@ Temporary Code to  Migrate Files to The New Location
-        for f in self.files.all():
-            dirs = f.file.name.split("/")
-            if len(dirs) > 1:
-                if dirs[0] == "packages":
-                    cf = ContentFile(f.file.read())
-                    if "sha256$" + hashlib.sha256(cf.read()).hexdigest().lower() == f.digest:
-                        f.file.delete()
-                        f.file.save(f.filename, cf)
-                    else:
-                        print "sha256$" + hashlib.sha256(cf.read()).hexdigest().lower(), "did not match", f.digest
-
         return super(Release, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
