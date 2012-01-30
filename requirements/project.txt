@@ -63,3 +63,7 @@ django-intercom-io==0.1.1
 
 # Caching
 django-redis-cache==0.9.2
+
+# Error Logging
+simplejson==2.3.2
+raven==1.1.6

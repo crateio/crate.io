@@ -24,10 +24,14 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler",
         },
+        "sentry": {
+            "level": "ERROR",
+            "class": "raven.contrib.django.handlers.SentryHandler",
+        },
     },
     "loggers": {
         "": {
-            "handlers": ["console"],
+            "handlers": ["console", "sentry"],
             "propagate": True,
             "level": "INFO",
         },
@@ -35,6 +39,11 @@ LOGGING = {
             "handlers": ["mail_admins"],
             "level": "ERROR",
             "propagate": True,
+        },
+        "sentry.errors": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+            "propagate": False,
         },
     }
 }
