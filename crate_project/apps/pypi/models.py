@@ -63,9 +63,11 @@ class PackageModified(TimeStampedModel):
 
 class TaskLog(TimeStampedModel):
     STATUS = Choices(
+        ("pending", "Pending"),
         ("success", "Success"),
         ("failed", "Failed"),
         ("retry", "Retry"),
+        ("resubmitted", "Resubmitted"),
     )
 
     task_id = UUIDField(auto=False, editable=True, unique=True)
