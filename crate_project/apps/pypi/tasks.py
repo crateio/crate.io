@@ -475,22 +475,20 @@ def synchronize_troves(index=None):
         task_log(synchronize_troves.request.id, TaskLog.STATUS.success, synchronize_troves.name, [], {"index": index})
 
 
-@task(time_limit=300, soft_time_limit=120)
+@task(time_limit=650, soft_time_limit=600)
 def synchronize_downloads(index=None):
     if index is None:
         # Default to PyPI
         index = "http://pypi.python.org/"
 
     try:
-        freqencies = {"hourly": 5, "daily": 5, "weekly": 5, "monthly": 5, "yearly": 5}
         releases = set()
 
-        for freq, num in freqencies.iteritems():
-            for rf in ReleaseFile.objects.filter(release__frequency=freq).order_by("release__modified").select_related("release", "release__package")[:num]:
-                if rf.release not in releases:
-                    update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
-                    rf.release.save()
-                    releases.add(rf.release)
+        for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:150]:
+            if rf.release not in releases:
+                update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
+                rf.release.save()
+                releases.add(rf.release)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
         raise

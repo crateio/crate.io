@@ -65,7 +65,6 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
-    featured = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -113,18 +112,8 @@ class PackageURI(models.Model):
 
 class Release(models.Model):
 
-    FREQUENCIES = Choices(
-        ("hourly", "Hourly"),
-        ("daily", "Daily"),
-        ("weekly", "Weekly"),
-        ("monthly", "Monthly"),
-        ("yearly", "Yearly"),
-    )
-
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
-
-    frequency = models.CharField(max_length=25, choices=FREQUENCIES, default=FREQUENCIES.hourly)
 
     package = models.ForeignKey(Package, related_name="releases")
     version = models.CharField(max_length=512)
