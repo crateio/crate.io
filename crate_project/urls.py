@@ -6,12 +6,14 @@ admin.autodiscover()
 
 from pinax.apps.account.openid_consumer import PinaxConsumer
 
+from search.views import Search
+
 
 handler500 = "pinax.views.server_error"
 
 
 urlpatterns = patterns("",
-    url(r"^$", include("search.urls")),
+    url(r"^$", Search.as_view(), name="home"),
     url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user", name="admin_invite_user"),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^about/", include("about.urls")),
@@ -22,7 +24,8 @@ urlpatterns = patterns("",
     url(r"^announcements/", include("announcements.urls")),
 
     url(r"^packages/", include("packages.urls")),
-    url(r"^help/", include("helpdocs.urls"))
+    url(r"^help/", include("helpdocs.urls")),
+    url(r"^", include("search.urls")),
 )
 
 

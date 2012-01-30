@@ -6,6 +6,8 @@
 {% load ifsetting_tag %}
 {% load i18n %}
 
+{% load url from future %}
+
 {% block script_base %}
     {# Temporary Until upstream gets bootstrap modal support #}
     <script src="{% static 'pinax/js/jquery-1.7.1.min.js' %}"></script>
@@ -42,21 +44,18 @@
 
 {% block head_title_base %}{% block head_title %}{% endblock %}{% if SITE_NAME %} &mdash; {{ SITE_NAME }}{% endif %}{% endblock %}
 
-{% block topbar %}
-    <a class="brand" href="{% url search %}">{{ SITE_NAME }}</a><span class="label info" style="position: relative; top: 8px;">Beta</span>
 
-    {% block nav %}
-        {% if user.is_authenticated %}
-            <ul class="nav">
-                {# <li id="tab_profile"><a href="{% url profile_detail user.username %}">{% trans "Profile" %}</a></li> #}
-                {# <li id="tab_notices"><a href="{% url notification_notices %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li> #}
-            </ul>
-        {% endif %}
-    {% endblock %}
-
-    {% block account_bar %}
-        {% include "_account_bar.html" %}
-    {% endblock %}
+{% block nav %}
+    {% if user.is_authenticated %}
+        <ul class="nav">
+            {# <li id="tab_profile"><a href="{% url 'profile_detail' user.username %}">{% trans "Profile" %}</a></li> #}
+            {# <li id="tab_notices"><a href="{% url 'notification_notices' %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li> #}
+        </ul>
+    {% endif %}
+        <form class="navbar-search pull-right" action="{% url 'search' %}">
+            <input type="text" class="search-query" placeholder="Search" name="q">
+            <input type="hidden" name="has_releases" value="on">
+        </form>
 {% endblock %}
 
 {% block footer %}
