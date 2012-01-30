@@ -17,6 +17,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.encoding import smart_str
 from django.utils.importlib import import_module
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from model_utils import Choices
@@ -65,6 +66,7 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
+    downloads_synced_on = models.DateTimeField(default=now)
 
     def __unicode__(self):
         return self.name

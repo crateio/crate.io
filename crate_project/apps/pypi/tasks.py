@@ -482,12 +482,11 @@ def synchronize_downloads(index=None):
         index = "http://pypi.python.org/"
 
     try:
-        releases = set()
+        for package in Package.objects.all().order_by("downloads_synced_on").prefetch_related("releases", "releases__files")[:150]:
+            package.save()
 
-        for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:150]:
-            if rf.release not in releases:
-                update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
-                releases.add(rf.release)
+            for release in package.releases.all():
+                update_download_counts.delay(package.name, release.version, dict([(x.filename, x.pk) for x in release.files.all()]), index=index)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
         raise
