@@ -44,7 +44,7 @@
 
 {% block head_title_base %}{% block head_title %}{% endblock %}{% if SITE_NAME %} &mdash; {{ SITE_NAME }}{% endif %}{% endblock %}
 
-{% block topbar_branding %}<a class="brand" href="{% url 'search' %}">{{ SITE_NAME }} <span class="label label-info">Beta</span></a>{% endblock %}
+{% block site_brand %}<a class="brand" href="{% url 'search' %}">{{ SITE_NAME }} <span class="label label-info">Beta</span></a>{% endblock %}
 
 {% block nav %}
     {% if user.is_authenticated %}
