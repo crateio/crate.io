@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
 {% endblock %}
 
+{% block head_title %}{{ release.package.name }} {{ release.version }}{% endblock %}
+
 {% block body_base %}
     <div class="container">
         <div class="content">

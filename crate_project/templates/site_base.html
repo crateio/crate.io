@@ -40,6 +40,8 @@
     {% endifsetting %}
 {% endblock %}
 
+{% block head_title_base %}{% block head_title %}{% endblock %}{% if SITE_NAME %} &mdash; {{ SITE_NAME }}{% endif %}{% endblock %}
+
 {% block topbar %}
     <a class="brand" href="{% url search %}">{{ SITE_NAME }}</a><span class="label info" style="position: relative; top: 8px;">Beta</span>
 
