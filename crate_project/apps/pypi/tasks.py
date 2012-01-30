@@ -487,7 +487,6 @@ def synchronize_downloads(index=None):
         for rf in ReleaseFile.objects.order_by("release__modified").select_related("release", "release__package")[:150]:
             if rf.release not in releases:
                 update_download_counts.delay(rf.release.package.name, rf.release.version, dict([(x.filename, x.pk) for x in rf.release.files.all()]), index=index)
-                rf.release.save()
                 releases.add(rf.release)
     except Exception:
         task_log(synchronize_downloads.request.id, TaskLog.STATUS.failed, synchronize_downloads.name, [], {"index": index}, exception=sys.exc_info())
@@ -528,3 +527,14 @@ def update_download_counts(package_name, version, files, index=None):
         raise
     else:
         task_log(update_download_counts.request.id, TaskLog.STATUS.success, update_download_counts.name, [package_name, version, files], {"index": index})
+
+
+@task(time_limit=650, soft_time_limit=600)
+def migrate_all_releases():
+    for release in Release.objects.all():
+        migrate_release.delay(release.pk)
+
+
+@task
+def migrate_release(release_pk):
+    Release.objects.get(pk=release_pk).save()
