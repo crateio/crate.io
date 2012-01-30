@@ -534,6 +534,6 @@ def migrate_all_releases():
         migrate_release.delay(release.pk)
 
 
-@task
+@task(time_limit=650, soft_time_limit=600)
 def migrate_release(release_pk):
     Release.objects.get(pk=release_pk).save()
