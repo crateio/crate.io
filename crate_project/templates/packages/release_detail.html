@@ -38,9 +38,12 @@
                     </div>
 
                     <ul id="package-tabs" class="nav tabs">
+                        {% package_version_count release.package.name as total_versions %}
+
                         <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">Description</a></li>
                         <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#files" data-toggle="tab">Files</a></li>
+                        <li><a href="#all-versions" data-toggle="tab">All Versions ({{ total_versions }})</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -171,6 +174,21 @@
                                 </div>
                             {% endfor %}
                         </div>
+
+                        <div id="all-versions" class="tab-pane fade in">
+                            {% package_versions release.package.name as latest_versions %}
+
+                            <ul class="unstyled">
+                                {% for version in latest_versions %}
+                                    <li>
+                                        <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">
+                                            {{ version.version }}
+                                        </a>
+                                        <span class="date">{{ version.created|date:"DATE_FORMAT" }}</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
 
@@ -181,7 +199,7 @@
                         <div class="version"><span class="count">{{ release.downloads|intcomma }}</span> for this version</div>
                     </div>
 
-                    <h3>Versions</h3>
+                    <h3>Latest Versions</h3>
                     <div class="versions">
                         {% package_versions release.package.name 5 as latest_versions %}
 
@@ -195,36 +213,9 @@
                                 </li>
                             {% endfor %}
                         </ul>
-
-                        {% package_version_count release.package.name as total_versions %}
-                        {% if total_versions > 5 %}
-                            <a data-toggle="modal" href="#all-versions" title="All Versions for {{ release.package.name }}">Show All Versions ({{ total_versions }} total)</a>
-                        {% endif %}
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="all-versions" class="modal hide fade">
-        <div class="modal-header">
-            <a href="#" class="close" data-dismiss="modal">×</a>
-            <h3>{{ release.package.name }} Versions</h3>
-        </div>
-
-        <div class="modal-body">
-            {% package_versions release.package.name as latest_versions %}
-
-            <ul class="unstyled">
-                {% for version in latest_versions %}
-                    <li>
-                        <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">
-                            {{ version.version }}
-                        </a>
-                        <span class="date">{{ version.created|date:"DATE_FORMAT" }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
         </div>
     </div>
 {% endblock %}
