@@ -29,7 +29,7 @@
     {% block extra_script %}
         {# Move this into it's own block once we get rid of script_base #}
         {% ifsetting SERVE_LESS %}
-            <script src="{% static 'pinax/js/less-1.2.1.min.js' %}" type="text/javascript"></script>
+            <script src="{% static 'pinax/js/less-1.2.0.min.js' %}" type="text/javascript"></script>
         {% endifsetting %}
     {% endblock %}
 {% endblock %}
@@ -44,6 +44,7 @@
 
 {% block head_title_base %}{% block head_title %}{% endblock %}{% if SITE_NAME %} &mdash; {{ SITE_NAME }}{% endif %}{% endblock %}
 
+{% block topbar_branding %}<a class="brand" href="{% url 'search' %}">{{ SITE_NAME }} <span class="label label-info">Beta</span></a>{% endblock %}
 
 {% block nav %}
     {% if user.is_authenticated %}
