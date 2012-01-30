@@ -225,6 +225,6 @@ AWS_HEADERS = {
 
 METRON_SETTINGS = {
     "mixpanel": {3: "a280fbfb3039709d8a5ac15834a16e5e"},
-    # "google": {3: ""},
+    "google": {3: "UA-28759418-1"},
     "gauges": {3: "4f1e4cd0613f5d7003000002"}
 }

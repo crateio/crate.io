@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
 {% endblock %}
 
+{% block head_title %}{{ release.package.name }} {{ release.version }}{% endblock %}
+
 {% block body_base %}
+    {% include "_announcements.html" %}
+
     <div class="container">
         <div class="content">
             <div class="page-header">
@@ -34,17 +38,21 @@
                     </div>
 
                     <ul id="package-tabs" class="nav tabs">
-                        <li class="active"><a href="#info" data-toggle="tab">Info</a></li>
-                        <li><a href="#description" data-toggle="tab">Description</a></li>
+                        <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">Description</a></li>
+                        <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#files" data-toggle="tab">Files</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div id="description" class="tab-pane fade">
-                            {{ release.description|restructuredtext }}
+                        <div id="description" class="tab-pane fade in{% if release.description %} active{% endif %}">
+                            {% if release.description %}
+                                {{ release.description|restructuredtext }}
+                            {% else %}
+                                <p>No Description Provided</p>
+                            {% endif %}
                         </div>
 
-                        <div id="info" class="tab-pane fade in active">
+                        <div id="info" class="tab-pane fade in{% if not release.description %} active{% endif %}">
                             <div class="author">
                                 {% if release.author %}
                                     <h4>Author</h4>
@@ -121,7 +129,7 @@
                             </div>
                         </div>
 
-                        <div id="files" class="tab-pane fade">
+                        <div id="files" class="tab-pane fade in">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -227,6 +235,11 @@
         $(function(){
             $("#description pre.literal-block").addClass("prettyprint");
             prettyPrint();
+
+            $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+                console.log($(e.target).attr("href")); // activated tab
+                e.relatedTarget // previous tab
+            });
         });
     </script>
 {% endblock %}
