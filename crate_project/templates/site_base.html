@@ -58,6 +58,11 @@
         </form>
 {% endblock %}
 
+{% block body_base %}
+    {% include "_announcements.html" %}
+    {{ block.super }}
+{% endblock %}
+
 {% block footer %}
     {% include "_footer.html" %}
 {% endblock %}

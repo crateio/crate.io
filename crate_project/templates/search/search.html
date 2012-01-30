@@ -14,12 +14,9 @@
 {% block body_id %}search{% endblock %}
 
 {% block body_base %}
+    {% include "_announcements.html" %}
+
     <div class="container">
-        <div class="alert alert-block alert-info">
-            <h4 class="alert-header">Thanks for checking out Crate.io.</h4>
-            <p>We are currently in beta and are trying to improve everyday! If you have any feedback please email <a href="mailto:support@crate.io">support@crate.io</a> or pop into IRC (<a href="irc://irc.freenode.net:6667/crate">#crate on Freenode</a>).</p>
-            <p>By the way, Crate.io is open source! Check it out on <a href="https://github.com/crateio/crate-site/">Github</a>.</p>
-        </div>
         {% include "_messages.html" %}
 
         <div class="hero-unit">

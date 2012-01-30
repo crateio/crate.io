@@ -14,6 +14,8 @@
 {% block head_title %}{{ release.package.name }} {{ release.version }}{% endblock %}
 
 {% block body_base %}
+    {% include "_announcements.html" %}
+
     <div class="container">
         <div class="content">
             <div class="page-header">
@@ -233,6 +235,11 @@
         $(function(){
             $("#description pre.literal-block").addClass("prettyprint");
             prettyPrint();
+
+            $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+                console.log($(e.target).attr("href")); // activated tab
+                e.relatedTarget // previous tab
+            });
         });
     </script>
 {% endblock %}
