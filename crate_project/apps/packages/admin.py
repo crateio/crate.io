@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from packages.models import Package, Release, ReleaseFile, TroveClassifier, PackageURI
-from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
+from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ChangeLog
 from packages.tasks import save_releases
 
 
@@ -68,7 +68,15 @@ class ReleaseFileAdmin(admin.ModelAdmin):
     raw_id_fields = ["release"]
 
 
+class ChangeLogAdmin(admin.ModelAdmin):
+    list_display = ["package", "release", "type", "created", "modified"]
+    list_filter = ["type", "created", "modified"]
+    search_fields = ["package__name"]
+    raw_id_fields = ["package", "release"]
+
+
 admin.site.register(Package, PackageAdmin)
 admin.site.register(Release, ReleaseAdmin)
 admin.site.register(ReleaseFile, ReleaseFileAdmin)
 admin.site.register(TroveClassifier, TroveClassifierAdmin)
+admin.site.register(ChangeLog, ChangeLogAdmin)
