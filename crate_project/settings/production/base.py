@@ -82,3 +82,5 @@ AWS_S3_CUSTOM_DOMAIN = "media.crate.io"
 # ]
 
 INTERCOM_APP_ID = "79qt2qu3"
+
+SIMPLE_API_URL = "http://simple.crate.io/"

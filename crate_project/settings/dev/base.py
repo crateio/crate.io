@@ -75,3 +75,5 @@ PACKAGE_DELETE_REQUIRED = False
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
 AWS_STORAGE_BUCKET_NAME = "crate-media-dev"
+
+SIMPLE_API_URL = "http://simple.crate.io/"
