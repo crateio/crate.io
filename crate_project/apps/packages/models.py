@@ -1,4 +1,3 @@
-import hashlib
 import os
 import posixpath
 import urlparse
@@ -9,7 +8,6 @@ import lxml.html
 from docutils.core import publish_string
 
 from django.conf import settings
-from django.core.files.base import ContentFile
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
