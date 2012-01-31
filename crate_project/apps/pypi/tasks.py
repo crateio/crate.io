@@ -263,10 +263,10 @@ def process_release_data(package_name, version, index=None):
                     ru, c = ReleaseURI.objects.get_or_create(release=release, label=key, defaults={"uri": url})
 
                     if key in current_uris:
-                        current_uris.remove(url)
+                        current_uris.remove(key)
 
                 if current_uris:
-                    ReleaseURI.objects.filter(release=release, uri__in=current_uris).delete()
+                    ReleaseURI.objects.filter(release=release, label__in=current_uris).delete()
 
                 release.requires_python = get_release_data(data, "required_python")
 
