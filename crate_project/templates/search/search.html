@@ -25,7 +25,7 @@
                 <p>Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.</p>
             {% endblock %}
             <div class="row">
-            <div id="main-search" class="span6">
+            <div id="main-search" class="span5">
                 <form class="form-search" method="GET" action=".">
                     {{ form.non_field_errors }}
                     <div class="control-group{% if form.q.errors %} error{% endif %}">
@@ -52,7 +52,7 @@
                 {% endcache %}
             </div>
             <div class="row">
-                <div class="span2">
+                <div class="span3">
                     <h4>New Packages</h4>
                     {% new_packages 5 as changelogs %}
                     {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
