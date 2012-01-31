@@ -63,6 +63,7 @@ PACKAGE_FILE_STORAGE_OPTIONS = {
     "bucket": "crate-production",
     "custom_domain": "packages.crate.io",
 }
+PACKAGE_DELETE_REQUIRED = False
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 # STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
