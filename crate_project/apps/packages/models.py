@@ -5,7 +5,7 @@ import uuid
 
 import lxml.html
 
-from docutils.core import publish_string
+from docutils.core import publish_string, publish_parts
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -13,8 +13,9 @@ from django.db import models
 from django.db.models import Sum
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils.encoding import smart_str
+from django.utils.encoding import smart_str, force_unicode
 from django.utils.importlib import import_module
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -191,6 +192,15 @@ class Release(models.Model):
     @property
     def requirement_line(self):
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
+
+    @property
+    def description_html(self):
+        # @@@ Consider Saving This to the DB
+        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+        docutils_settings.update({"warning_stream": os.devnull})
+
+        parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+        return mark_safe(force_unicode(parts["fragment"]))
 
 
 class ReleaseFile(models.Model):
