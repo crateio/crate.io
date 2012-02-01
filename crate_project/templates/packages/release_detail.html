@@ -36,7 +36,7 @@
                         {% endif %}
                     </div>
 
-                    <ul id="package-tabs" class="nav tabs">
+                    <ul id="package-tabs" class="nav nav-tabs">
                         {% package_version_count release.package.name as total_versions %}
 
                         <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">Description</a></li>
