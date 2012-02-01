@@ -11,7 +11,7 @@ class SearchForm(HaystackSearchForm):
         super(SearchForm, self).__init__(*args, **kwargs)
 
         self.fields["q"].widget.attrs.update({
-            "class": "span12",
+            "class": "span10",
             "placeholder": "Search",
         })
 
