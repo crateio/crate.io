@@ -4,7 +4,7 @@
         "model": "sites.site",
         "fields": {
             "domain": "localhost:8000",
-            "name": "Crate (dev)"
+            "name": "Crate (local)"
         }
     },
     {
@@ -22,5 +22,13 @@
             "domain": "crate.io",
             "name": "Crate"
         }
-    }
+    },
+    {
+        "pk": 4,
+        "model": "sites.site",
+        "fields": {
+            "domain": "dev.crate.io",
+            "name": "Crate (dev)"
+        }
+    },
 ]

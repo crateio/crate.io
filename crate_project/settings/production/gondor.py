@@ -1,7 +1,7 @@
 from .base import *
 
-from local_settings import *
 from secret_settings import *
+from local_settings import *  # Instance specific settings (in deploy.settings_[INSTANCE_NAME]))
 
 # Fix Email Settings
 SERVER_EMAIL = "server@crate.io"
