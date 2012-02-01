@@ -1,25 +1,33 @@
-<h3>Evaluation</h3>
+<h3>Evaluation <small>mouse over for details</small></h3>
 
 <div id="release-evaluation">
     <h6>PEP386 Compatibility</h6>
     <div class="alert{% if release.quality_version_scheme %} alert-success{% elif release.quality_version_scheme == None %}{% else %} alert-error{% endif %}">
-        {% if release.quality_version_scheme %}
-            <i class="icon ok"></i> Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
-        {% elif release.quality_version_scheme == None %}
-            <i class="icon asterisk"></i> Almost Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
-        {% else %}
-            <i class="icon remove"></i> Incompatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
-        {% endif %}
+        <div rel="popover" data-title="PEP386 Compatibility" data-content="PEP386 defines a specific allowed syntax for Python package versions. <br /><br /> Previously it was impossible to accurately determine across any Python package what order the versions should go in, but with PEP386 we can now intelligently sort by version... <br /><br /> But only if the version numbers are Compatible!">
+            {% if release.quality_version_scheme %}
+                <i class="icon ok"></i> Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+            {% elif release.quality_version_scheme == None %}
+                <i class="icon asterisk"></i> Almost Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+            {% else %}
+                <i class="icon remove"></i> Incompatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+            {% endif %}
+        </div>
     </div>
 
     <h6>Package Hosting</h6>
     <div class="alert{% if release.quality_hosting %} alert-success{% else %} alert-error{% endif %}">
-        {% if release.quality_hosting %}
-            <i class="icon ok"></i> Package is hosted on PyPI
-        {% elif release.quality_hosting == None %}
-            <i class="icon remove"></i> No Package Hosting
-        {% else %}
-            <i class="icon remove"></i> Package isn't hosted on PyPI
-        {% endif %}
+        <div rel="popover" data-title="Package Hosting" data-content="Did you know that packages listed on PyPI arn't required to host there? <br /><br /> When your package manager tries to install a package from PyPI it looks in number of locations, one such location is an author specified url of where the package can be downloaded from. <br /><br /> Packages hosted by the author means that installing this package depends on the authors server staying up, adding another link in the chain that can cause your installation to fail!">
+            {% if release.quality_hosting %}
+                <i class="icon ok"></i> Package is hosted on PyPI
+            {% elif release.quality_hosting == None %}
+                <i class="icon remove"></i> No Package Hosting
+            {% else %}
+                <i class="icon remove"></i> Package isn't hosted on PyPI
+            {% endif %}
+        </div>
     </div>
 </div>
+
+<script>
+    $("[rel='popover']").popover();
+</script>
