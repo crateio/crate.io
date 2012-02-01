@@ -155,7 +155,7 @@
                                         </tr>
                                     {% empty %}
                                         <tr>
-                                            <td colspan="6">There are No Files for This Package's Release</td>
+                                            <td colspan="6">There are No Files for This Package's Release{% if release.download_uri %}, but try the <a href="{{ release.download_uri }}">author's downloads</a> for this release.{% else %}.{% endif %}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
