@@ -1,0 +1,25 @@
+<h3>Evaluation</h3>
+
+<div id="release-evaluation">
+    <h6>PEP386 Compatibility</h6>
+    <div class="alert{% if release.quality_version_scheme %} alert-success{% elif release.quality_version_scheme == None %}{% else %} alert-error{% endif %}">
+        {% if release.quality_version_scheme %}
+            <i class="icon ok"></i> Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+        {% elif release.quality_version_scheme == None %}
+            <i class="icon asterisk"></i> Almost Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+        {% else %}
+            <i class="icon remove"></i> Incompatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.
+        {% endif %}
+    </div>
+
+    <h6>Package Hosting</h6>
+    <div class="alert{% if release.quality_hosting %} alert-success{% else %} alert-error{% endif %}">
+        {% if release.quality_hosting %}
+            <i class="icon ok"></i> Package is hosted on PyPI
+        {% elif release.quality_hosting == None %}
+            <i class="icon remove"></i> No Package Hosting
+        {% else %}
+            <i class="icon remove"></i> Package isn't hosted on PyPI
+        {% endif %}
+    </div>
+</div>

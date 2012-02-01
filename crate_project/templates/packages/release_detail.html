@@ -202,6 +202,8 @@
                         <div class="version"><span class="count">{{ release.downloads|intcomma }}</span> for this version</div>
                     </div>
 
+                    {% include "quality/sidebar.html" with release=release %}
+
                     <h3>Latest Versions</h3>
                     <div class="versions">
                         {% package_versions release.package.name 5 as latest_versions %}
