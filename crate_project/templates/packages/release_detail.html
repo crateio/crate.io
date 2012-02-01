@@ -153,6 +153,10 @@
                                             <td>{{ file.file.size|filesizeformat }}</td>
                                             <td>{{ file.downloads|intcomma }}</td>
                                         </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="6">There are No Files for This Package's Release</td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
