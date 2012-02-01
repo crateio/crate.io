@@ -54,13 +54,13 @@
                 <div class="well">
                     <h3>Refine Results</h3>
 
-                    <ul class="nav list">
+                    <ul class="nav nav-list">
                         {% if facets.fields and facets.fields.python_versions %}
                             <li class="nav-header">By Python Version</li>
                             {% if faceted_by.python %}
                                 {% for ver in facets.fields.python_versions %}
                                     {% if ver.0 == faceted_by.python %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon remove"></i> {{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon icon-remove"></i> {{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
@@ -75,7 +75,7 @@
                             {% if faceted_by.os %}
                                 {% for os in facets.fields.operating_systems %}
                                     {% if os.0 == faceted_by.os %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon remove"></i> {{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon icon-remove"></i> {{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
@@ -90,7 +90,7 @@
                             {% if faceted_by.license %}
                                 {% for lice in facets.fields.licenses %}
                                     {% if lice.0 == faceted_by.license %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon remove"></i> {{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon icon-remove"></i> {{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
@@ -105,7 +105,7 @@
                             {% if faceted_by.implementation %}
                                 {% for impl in facets.fields.implementations %}
                                     {% if impl.0 == faceted_by.implementation %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon remove"></i> {{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon icon-remove"></i> {{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
