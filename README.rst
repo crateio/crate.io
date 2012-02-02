@@ -13,7 +13,7 @@ Technology Stack
 ================
 
 Crate.io is built on top of Python using the Django framework. It uses Celery
-to process it's shared tasks, PostgreSQL to store it's data, and Redis as it's
+to process its shared tasks, PostgreSQL to store its data, and Redis as its
 caching layer.
 
 Relation to PyPI
@@ -22,9 +22,9 @@ Relation to PyPI
 The software that powers Crate.io defaults to PyPI, but can techincally be used
 with any index that presents the same XMLRPC API.
 
-Crate.io the website currently only mirrors PyPI. All Packages, and their associated
-data comes from PyPI. Crate.io provides a reliable place for those packages to be stored
-and accessed at and tries to present a cleaner and more user friendly interface to
+Crate.io the website currently only mirrors PyPI. All Packages and their associated
+data come from PyPI. Crate.io provides a reliable place for those packages to be stored
+and accessed and tries to present a cleaner and more user-friendly interface to
 that data.
 
 Development
