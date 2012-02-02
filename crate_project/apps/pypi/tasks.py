@@ -17,7 +17,7 @@ from celery.task import task
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import transaction
-from django.utils.timezone import utc
+from django.utils.timezone import now, utc
 
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseFile, ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI
@@ -484,7 +484,7 @@ def synchronize_downloads(index=None):
 
     try:
         for package in Package.objects.all().order_by("downloads_synced_on").prefetch_related("releases", "releases__files")[:150]:
-            package.save()
+            Package.objects.filter(pk=package.pk).update(downloads_synced_on=now())
 
             for release in package.releases.all():
                 update_download_counts.delay(package.name, release.version, dict([(x.filename, x.pk) for x in release.files.all()]), index=index)
