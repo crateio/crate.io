@@ -17,8 +17,8 @@ class PackageURIAdmin(admin.TabularInline):
 
 class PackageAdmin(admin.ModelAdmin):
     inlines = [PackageURIAdmin]
-    list_display = ["name", "created", "modified"]
-    list_filter = ["created", "modified"]
+    list_display = ["name", "created", "modified", "downloads_synced_on"]
+    list_filter = ["created", "modified", "downloads_synced_on"]
     search_fields = ["name"]
 
 
