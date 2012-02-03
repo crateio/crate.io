@@ -1,15 +1,17 @@
 {% for result in results %}
-    <div class="alert{% if result.level %} alert-{{ result.level }}{% endif %}">
-        <div rel="popover" data-placement="left" data-title="{{ result.evaluator.title }}" data-content="{{ result.evaluator.message }}">
-            {% if result.level == "success" %}
-                <i class="icon icon-ok"></i> {{ result.message }}
-            {% elif result.level == "error" %}
-                <i class="icon icon-remove"></i> {{ result.message }}
-            {% else %}
-                <i class="icon icon-asterisk"></i> {{ result.message }}
-            {% endif %}
+    {% if not result.hide %}
+        <div class="alert{% if result.level %} alert-{{ result.level }}{% endif %}">
+            <div rel="popover" data-placement="left" data-title="{{ result.evaluator.title }}" data-content="{{ result.evaluator.message }}">
+                {% if result.level == "success" %}
+                    <i class="icon icon-ok"></i> {{ result.message }}
+                {% elif result.level == "error" %}
+                    <i class="icon icon-remove"></i> {{ result.message }}
+                {% else %}
+                    <i class="icon icon-asterisk"></i> {{ result.message }}
+                {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endfor %}
 
 <script>
