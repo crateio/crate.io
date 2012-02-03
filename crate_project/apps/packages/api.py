@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf.urls import url
 
 from tastypie import fields
 from tastypie.bundle import Bundle
@@ -7,8 +7,22 @@ from tastypie.constants import ALL
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
-from packages.models import Package, Release, ReleaseFile, ReleaseURI
+from packages.models import Package, Release, ReleaseFile, ReleaseURI, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete
+
+
+class InlineTroveClassifierResource(ModelResource):
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = ["trove"]
+        filtering = {
+            "trove": ALL,
+        }
+        include_resource_uri = False
+        ordering = ["trove"]
+        queryset = TroveClassifier.objects.all()
+        resource_name = "classifier"
 
 
 class PackageResource(ModelResource):
@@ -54,6 +68,7 @@ class ReleaseResource(ModelResource):
     package = fields.ForeignKey(PackageResource, "package")
     files = fields.ToManyField("packages.api.ReleaseFileResource", "files", full=True)
     uris = fields.ToManyField("packages.api.ReleaseURIResource", "uris", full=True)
+    classifiers = fields.ListField()
     requires = fields.ToManyField("packages.api.ReleaseRequireResource", "requires", full=True)
     provides = fields.ToManyField("packages.api.ReleaseProvideResource", "provides", full=True)
     obsoletes = fields.ToManyField("packages.api.ReleaseObsoleteResource", "obsoletes", full=True)
@@ -64,7 +79,7 @@ class ReleaseResource(ModelResource):
         cache = SimpleCache()
         fields = [
                     "author", "author_email", "created", "description", "download_uri", "downloads",
-                    "license", "maintainer", "maintainer_email", "package", "platform",
+                    "license", "maintainer", "maintainer_email", "package", "platform", "classifiers",
                     "requires_python", "summary", "version"
                 ]
         filtering = {
@@ -102,6 +117,9 @@ class ReleaseResource(ModelResource):
             kwargs["api_name"] = self._meta.api_name
 
         return self._build_reverse_url("api_dispatch_detail", kwargs=kwargs)
+
+    def dehydrate_classifiers(self, bundle):
+        return [c.trove for c in bundle.obj.classifiers.all()]
 
 
 class ReleaseFileResource(ModelResource):
