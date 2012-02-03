@@ -28,6 +28,7 @@ urlpatterns = patterns("",
 
     url(r"^packages/", include("packages.urls")),
     url(r"^help/", include("helpdocs.urls")),
+    url(r"^api/", include("crate_project.api_urls")),
 
     url(r"^s/(?P<path>.+)?", "crate.views.simple_redirect", name="simple_redirect"),
 
