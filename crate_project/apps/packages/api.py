@@ -65,7 +65,17 @@ class ReleaseResource(ModelResource):
                     "license", "maintainer", "maintainer_email", "package", "platform",
                     "requires_python", "summary", "version"
                 ]
+        filtering = {
+            "author": ALL,
+            "author_email": ALL,
+            "maintainer": ALL,
+            "maintainer_email": ALL,
+            "created": ALL,
+            "license": ALL,
+            "version": ALL,
+        }
         include_absolute_url = True
+        ordering = ["created", "license", "package", "version"]
         queryset = Release.objects.all()
         resource_name = "release"
 
