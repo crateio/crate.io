@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 
 from tastypie import fields
 from tastypie.bundle import Bundle
+from tastypie.cache import SimpleCache
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
@@ -13,6 +14,7 @@ class PackageResource(ModelResource):
 
     class Meta:
         allowed_methods = ["get"]
+        cache = SimpleCache()
         fields = ["created", "downloads_synced_on", "name"]
         include_absolute_url = True
         queryset = Package.objects.all()
@@ -46,6 +48,7 @@ class ReleaseResource(ModelResource):
 
     class Meta:
         allowed_methods = ["get"]
+        cache = SimpleCache()
         fields = [
                     "author", "author_email", "created", "description", "download_uri",
                     "license", "maintainer", "maintainer_email", "package", "platform",
