@@ -9,6 +9,7 @@ class PackageResource(ModelResource):
 
     class Meta:
         allowed_methods = ["get"]
+        include_absolute_url = True
         queryset = Package.objects.all()
         resource_name = "package"
 
@@ -23,5 +24,6 @@ class ReleaseResource(ModelResource):
                     "license", "maintainer", "maintainer_email", "package", "platform",
                     "requires_python", "summary", "version"
                 ]
+        include_absolute_url = True
         queryset = Release.objects.all()
         resource_name = "release"
