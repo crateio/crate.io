@@ -119,4 +119,4 @@ class RTDDocs(object):
 
 suite.register(PEP386Compatability)
 suite.register(PackageHosting)
-suite.register(RTDDocs)
+#suite.register(RTDDocs)
