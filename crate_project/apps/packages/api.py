@@ -5,6 +5,8 @@ from packages.models import Package, Release
 
 
 class PackageResource(ModelResource):
+    releases = fields.ToManyField("packages.api.ReleaseResource", "releases")
+
     class Meta:
         queryset = Package.objects.all()
         resource_name = "package"
