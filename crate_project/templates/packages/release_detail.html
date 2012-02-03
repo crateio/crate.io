@@ -5,6 +5,7 @@
 {% load staticfiles %}
 {% load package_tags %}
 {% load package_utils %}
+{% load evaluators %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
@@ -204,7 +205,10 @@
                         <div class="version"><span class="count">{{ release.downloads|intcomma }}</span> for this version</div>
                     </div>
 
-                    {% include "quality/sidebar.html" with release=release %}
+                    <h3>Evaluation <small>mouse over for details</small></h3>
+                    <div id="release-evaluation">
+                        {% evaluate release %}
+                    </div>
 
                     <h3>Latest Versions</h3>
                     <div class="versions">

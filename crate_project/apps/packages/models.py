@@ -211,29 +211,6 @@ class Release(models.Model):
                 self._show_install_command = True
         return self._show_install_command
 
-    def quality_version_scheme(self):
-        normalized = verlib.suggest_normalized_version(self.version)
-
-        if self.version == normalized:
-            # Release Is Already Normalized
-            return True
-        elif normalized is not None:
-            # Release Isn't Normalized, But We Can Figure It Out
-            return None
-        else:
-            # We Can't Normalize the Release Version
-            return False
-
-    def quality_hosting(self):
-        if not hasattr(self, "_quality_hosting"):
-            if self.files.all().exists():
-                self._quality_hosting = True
-            elif self.download_uri:
-                self._quality_hosting = False
-            else:
-                self._quality_hosting = None
-        return self._quality_hosting
-
 
 class ReleaseFile(models.Model):
 

@@ -4,6 +4,9 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
+import evaluator
+evaluator.autodiscover()
+
 from pinax.apps.account.openid_consumer import PinaxConsumer
 
 from search.views import Search

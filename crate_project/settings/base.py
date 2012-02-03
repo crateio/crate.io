@@ -161,6 +161,7 @@ INSTALLED_APPS = [
     "pypi",
     "search",
     "crate",
+    "evaluator",
     "privatebeta",
     "helpdocs",
 ]
