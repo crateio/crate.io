@@ -71,7 +71,7 @@ class PackageHosting(object):
             }
 
 
-class RTDDocs(object):
+class RTDocs(object):
     title = "Documentation hosted on Read The Docs"
     message = mark_safe("Documentation can be one of the most important parts of any library. "
                 "Even more important than just having documentation, is making sure that people are "
@@ -92,18 +92,18 @@ class RTDDocs(object):
 
         key = "evaluate:rtd:%s" % slug
 
-        if cache.get(key) is not None:
-            hosted_on_rtd = cache.get(key)
+        if cache.get(key, version=2) is not None:
+            hosted_on_rtd = cache.get(key, version=2)
         else:
             api = slumber.API(base_url="http://readthedocs.org/api/v1/")
-            results = api.project.get(slug=slug)
+            results = api.project.get(slug__iexact=slug)
 
             if results["objects"]:
                 hosted_on_rtd = True
             else:
                 hosted_on_rtd = False
 
-            cache.set(key, hosted_on_rtd, 60 * 60 * 24 * 7)  # Cache This for a Week
+            cache.set(key, hosted_on_rtd, 60 * 60 * 24 * 7, version=2)  # Cache This for a Week
 
         if hosted_on_rtd:
             return {
@@ -119,4 +119,4 @@ class RTDDocs(object):
 
 suite.register(PEP386Compatability)
 suite.register(PackageHosting)
-#suite.register(RTDDocs)
+suite.register(RTDocs)
