@@ -73,7 +73,7 @@ class PackageHosting(object):
 
 class RTDDocs(object):
     title = "Documentation hosted on Read The Docs"
-    message = mark_safe("Documentation can be one of the most important parts of any library."
+    message = mark_safe("Documentation can be one of the most important parts of any library. "
                 "Even more important than just having documentation, is making sure that people are "
                 "able to find it easily."
                 "<br /><br />"
