@@ -153,6 +153,7 @@ INSTALLED_APPS = [
     "storages",
     "intercom",
     "celery_haystack",
+    "tastypie",
 
     # project
     "about",
