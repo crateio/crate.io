@@ -7,7 +7,7 @@ from tastypie.constants import ALL
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
-from packages.models import Package, Release
+from packages.models import Package, Release, ReleaseFile
 
 
 class PackageResource(ModelResource):
@@ -50,6 +50,7 @@ class PackageResource(ModelResource):
 
 class ReleaseResource(ModelResource):
     package = fields.ForeignKey(PackageResource, "package")
+    files = fields.ToManyField("packages.api.ReleaseFileResource", "files", full=True)
 
     class Meta:
         allowed_methods = ["get"]
@@ -84,3 +85,13 @@ class ReleaseResource(ModelResource):
             kwargs["api_name"] = self._meta.api_name
 
         return self._build_reverse_url("api_dispatch_detail", kwargs=kwargs)
+
+
+class ReleaseFileResource(ModelResource):
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = ["comment", "created", "digest", "downloads", "file", "filename", "python_version", "type"]
+        include_resource_uri = False
+        queryset = ReleaseFile.objects.all()
+        resource_name = "files"
