@@ -28,10 +28,8 @@ class PackageResource(ModelResource):
         resource_name = "package"
 
     def override_urls(self):
-        rr = ReleaseResource()
         return [
             url(r"^(?P<resource_name>%s)/(?P<name>[^/]+)%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view("dispatch_detail"), name="api_dispatch_detail"),
-            url(r"^(?P<resource_name>%s)%s" % (self._meta.resource_name, trailing_slash()), include(rr.urls)),
         ]
 
     def get_resource_uri(self, bundle_or_obj):
@@ -65,21 +63,14 @@ class ReleaseResource(ModelResource):
         queryset = Release.objects.all()
         resource_name = "release"
 
-    def base_urls(self):
-        """
-        The standard URLs this ``Resource`` should respond to.
-        """
-        # Due to the way Django parses URLs, ``get_multiple`` won't work without
-        # a trailing slash.
+    def override_urls(self):
         return [
-            url(r"^schema%s$" % trailing_slash(), self.wrap_view('get_schema'), name="api_get_schema"),
-            url(r"^set/(?P<pk_list>\w[\w/;-]*)/$", self.wrap_view('get_multiple'), name="api_get_multiple"),
-            url(r"^(?P<package__name>[^/]+)/(?P<version>[^/]+)/$", self.wrap_view("dispatch_detail"), name="api_dispatch_detail"),
+            url(r"^(?P<resource_name>%s)/(?P<package__name>[^/]+)-(?P<version>[^/]+)%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view("dispatch_detail"), name="api_dispatch_detail"),
         ]
 
     def get_resource_uri(self, bundle_or_obj):
         kwargs = {
-            "resource_name": "package",  # @@@ Might be a better way?
+            "resource_name": self._meta.resource_name,
         }
 
         if isinstance(bundle_or_obj, Bundle):
