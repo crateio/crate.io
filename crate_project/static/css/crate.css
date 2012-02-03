@@ -12,6 +12,7 @@ body,p,label,input,button,select,textarea,.navbar-search .search-query{font-fami
 .page-header{background-color:#f5f5f5;padding:20px 20px 10px;margin:-20px -20px 20px;}
 #sidebar{margin-left:0;padding-left:19px;border-left:1px solid #eee;}#sidebar .downloads .count{display:block;color:#404040;font-weight:bold;font-size:24px;}
 #sidebar .downloads .package,#sidebar .downloads .version{margin-bottom:1em;}
+.no-install-summary{margin-bottom:30px;}
 #install-cmd,#install-cmd h4{font-size:28px;font-weight:normal;font-family:Monaco, Andale Mono, Courier New, monospace;}
 #install-cmd{margin-top:1em;margin-bottom:1em;text-align:center;}#install-cmd h4{display:inline;text-transform:uppercase;font-size:18px;}
 #install-cmd h4:after{content:" >";}

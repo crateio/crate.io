@@ -23,18 +23,20 @@
 
             <div class="row">
                 <div class="span9">
-                    <div class="summary">
+                    <div class="summary{% if not release.show_install_command %} no-install-summary{% endif %}">
                         {{ release.summary }}
                     </div>
 
-                    <div id="install-cmd">
-                        <h4>Install</h4>
-                        {% if version_specific %}
-                            {{ release.install_command }}
-                        {% else %}
-                            {{ release.package.install_command }}
-                        {% endif %}
-                    </div>
+                    {% if release.show_install_command %}
+                        <div id="install-cmd">
+                            <h4>Install</h4>
+                            {% if version_specific %}
+                                {{ release.install_command }}
+                            {% else %}
+                                {{ release.package.install_command }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
 
                     <ul id="package-tabs" class="nav nav-tabs">
                         {% package_version_count release.package.name as total_versions %}

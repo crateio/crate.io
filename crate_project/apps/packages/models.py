@@ -202,6 +202,15 @@ class Release(models.Model):
         parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
         return mark_safe(force_unicode(parts["fragment"]))
 
+    @property
+    def show_install_command(self):
+        if not hasattr(self, "_show_install_command"):
+            if self.classifiers.filter(trove="Framework :: Plone").exists():
+                self._show_install_command = False
+            else:
+                self._show_install_command = True
+        return self._show_install_command
+
     def quality_version_scheme(self):
         normalized = verlib.suggest_normalized_version(self.version)
 
