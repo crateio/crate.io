@@ -330,6 +330,14 @@ class ChangeLog(TimeStampedModel):
     release = models.ForeignKey(Release, blank=True, null=True)
 
 
+class ReadTheDocsPackageSlug(models.Model):
+    package = models.OneToOneField(Package, related_name="readthedocs_slug")
+    slug = models.CharField(max_length=150, unique=True)
+
+    def __unicode__(self):
+        return u"%s" % self.slug
+
+
 @receiver(post_save, sender=Release)
 def version_ordering(sender, **kwargs):
     instance = kwargs.get("instance")
