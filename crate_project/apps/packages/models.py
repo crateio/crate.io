@@ -6,6 +6,7 @@ import uuid
 import lxml.html
 
 from docutils.core import publish_string, publish_parts
+from docutils.utils import SystemMessage
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -199,8 +200,12 @@ class Release(models.Model):
         docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
         docutils_settings.update({"warning_stream": os.devnull})
 
-        parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
-        return mark_safe(force_unicode(parts["fragment"]))
+        try:
+            parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+        except SystemMessage:
+            return self.description
+        else:
+            return mark_safe(force_unicode(parts["fragment"]))
 
     @property
     def show_install_command(self):
