@@ -112,7 +112,7 @@ class RTDDocs(object):
             }
         else:
             return {
-                "level": "error",
+                "level": "unknown",
                 "message": mark_safe('Docs Unavailable on <a href="http://readthedocs.org/">Read The Docs</a>')
             }
 
