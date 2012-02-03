@@ -1,4 +1,7 @@
+from django.conf.urls import patterns, include, url
+
 from tastypie import fields
+from tastypie.bundle import Bundle
 from tastypie.resources import ModelResource
 
 from packages.models import Package, Release
@@ -9,9 +12,30 @@ class PackageResource(ModelResource):
 
     class Meta:
         allowed_methods = ["get"]
+        fields = ["created", "downloads_synced_on", "name"]
         include_absolute_url = True
         queryset = Package.objects.all()
         resource_name = "package"
+
+    def override_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<name>[^/]+)/$" % self._meta.resource_name, self.wrap_view("dispatch_detail"), name="api_dispatch_detail"),
+        ]
+
+    def get_resource_uri(self, bundle_or_obj):
+        kwargs = {
+            "resource_name": self._meta.resource_name,
+        }
+
+        if isinstance(bundle_or_obj, Bundle):
+            kwargs["name"] = bundle_or_obj.obj.name
+        else:
+            kwargs["name"] = bundle_or_obj.name
+
+        if self._meta.api_name is not None:
+            kwargs["api_name"] = self._meta.api_name
+
+        return self._build_reverse_url("api_dispatch_detail", kwargs=kwargs)
 
 
 class ReleaseResource(ModelResource):
