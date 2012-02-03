@@ -8,6 +8,7 @@ from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 
 from packages.models import Package, Release, ReleaseFile, ReleaseURI
+from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete
 
 
 class PackageResource(ModelResource):
@@ -52,6 +53,9 @@ class ReleaseResource(ModelResource):
     package = fields.ForeignKey(PackageResource, "package")
     files = fields.ToManyField("packages.api.ReleaseFileResource", "files", full=True)
     uris = fields.ToManyField("packages.api.ReleaseURIResource", "uris", full=True)
+    requires = fields.ToManyField("packages.api.ReleaseRequireResource", "requires", full=True)
+    provides = fields.ToManyField("packages.api.ReleaseProvideResource", "provides", full=True)
+    obsoletes = fields.ToManyField("packages.api.ReleaseObsoleteResource", "obsoletes", full=True)
 
     class Meta:
         allowed_methods = ["get"]
@@ -106,3 +110,33 @@ class ReleaseURIResource(ModelResource):
         include_resource_uri = False
         queryset = ReleaseURI.objects.all()
         resource_name = "uris"
+
+
+class ReleaseRequireResource(ModelResource):
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = ["kind", "name", "version", "environment"]
+        include_resource_uri = False
+        queryset = ReleaseRequire.objects.all()
+        resource_name = "requires"
+
+
+class ReleaseProvideResource(ModelResource):
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = ["kind", "name", "version", "environment"]
+        include_resource_uri = False
+        queryset = ReleaseProvide.objects.all()
+        resource_name = "provides"
+
+
+class ReleaseObsoleteResource(ModelResource):
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = ["kind", "name", "version", "environment"]
+        include_resource_uri = False
+        queryset = ReleaseObsolete.objects.all()
+        resource_name = "obsoletes"
