@@ -11,6 +11,7 @@ django-uuidfield==0.2
 # Utility
 PIL==1.1.7
 -e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
+slumber==0.4
 
 # Celery
 redis==2.4.11
