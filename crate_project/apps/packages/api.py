@@ -13,11 +13,12 @@ from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete
 
 class PackageResource(ModelResource):
     releases = fields.ToManyField("packages.api.ReleaseResource", "releases")
+    downloads = fields.IntegerField("downloads")
 
     class Meta:
         allowed_methods = ["get"]
         cache = SimpleCache()
-        fields = ["created", "downloads_synced_on", "name"]
+        fields = ["created", "downloads_synced_on", "downloads", "name"]
         filtering = {
             "name": ALL,
             "created": ALL,
@@ -56,12 +57,13 @@ class ReleaseResource(ModelResource):
     requires = fields.ToManyField("packages.api.ReleaseRequireResource", "requires", full=True)
     provides = fields.ToManyField("packages.api.ReleaseProvideResource", "provides", full=True)
     obsoletes = fields.ToManyField("packages.api.ReleaseObsoleteResource", "obsoletes", full=True)
+    downloads = fields.IntegerField("downloads")
 
     class Meta:
         allowed_methods = ["get"]
         cache = SimpleCache()
         fields = [
-                    "author", "author_email", "created", "description", "download_uri",
+                    "author", "author_email", "created", "description", "download_uri", "downloads",
                     "license", "maintainer", "maintainer_email", "package", "platform",
                     "requires_python", "summary", "version"
                 ]
