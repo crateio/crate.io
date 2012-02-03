@@ -6,6 +6,8 @@
                     <i class="icon icon-ok"></i> {{ result.message }}
                 {% elif result.level == "error" %}
                     <i class="icon icon-remove"></i> {{ result.message }}
+                {% elif result.level == "unknown" %}
+                    <i class="icon icon-remove"></i> {{ result.message }}
                 {% else %}
                     <i class="icon icon-asterisk"></i> {{ result.message }}
                 {% endif %}
