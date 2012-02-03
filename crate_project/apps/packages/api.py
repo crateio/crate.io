@@ -23,6 +23,7 @@ class PackageResource(ModelResource):
             "downloads_synced_on": ALL,
         }
         include_absolute_url = True
+        ordering = ["created", "downloads_synced_on"]
         queryset = Package.objects.all()
         resource_name = "package"
 
