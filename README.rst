@@ -8,6 +8,12 @@ on presenting an extremely stable interface to PyPI compatible applications (e.g
 With Crate you should be able to quickly find, evaluate, and install your packages
 with no worries about if something is going to be down or not.
 
+Discussion
+==========
+
+Discussion about crate can take place either in #crate on freenode, on Github Issues,
+or on the Trello board located at: https://trello.com/board/crate-site/4f1ce86e2309d79e2a0141c3
+
 
 Technology Stack
 ================
