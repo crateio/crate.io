@@ -61,28 +61,29 @@ class PackageHashMismatch(Exception):
 
 
 def task_log(task_id, status, name, args, kwargs, exception=None):
-    defaults = {
-        "status": status,
-        "name": name,
-        "args": str(args),
-        "kwargs": str(kwargs),
-    }
+    if task_id is not None:
+        defaults = {
+            "status": status,
+            "name": name,
+            "args": str(args),
+            "kwargs": str(kwargs),
+        }
 
-    if exception is not None:
-        exc = "".join(traceback.format_exception(*exception))
-        defaults.update({"exception": exc})
-    else:
-        exc = None
+        if exception is not None:
+            exc = "".join(traceback.format_exception(*exception))
+            defaults.update({"exception": exc})
+        else:
+            exc = None
 
-    tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
+        tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
 
-    if not c:
-        tlog.status = TaskLog.STATUS.retry
-        if exc is not None:
-            tlog.exception = exc
-        tlog.save()
+        if not c:
+            tlog.status = TaskLog.STATUS.retry
+            if exc is not None:
+                tlog.exception = exc
+            tlog.save()
 
-    return tlog
+        return tlog
 
 
 @task(time_limit=120, soft_time_limit=60)
@@ -227,17 +228,25 @@ def process_release_data(package_name, version, index=None):
 
                 if get_release_data(data, "home_page"):
                     ru, c = ReleaseURI.objects.get_or_create(release=release, label="Home Page", defaults={"uri": get_release_data(data, "home_page")})
+
                     if not c and ru.uri != get_release_data(data, "home_page"):
                         ru.uri = get_release_data(data, "home_page")
                         ru.save()
+
+                    if "Home Page" in current_uris:
+                        current_uris.remove("Home Page")
                 elif "Home Page" in current_uris:
                     ReleaseURI.objects.filter(release=release, label="Home Page").delete()
 
                 if get_release_data(data, "bugtrack_url"):
                     ru, c = ReleaseURI.objects.get_or_create(release=release, label="Bug Tracker", defaults={"uri": get_release_data(data, "bugtrack_url")})
+
                     if not c and ru.uri != get_release_data(data, "bugtrack_url"):
                         ru.uri = get_release_data(data, "bugtrack_url")
                         ru.save()
+
+                    if "Bug Tracker" in current_uris:
+                        current_uris.remove("Bug Tracker")
                 elif "Bug Tracker" in current_uris:
                     ReleaseURI.objects.filter(release=release, label="Bug Tracker").delete()
 
