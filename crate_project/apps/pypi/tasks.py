@@ -61,28 +61,29 @@ class PackageHashMismatch(Exception):
 
 
 def task_log(task_id, status, name, args, kwargs, exception=None):
-    defaults = {
-        "status": status,
-        "name": name,
-        "args": str(args),
-        "kwargs": str(kwargs),
-    }
+    if task_id is not None:
+        defaults = {
+            "status": status,
+            "name": name,
+            "args": str(args),
+            "kwargs": str(kwargs),
+        }
 
-    if exception is not None:
-        exc = "".join(traceback.format_exception(*exception))
-        defaults.update({"exception": exc})
-    else:
-        exc = None
+        if exception is not None:
+            exc = "".join(traceback.format_exception(*exception))
+            defaults.update({"exception": exc})
+        else:
+            exc = None
 
-    tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
+        tlog, c = TaskLog.objects.get_or_create(task_id=task_id.replace("-", ""), defaults=defaults)
 
-    if not c:
-        tlog.status = TaskLog.STATUS.retry
-        if exc is not None:
-            tlog.exception = exc
-        tlog.save()
+        if not c:
+            tlog.status = TaskLog.STATUS.retry
+            if exc is not None:
+                tlog.exception = exc
+            tlog.save()
 
-    return tlog
+        return tlog
 
 
 @task(time_limit=120, soft_time_limit=60)
