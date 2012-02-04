@@ -92,8 +92,8 @@ class RTDocs(object):
 
         key = "evaluate:rtd:%s" % slug
 
-        if cache.get(key, version=3) is not None:
-            hosted_on_rtd, url = cache.get(key, version=3)
+        if cache.get(key, version=4) is not None:
+            hosted_on_rtd, url = cache.get(key, version=4)
         else:
             api = slumber.API(base_url="http://readthedocs.org/api/v1/")
             results = api.project.get(slug__iexact=slug)
@@ -105,7 +105,7 @@ class RTDocs(object):
                 hosted_on_rtd = False
                 url = None
 
-            cache.set(key, (hosted_on_rtd, url), 60 * 60 * 24, version=3)  # Cache This for a Day
+            cache.set(key, (hosted_on_rtd, url), 60 * 30, version=4)  # Cache This for 30 Minutes
 
         if hosted_on_rtd:
             return {
