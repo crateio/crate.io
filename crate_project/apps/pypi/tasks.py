@@ -227,17 +227,25 @@ def process_release_data(package_name, version, index=None):
 
                 if get_release_data(data, "home_page"):
                     ru, c = ReleaseURI.objects.get_or_create(release=release, label="Home Page", defaults={"uri": get_release_data(data, "home_page")})
+
                     if not c and ru.uri != get_release_data(data, "home_page"):
                         ru.uri = get_release_data(data, "home_page")
                         ru.save()
+
+                    if "Home Page" in current_uris:
+                        current_uris.remove("Home Page")
                 elif "Home Page" in current_uris:
                     ReleaseURI.objects.filter(release=release, label="Home Page").delete()
 
                 if get_release_data(data, "bugtrack_url"):
                     ru, c = ReleaseURI.objects.get_or_create(release=release, label="Bug Tracker", defaults={"uri": get_release_data(data, "bugtrack_url")})
+
                     if not c and ru.uri != get_release_data(data, "bugtrack_url"):
                         ru.uri = get_release_data(data, "bugtrack_url")
                         ru.save()
+
+                    if "Bug Tracker" in current_uris:
+                        current_uris.remove("Bug Tracker")
                 elif "Bug Tracker" in current_uris:
                     ReleaseURI.objects.filter(release=release, label="Bug Tracker").delete()
 
