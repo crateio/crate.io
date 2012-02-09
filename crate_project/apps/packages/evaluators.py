@@ -1,5 +1,7 @@
 import slumber
 
+from slumber import exceptions
+
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 
@@ -95,8 +97,14 @@ class RTDocs(object):
         if cache.get(key, version=4) is not None:
             hosted_on_rtd, url = cache.get(key, version=4)
         else:
-            api = slumber.API(base_url="http://readthedocs.org/api/v1/")
-            results = api.project.get(slug__iexact=slug)
+            try:
+                api = slumber.API(base_url="http://readthedocs.org/api/v1/")
+                results = api.project.get(slug__iexact=slug)
+            except exceptions.SlumberHttpBaseException:
+                return {
+                    "level": "unknown",
+                    "message": mark_safe('There was an error with the <a href="http://readthedocs.org/">Read The Docs</a> API.'),
+                }
 
             if results["objects"]:
                 hosted_on_rtd = True
