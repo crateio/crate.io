@@ -268,9 +268,13 @@ class PyPIPackage(object):
                 release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
 
     def get_releases(self):
-        # @@@ We could possibly use self.version to skip this step (but only process 1 version)
-        releases = self.pypi.package_releases(self.name, True)
+        if self.version is None:
+            releases = self.pypi.package_releases(self.name, True)
+        else:
+            releases = [self.version]
+
         logger.debug("[RELEASES] %s%s [%s]" % (self.name, " %s" % self.version if self.version else "", ", ".join(releases)))
+
         return releases
 
     def get_release_data(self):
