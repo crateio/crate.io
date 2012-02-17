@@ -5,6 +5,8 @@ import xmlrpclib
 
 import requests
 
+from django.conf import settings
+from django.core.files.base import ContentFile
 from django.db import transaction
 
 from packages.models import Package, Release, TroveClassifier
@@ -41,6 +43,8 @@ class PyPIPackage(object):
     def __init__(self, name, version=None):
         self.name = name
         self.version = version
+
+        self.stored = False
 
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
 
@@ -221,6 +225,8 @@ class PyPIPackage(object):
 
                 release.save()
 
+        self.stored = True
+
     def download(self):
         # Check to Make sure fetch has been ran
         if not hasattr(self, "releases") or not hasattr(self, "release_data") or not hasattr(self, "release_url_data"):
@@ -230,38 +236,36 @@ class PyPIPackage(object):
         if not hasattr(self, "data"):
             raise Exception("build must be called prior to running download")  # @@@ Make a Custom Exception
 
-        for release in self.releases:
-            files = []
+        if not self.stored:
+            raise Exception("package must be stored prior to downloading")  # @@@ Make a Custom Exception
 
-            for file_data in self.data[release]["files"]:
-                if file_data["file"].startswith("http"):
-                    # @@@ Handle Last-Modified and MD5 Storage
+        for data in self.data.values():
+            package = Package.objects.get(name=data["package"])
+            release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
-                    # This file is in URI form
-                    resp = requests.get(file_data["file"], prefetch=True)
+            for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
+                # @@@ Handle Last-Modified and MD5 Storage
 
-                    resp.raise_for_status()
+                file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
-                    if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
-                        raise PackageHashMismatch("%s does not match %s for %s %s" % (
-                                                            hashlib.md5(resp.content).hexdigest().lower(),
-                                                            file_data["digests"]["md5"].lower(),
-                                                            file_data["type"],
-                                                            file_data["filename"],
-                                                        ))
+                resp = requests.get(file_data["file"], prefetch=True)
+                resp.raise_for_status()
 
-                    # @@@ Verify Signatures
+                if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
+                    raise PackageHashMismatch("%s does not match %s for %s %s" % (
+                                                        hashlib.md5(resp.content).hexdigest().lower(),
+                                                        file_data["digests"]["md5"].lower(),
+                                                        file_data["type"],
+                                                        file_data["filename"],
+                                                    ))
 
-                    file_data["file"] = {
-                        "name": file_data["filename"],
-                        "file": resp.content.encode("base64").replace("\n", ""),
-                    }
+                # @@@ Verify Signatures
 
-                    del file_data["filename"]
+                release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
-                files.append(file_data)
+                # @@@ Check sha256 Hash?
 
-            self.data[release]["files"] = files
+                release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
 
     def get_releases(self):
         # @@@ We could possibly use self.version to skip this step (but only process 1 version)
