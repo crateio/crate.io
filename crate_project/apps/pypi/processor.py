@@ -236,32 +236,33 @@ class PyPIPackage(object):
             raise Exception("package must be stored prior to downloading")  # @@@ Make a Custom Exception
 
         for data in self.data.values():
-            package = Package.objects.get(name=data["package"])
-            release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
+            with transaction.commit_on_success():
+                package = Package.objects.get(name=data["package"])
+                release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
-            for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
-                # @@@ Handle Last-Modified and MD5 Storage
+                for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
+                    # @@@ Handle Last-Modified and MD5 Storage
 
-                file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
+                    file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
-                resp = requests.get(file_data["file"], prefetch=True)
-                resp.raise_for_status()
+                    resp = requests.get(file_data["file"], prefetch=True)
+                    resp.raise_for_status()
 
-                if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
-                    raise PackageHashMismatch("%s does not match %s for %s %s" % (
-                                                        hashlib.md5(resp.content).hexdigest().lower(),
-                                                        file_data["digests"]["md5"].lower(),
-                                                        file_data["type"],
-                                                        file_data["filename"],
-                                                    ))
+                    if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
+                        raise PackageHashMismatch("%s does not match %s for %s %s" % (
+                                                            hashlib.md5(resp.content).hexdigest().lower(),
+                                                            file_data["digests"]["md5"].lower(),
+                                                            file_data["type"],
+                                                            file_data["filename"],
+                                                        ))
 
-                # @@@ Verify Signatures
+                    # @@@ Verify Signatures
 
-                release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
+                    release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
-                # @@@ Check sha256 Hash?
+                    # @@@ Check sha256 Hash?
 
-                release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
+                    release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
 
     def get_releases(self):
         if self.version is None:
