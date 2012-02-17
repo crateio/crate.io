@@ -5,6 +5,8 @@ import xmlrpclib
 
 import requests
 
+from django.db import transaction
+
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
 from pypi.exceptions import PackageHashMismatch
@@ -161,59 +163,63 @@ class PyPIPackage(object):
         pp.pprint(self.data)
 
         for data in self.data.values():
-            package, _ = Package.objects.get_or_create(name=data["package"])
-            release, _ = Release.objects.get_or_create(package=package, version=data["version"])
+            with transaction.commit_on_success():
+                package, _ = Package.objects.get_or_create(name=data["package"])
+                release, _ = Release.objects.get_or_create(package=package, version=data["version"])
 
-            for key, value in data.iteritems():
-                if key in ["package", "version"]:
-                    # Short circuit package and version
-                    continue
+                # This is an extra database call nut it should prevent ShareLocks
+                Release.objects.filter(pk=release.pk).select_for_update()
 
-                if key == "uris":
-                    ReleaseURI.objects.filter(release=release).delete()
-                    for label, uri in value.iteritems():
-                        ReleaseURI.objects.get_or_create(release=release, label=label, uri=uri)
-                elif key == "classifiers":
-                    release.classifiers.clear()
-                    for classifier in value:
-                        trove, _ = TroveClassifier.objects.get_or_create(trove=classifier)
-                        release.classifiers.add(trove)
-                elif key in ["requires", "provides", "obsoletes"]:
-                    model = {"requires": ReleaseRequire, "provides": ReleaseProvide, "obsoletes": ReleaseObsolete}.get(key)
-                    model.objects.filter(release=release).delete()
-                    for item in value:
-                        model.objects.get_or_create(release=release, **item)
-                elif key == "files":
-                    files = ReleaseFile.objects.filter(release=release)
-                    filenames = dict([(x.filename, x) for x in files])
+                for key, value in data.iteritems():
+                    if key in ["package", "version"]:
+                        # Short circuit package and version
+                        continue
 
-                    for f in value:
-                        rf, c = ReleaseFile.objects.get_or_create(
-                            release=release,
-                            type=f["type"],
-                            filename=f["filename"],
-                            python_version=f["python_version"],
-                            defaults=dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
-                        )
+                    if key == "uris":
+                        ReleaseURI.objects.filter(release=release).delete()
+                        for label, uri in value.iteritems():
+                            ReleaseURI.objects.get_or_create(release=release, label=label, uri=uri)
+                    elif key == "classifiers":
+                        release.classifiers.clear()
+                        for classifier in value:
+                            trove, _ = TroveClassifier.objects.get_or_create(trove=classifier)
+                            release.classifiers.add(trove)
+                    elif key in ["requires", "provides", "obsoletes"]:
+                        model = {"requires": ReleaseRequire, "provides": ReleaseProvide, "obsoletes": ReleaseObsolete}.get(key)
+                        model.objects.filter(release=release).delete()
+                        for item in value:
+                            model.objects.get_or_create(release=release, **item)
+                    elif key == "files":
+                        files = ReleaseFile.objects.filter(release=release)
+                        filenames = dict([(x.filename, x) for x in files])
 
-                        if f["filename"] in filenames.keys():
-                            del filenames[f["filename"]]
+                        for f in value:
+                            rf, c = ReleaseFile.objects.get_or_create(
+                                release=release,
+                                type=f["type"],
+                                filename=f["filename"],
+                                python_version=f["python_version"],
+                                defaults=dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
+                            )
 
-                        if not c:
-                            for k, v in f.iteritems():
-                                if k in ["digests", "file", "filename", "type", "python_version"]:
-                                    continue
+                            if f["filename"] in filenames.keys():
+                                del filenames[f["filename"]]
 
-                                setattr(rf, k, v)
+                            if not c:
+                                for k, v in f.iteritems():
+                                    if k in ["digests", "file", "filename", "type", "python_version"]:
+                                        continue
 
-                            rf.save()
+                                    setattr(rf, k, v)
 
-                    if filenames:
-                        ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]).delete()
-                else:
-                    setattr(release, key, value)
+                                rf.save()
 
-            release.save()
+                        if filenames:
+                            ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]).delete()
+                    else:
+                        setattr(release, key, value)
+
+                release.save()
 
     def download(self):
         # Check to Make sure fetch has been ran
