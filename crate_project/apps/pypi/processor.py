@@ -162,10 +162,6 @@ class PyPIPackage(object):
             logger.debug("[RELEASE BUILD DATA] %s %s %s" % (self.name, release, data))
 
     def store(self):
-        import pprint
-        pp = pprint.PrettyPrinter(indent=4)
-        pp.pprint(self.data)
-
         for data in self.data.values():
             with transaction.commit_on_success():
                 package, _ = Package.objects.get_or_create(name=data["package"])
