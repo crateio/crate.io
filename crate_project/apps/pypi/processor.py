@@ -5,7 +5,8 @@ import xmlrpclib
 
 import requests
 
-from packages.models import Package, Release
+from packages.models import Package, Release, TroveClassifier
+from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
 from pypi.exceptions import PackageHashMismatch
 
 logger = logging.getLogger(__name__)
@@ -168,11 +169,48 @@ class PyPIPackage(object):
                     # Short circuit package and version
                     continue
 
-                if key in ["uris", "requires", "provides", "obsoletes", "files", "classifiers"]:
-                    # Process These Specially
-                    pass
+                if key == "uris":
+                    ReleaseURI.objects.filter(release=release).delete()
+                    for label, uri in value.iteritems():
+                        ReleaseURI.objects.get_or_create(release=release, label=label, uri=uri)
+                elif key == "classifiers":
+                    release.classifiers.clear()
+                    for classifier in value:
+                        trove, _ = TroveClassifier.objects.get_or_create(trove=classifier)
+                        release.classifiers.add(trove)
+                elif key in ["requires", "provides", "obsoletes"]:
+                    model = {"requires": ReleaseRequire, "provides": ReleaseProvide, "obsoletes": ReleaseObsolete}.get(key)
+                    model.objects.filter(release=release).delete()
+                    for item in value:
+                        model.objects.get_or_create(release=release, **item)
+                elif key == "files":
+                    files = ReleaseFile.objects.filter(release=release)
+                    filenames = dict([(x.filename, x) for x in files])
+
+                    for f in value:
+                        rf, c = ReleaseFile.objects.get_or_create(
+                            release=release,
+                            type=f["type"],
+                            filename=f["filename"],
+                            python_version=f["python_version"],
+                            defaults=dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
+                        )
+
+                        if f["filename"] in filenames.keys():
+                            del filenames[f["filename"]]
+
+                        if not c:
+                            for k, v in f.iteritems():
+                                if k in ["digests", "file", "filename", "type", "python_version"]:
+                                    continue
+
+                                setattr(rf, k, v)
+
+                            rf.save()
+
+                    if filenames:
+                        ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]).delete()
                 else:
-                    print key, value
                     setattr(release, key, value)
 
             release.save()
