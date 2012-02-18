@@ -41,7 +41,7 @@ class DownloadChangeAdmin(admin.ModelAdmin):
     search_fields = ["release__package__name"]
 
 
-admin.site.register(PyPIMirrorPage)
+admin.site.register(PyPIMirrorPage, PyPIMirrorPageAdmin)
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(Log, LogAdmin)
 admin.site.register(PackageModified, PackageModifiedAdmin)
