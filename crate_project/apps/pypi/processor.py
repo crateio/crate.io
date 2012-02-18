@@ -281,7 +281,7 @@ class PyPIPackage(object):
 
         # Mark unsynced as deleted when bulk processing
         if self.bulk:
-            Release.objects.filter(package=package).exclude(verison__in=self.data.keys()).update(deleted=True)
+            Release.objects.filter(package=package).exclude(version__in=self.data.keys()).update(deleted=True)
 
         self.stored = True
 
