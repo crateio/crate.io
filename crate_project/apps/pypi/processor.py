@@ -61,7 +61,9 @@ class PyPIPackage(object):
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
         self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-    def process(self):
+    def process(self, bulk=False):
+        self.bulk = bulk
+
         self.fetch()
         self.build()
         self.store()
@@ -275,6 +277,11 @@ class PyPIPackage(object):
 
         if package.deleted:
             Package.objects.filter(pk=package.pk).update(deleted=False)
+
+        # Mark unsynced as deleted when bulk processing
+        if self.bulk:
+            Release.objects.filter(package=package).exclude(verison__in=self.data.keys()).update(deleted=True)
+
         self.stored = True
 
     def download(self):

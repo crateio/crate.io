@@ -7,8 +7,11 @@ import xmlrpclib
 import redis
 import requests
 
+from celery.task import task
+
 from django.conf import settings
 
+from packages.models import Package
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -34,6 +37,26 @@ def remove_file(name, version, timestamp, action, matches):
     package.remove_files(*matches.groups())
 
 
+@task
+def bulk_process(name, version, timestamp, action, matches):
+    package = PyPIPackage(name)
+    package.process(bulk=True)
+
+
+@task
+def bulk_synchronize():
+    pypi = xmlrpclib.ServerProxy(INDEX_URL)
+
+    names = set()
+
+    for package in pypi.list_packages():
+        names.add(package)
+        bulk_process.delay(package, None, None, None, None)
+
+    Package.objects.exclude(name__in=names).update(deleted=True)
+
+
+@task
 def synchronize(since=None):
     datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
@@ -52,8 +75,8 @@ def synchronize(since=None):
         if sig.content != datastore.get(SERVERKEY_KEY):
             pass  # @@@ Key rolled over, redownload all sigs.
 
-    if since is None:
-        pass
+    if since is None:  # @@@ Should we do this for more than just initial?
+        bulk_synchronize.delay()
     else:
         logger.info("[SYNCING] Changes since %s" % since)
         changes = pypi.changelog(since)
