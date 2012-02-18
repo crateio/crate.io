@@ -87,6 +87,13 @@ class PyPIPackage(object):
 
                 releases.update(deleted=True)
 
+    def remove_files(self, *files):
+        packages = Package.objects.filter(name=self.name)
+        releases = Release.objects.filter(package__in=packages)
+
+        for rf in ReleaseFile.objects.filter(release__in=releases, filename__in=files):
+            rf.delete()
+
     def fetch(self):
         logger.debug("[FETCH] %s%s" % (self.name, " %s" % self.version if self.version else ""))
 

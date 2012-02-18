@@ -11,14 +11,19 @@ logger = logging.getLogger(__name__)
 INDEX_URL = "http://pypi.python.org/pypi"
 
 
-def process(name, version, timestamp, action):
+def process(name, version, timestamp, action, matches):
     package = PyPIPackage(name, version)
     package.process()
 
 
-def remove(name, version, timestamp, action):
+def remove(name, version, timestamp, action, matches):
     package = PyPIPackage(name, version)
     package.delete()
+
+
+def remove_file(name, version, timestamp, action, matches):
+    package = PyPIPackage(name, version)
+    package.remove_files(*matches.groups())
 
 
 def synchronize(since=None):
@@ -51,7 +56,7 @@ def synchronize(since=None):
                     (re.compile("^new release$"), process),
                     (re.compile("^add [\w\d\.]+ file .+$"), process),
                     (re.compile("^remove$"), remove),
-                    #(re.compile("^remove file .+$"), remove_file),  # @@@ Do Something
+                    (re.compile("^remove file (.+)$"), remove_file),
                     (re.compile("^update [\w]+(, [\w]+)*$"), process),
                     #(re.compile("^docupdate$"), docupdate),  # @@@ Do Something
                     #(re.compile("^add (Owner|Maintainer) .+$"), add_user_role),  # @@@ Do Something
@@ -60,8 +65,9 @@ def synchronize(since=None):
 
                 # Dispatch Based on the action
                 for pattern, func in dispatch.iteritems():
-                    if pattern.search(action) is not None:
-                        func(name, version, timestamp, action)
+                    matches = pattern.search(action)
+                    if matches is not None:
+                        func(name, version, timestamp, action, matches)
                         break
                 else:
                     logger.warn("[UNHANDLED] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
