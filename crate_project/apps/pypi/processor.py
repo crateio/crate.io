@@ -69,6 +69,8 @@ class PyPIPackage(object):
 
     def delete(self):
         with transaction.commit_on_success():
+            self.verify_and_sync_pages()
+
             if self.version is None:
                 # Delete the entire package
                 packages = Package.objects.filter(name=self.name).select_for_update()
@@ -88,6 +90,8 @@ class PyPIPackage(object):
                 releases.update(deleted=True)
 
     def remove_files(self, *files):
+        self.verify_and_sync_pages()
+
         packages = Package.objects.filter(name=self.name)
         releases = Release.objects.filter(package__in=packages)
 
@@ -285,28 +289,11 @@ class PyPIPackage(object):
         if not self.stored:
             raise Exception("package must be stored prior to downloading")  # @@@ Make a Custom Exception
 
+        pypi_pages = self.verify_and_sync_pages()
+
         for data in self.data.values():
             with transaction.commit_on_success():
-                # Get the Server Key for PyPI
-                if self.datastore.get(SERVERKEY_KEY):
-                    key = load_key(self.datastore.get(SERVERKEY_KEY))
-                else:
-                    serverkey = requests.get(SERVERKEY_URL, prefetch=True)
-                    key = load_key(serverkey.content)
-                    self.datastore.set(SERVERKEY_KEY, serverkey.content)
-
-                # Download the "simple" page from PyPI for this package
-                simple = requests.get(urlparse.urljoin(SIMPLE_URL, data["package"]), prefetch=True)
-                simple.raise_for_status()
-
-                # Download the "serversig" page from PyPI for this package
-                serversig = requests.get(urlparse.urljoin(SERVERSIG_URL, data["package"]), prefetch=True)
-                serversig.raise_for_status()
-
-                if not verify(key, simple.content, serversig.content):
-                    raise Exception("Simple API page does not match serversig")  # @@@ This Should be Custom Exception
-
-                simple_html = lxml.html.fromstring(simple.content)
+                simple_html = lxml.html.fromstring(pypi_pages["simple"])
                 simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
 
                 verified_md5_hashes = {}
@@ -319,14 +306,6 @@ class PyPIPackage(object):
 
                 package = Package.objects.get(name=data["package"])
                 release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
-
-                simple_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.simple, defaults={"content": simple.content})
-                if not c and simple_mirror.content != simple.content:
-                    PyPIMirrorPage.objects.filter(pk=simple_mirror.pk).update(content=simple.content)
-
-                serversig_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.serversig, defaults={"content": serversig.content.encode("base64")})
-                if not c and serversig_mirror.content.encode("base64") != serversig.content:
-                    PyPIMirrorPage.objects.filter(pk=serversig_mirror.pk).update(content=serversig.content.encode("base64"))
 
                 for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
                     file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
@@ -418,3 +397,38 @@ class PyPIPackage(object):
             logger.debug("[RELEASE URL DATA] %s %s %s" % (self.name, release, data))
             release_url_data.append([release, data])
         return dict(release_url_data)
+
+    def verify_and_sync_pages(self):
+        # Get the Server Key for PyPI
+        if self.datastore.get(SERVERKEY_KEY):
+            key = load_key(self.datastore.get(SERVERKEY_KEY))
+        else:
+            serverkey = requests.get(SERVERKEY_URL, prefetch=True)
+            key = load_key(serverkey.content)
+            self.datastore.set(SERVERKEY_KEY, serverkey.content)
+
+        # Download the "simple" page from PyPI for this package
+        simple = requests.get(urlparse.urljoin(SIMPLE_URL, self.name), prefetch=True)
+        simple.raise_for_status()
+
+        # Download the "serversig" page from PyPI for this package
+        serversig = requests.get(urlparse.urljoin(SERVERSIG_URL, self.name), prefetch=True)
+        serversig.raise_for_status()
+
+        if not verify(key, simple.content, serversig.content):
+            raise Exception("Simple API page does not match serversig")  # @@@ This Should be Custom Exception
+
+        package = Package.objects.get(name=self.name)
+
+        simple_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.simple, defaults={"content": simple.content})
+        if not c and simple_mirror.content != simple.content:
+            PyPIMirrorPage.objects.filter(pk=simple_mirror.pk).update(content=simple.content)
+
+        serversig_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.serversig, defaults={"content": serversig.content.encode("base64")})
+        if not c and serversig_mirror.content.encode("base64") != serversig.content:
+            PyPIMirrorPage.objects.filter(pk=serversig_mirror.pk).update(content=serversig.content.encode("base64"))
+
+        return {
+            "simple": simple.content,
+            "serversig": serversig.content,
+        }
