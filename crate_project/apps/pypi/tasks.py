@@ -4,11 +4,19 @@ import logging
 import re
 import xmlrpclib
 
+import redis
+import requests
+
+from django.conf import settings
+
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
 
 INDEX_URL = "http://pypi.python.org/pypi"
+
+SERVERKEY_URL = "http://pypi.python.org/serverkey"
+SERVERKEY_KEY = "crate:pypi:serverkey"
 
 
 def process(name, version, timestamp, action, matches):
@@ -27,15 +35,22 @@ def remove_file(name, version, timestamp, action, matches):
 
 
 def synchronize(since=None):
+    datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+
     # @@@ Since Needs Stored Somewhere
     if since is None:
         since = 1320000896
 
     pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
-    # Debug Shortcut
-    process("pyverify", "0.8.1", None, None)
-    return
+    headers = datastore.hgetall(SERVERKEY_KEY + ":headers")
+    sig = requests.get(SERVERKEY_URL, headers=headers, prefetch=True)
+
+    if not sig.response == 304:
+        sig.raise_for_status()
+    else:
+        if sig.content != datastore.get(SERVERKEY_KEY):
+            pass  # @@@ Key rolled over, redownload all sigs.
 
     if since is None:
         pass
