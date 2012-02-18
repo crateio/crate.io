@@ -77,7 +77,7 @@ def synchronize(since=None):
     headers = datastore.hgetall(SERVERKEY_KEY + ":headers")
     sig = requests.get(SERVERKEY_URL, headers=headers, prefetch=True)
 
-    if not sig.response == 304:
+    if not sig.status_code == 304:
         sig.raise_for_status()
     else:
         if sig.content != datastore.get(SERVERKEY_KEY):
