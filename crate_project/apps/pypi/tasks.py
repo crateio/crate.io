@@ -1,7 +1,9 @@
 import collections
+import datetime
 import hashlib
 import logging
 import re
+import time
 import xmlrpclib
 
 import redis
@@ -20,6 +22,8 @@ INDEX_URL = "http://pypi.python.org/pypi"
 
 SERVERKEY_URL = "http://pypi.python.org/serverkey"
 SERVERKEY_KEY = "crate:pypi:serverkey"
+
+PYPI_SINCE_KEY = "crate:pypi:since"
 
 
 def process(name, version, timestamp, action, matches):
@@ -62,7 +66,11 @@ def synchronize(since=None):
 
     # @@@ Since Needs Stored Somewhere
     if since is None:
-        since = 1320000896
+        s = datastore.get(PYPI_SINCE_KEY)
+        if s is not None:
+            since = int(s)
+        #since = 1320000896
+        #since = 1329500152
 
     pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
@@ -112,3 +120,5 @@ def synchronize(since=None):
             else:
                 logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
+
+    datastore.set(PYPI_SINCE_KEY, time.mktime(datetime.datetime.utcnow().timetuple()))
