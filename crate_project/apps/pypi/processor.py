@@ -15,6 +15,7 @@ from django.db import transaction
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
 from pypi.exceptions import PackageHashMismatch
+from pypi.models import PyPIMirrorPage
 from pypi.utils.serversigs import load_key, verify
 
 logger = logging.getLogger(__name__)
@@ -280,6 +281,14 @@ class PyPIPackage(object):
 
                 package = Package.objects.get(name=data["package"])
                 release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
+
+                simple_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.simple, defaults={"content": simple.content})
+                if not c and simple_mirror.content != simple.content:
+                    PyPIMirrorPage.objects.filter(pk=simple_mirror.pk).update(content=simple.content)
+
+                serversig_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, type=PyPIMirrorPage.TYPES.serversig, defaults={"content": serversig.content.encode("base64")})
+                if not c and serversig_mirror.content.encode("base64") != serversig.content:
+                    PyPIMirrorPage.objects.filter(pk=serversig_mirror.pk).update(content=serversig.content.encode("base64"))
 
                 for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
                     file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
