@@ -66,6 +66,7 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
+    deleted = models.BooleanField(default=False)
     downloads_synced_on = models.DateTimeField(default=now)
 
     def __unicode__(self):
@@ -116,6 +117,8 @@ class Release(models.Model):
 
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
+
+    deleted = models.BooleanField(default=False)
 
     package = models.ForeignKey(Package, related_name="releases")
     version = models.CharField(max_length=512)

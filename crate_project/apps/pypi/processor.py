@@ -11,6 +11,7 @@ import lxml.html
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.db import transaction
+from django.utils.timezone import utc
 
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
@@ -59,6 +60,32 @@ class PyPIPackage(object):
 
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
         self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+
+    def process(self):
+        self.fetch()
+        self.build()
+        self.store()
+        self.download()
+
+    def delete(self):
+        with transaction.commit_on_success():
+            if self.version is None:
+                # Delete the entire package
+                packages = Package.objects.filter(name=self.name).select_for_update()
+                releases = Release.objects.filter(package__in=packages).select_for_update()
+
+                packages.update(deleted=True)
+                releases.update(deleted=True)
+            else:
+                # Delete only this release
+                try:
+                    package = Package.objects.get(name=self.name)
+                except Package.DoesNotExist:
+                    return
+
+                releases = Release.objects.filter(package=package, version=self.version).select_for_update()
+
+                releases.update(deleted=True)
 
     def fetch(self):
         logger.debug("[FETCH] %s%s" % (self.name, " %s" % self.version if self.version else ""))
@@ -149,7 +176,7 @@ class PyPIPackage(object):
             for url_data in self.release_url_data[release]:
                 data["files"].append({
                     "comment": get_helper(url_data, "comment_text"),
-                    "downloads": get_helper(url_data, "downloads"),
+                    "downloads": get_helper(url_data, "downloads", 0),
                     "file": get_helper(url_data, "url"),
                     "filename": get_helper(url_data, "filename"),
                     "python_version": get_helper(url_data, "python_version"),
@@ -159,7 +186,7 @@ class PyPIPackage(object):
                     }
                 })
                 if url_data.get("upload_time"):
-                    data["files"][-1]["created"] = url_data["upload_time"]
+                    data["files"][-1]["created"] = url_data["upload_time"].replace(tzinfo=utc)
 
             for file_data in data["files"]:
                 if file_data.get("created"):
@@ -174,9 +201,10 @@ class PyPIPackage(object):
             logger.debug("[RELEASE BUILD DATA] %s %s %s" % (self.name, release, data))
 
     def store(self):
+        package, _ = Package.objects.get_or_create(name=self.name)
+
         for data in self.data.values():
             with transaction.commit_on_success():
-                package, _ = Package.objects.get_or_create(name=data["package"])
                 release, _ = Release.objects.get_or_create(package=package, version=data["version"])
 
                 # This is an extra database call nut it should prevent ShareLocks
@@ -231,8 +259,11 @@ class PyPIPackage(object):
                     else:
                         setattr(release, key, value)
 
+                release.deleted = False
                 release.save()
 
+        if package.deleted:
+            Package.objects.filter(pk=package.pk).update(deleted=False)
         self.stored = True
 
     def download(self):

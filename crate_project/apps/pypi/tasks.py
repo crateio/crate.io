@@ -12,15 +12,13 @@ INDEX_URL = "http://pypi.python.org/pypi"
 
 
 def process(name, version, timestamp, action):
-    package = PyPIPackage(name)
-    package.fetch()
-    package.build()
-    package.store()
-    # package.download()
+    package = PyPIPackage(name, version)
+    package.process()
 
-    # import pprint
-    # pp = pprint.PrettyPrinter(indent=4)
-    # pp.pprint(package.data)
+
+def remove(name, version, timestamp, action):
+    package = PyPIPackage(name, version)
+    package.delete()
 
 
 def synchronize(since=None):
@@ -52,7 +50,7 @@ def synchronize(since=None):
                     (re.compile("^create$"), process),
                     (re.compile("^new release$"), process),
                     (re.compile("^add [\w\d\.]+ file .+$"), process),
-                    #(re.compile("^remove$"), remove),  # @@@ Do Something
+                    (re.compile("^remove$"), remove),
                     #(re.compile("^remove file .+$"), remove_file),  # @@@ Do Something
                     (re.compile("^update [\w]+(, [\w]+)*$"), process),
                     #(re.compile("^docupdate$"), docupdate),  # @@@ Do Something
