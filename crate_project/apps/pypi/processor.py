@@ -3,6 +3,7 @@ import logging
 import re
 import xmlrpclib
 
+import redis
 import requests
 
 from django.conf import settings
@@ -47,6 +48,7 @@ class PyPIPackage(object):
         self.stored = False
 
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
+        self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
     def fetch(self):
         logger.debug("[FETCH] %s%s" % (self.name, " %s" % self.version if self.version else ""))
@@ -241,13 +243,37 @@ class PyPIPackage(object):
                 release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
                 for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
-                    # @@@ Handle Last-Modified and MD5 Storage
-
                     file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
-                    resp = requests.get(file_data["file"], prefetch=True)
+                    datastore_key = "crate:pypi:download:%(package)s:%(version)s:%(url)s" % {
+                                        "package": data["package"],
+                                        "version": data["version"],
+                                        "url": file_data["file"],
+                                    }
+                    stored_file_data = self.datastore.hgetall(datastore_key)
+
+                    headers = None
+
+                    if stored_file_data:
+                        # Stored data exists for this file
+                        if release_file.file and release_file.file.read():
+                            # We already have a file
+                            if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
+                                # The supposed MD5 from PyPI matches our local
+                                headers = {
+                                    "If-Modified-Since": stored_file_data["modified"],
+                                }
+
+                    resp = requests.get(file_data["file"], headers=headers, prefetch=True)
+
+                    if resp.status_code == 304:
+                        logger.info("[DOWNLOAD] skipping %(filename)s because it has not been modified" % {"filename": release_file.filename})
+                        return
+                    logger.info("[DOWNLOAD] downloading %(filename)s" % {"filename": release_file.filename})
+
                     resp.raise_for_status()
 
+                    # Make sure the MD5 of the file we receive matched what we were told it is
                     if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
                         raise PackageHashMismatch("%s does not match %s for %s %s" % (
                                                             hashlib.md5(resp.content).hexdigest().lower(),
@@ -260,9 +286,23 @@ class PyPIPackage(object):
 
                     release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
-                    # @@@ Check sha256 Hash?
-
                     release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
+
+                    # Store data relating to this file (if modified etc)
+                    stored_file_data = {
+                        "md5": file_data["digests"]["md5"].lower(),
+                        "modified": resp.headers.get("Last-Modified"),
+                    }
+
+                    if resp.headers.get("Last-Modified"):
+                        self.datastore.hmset(datastore_key, {
+                            "md5": file_data["digests"]["md5"].lower(),
+                            "modified": resp.headers["Last-Modified"],
+                        })
+                        # Set a year expire on the key so that stale entries disappear
+                        self.datastore.expire(datastore_key, 31556926)
+                    else:
+                        self.datastore.delete(datastore_key)
 
     def get_releases(self):
         if self.version is None:
