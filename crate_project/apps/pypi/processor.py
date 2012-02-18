@@ -1,6 +1,7 @@
 import hashlib
 import logging
 import re
+import urllib
 import urlparse
 import xmlrpclib
 
@@ -300,16 +301,17 @@ class PyPIPackage(object):
 
         for data in self.data.values():
             with transaction.commit_on_success():
-                simple_html = lxml.html.fromstring(pypi_pages["simple"])
-                simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
+                if pypi_pages.get("has_sig"):
+                    simple_html = lxml.html.fromstring(pypi_pages["simple"])
+                    simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
 
-                verified_md5_hashes = {}
+                    verified_md5_hashes = {}
 
-                for link in simple_html.iterlinks():
-                        m = _md5_re.search(link[2])
-                        if m:
-                            url, md5_hash = m.groups()
-                            verified_md5_hashes[url] = md5_hash
+                    for link in simple_html.iterlinks():
+                            m = _md5_re.search(link[2])
+                            if m:
+                                url, md5_hash = m.groups()
+                                verified_md5_hashes[url] = md5_hash
 
                 package = Package.objects.get(name=data["package"])
                 release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
@@ -317,8 +319,9 @@ class PyPIPackage(object):
                 for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
                     file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
-                    if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
-                        raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
+                    if pypi_pages.get("has_sig"):
+                        if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
+                            raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
 
                     datastore_key = "crate:pypi:download:%(url)s" % {"url": file_data["file"]}
                     stored_file_data = self.datastore.hgetall(datastore_key)
@@ -414,13 +417,23 @@ class PyPIPackage(object):
             key = load_key(serverkey.content)
             self.datastore.set(SERVERKEY_KEY, serverkey.content)
 
-        # Download the "simple" page from PyPI for this package
-        simple = requests.get(urlparse.urljoin(SIMPLE_URL, self.name), prefetch=True)
-        simple.raise_for_status()
+        try:
+            # Download the "simple" page from PyPI for this package
+            simple = requests.get(urlparse.urljoin(SIMPLE_URL, urllib.quote(self.name)), prefetch=True)
+            simple.raise_for_status()
+        except requests.HTTPError:
+            if simple.status_code == 404:
+                return {"has_sig": False}
+            raise
 
-        # Download the "serversig" page from PyPI for this package
-        serversig = requests.get(urlparse.urljoin(SERVERSIG_URL, self.name), prefetch=True)
-        serversig.raise_for_status()
+        try:
+            # Download the "serversig" page from PyPI for this package
+            serversig = requests.get(urlparse.urljoin(SERVERSIG_URL, urllib.quote(self.name)), prefetch=True)
+            serversig.raise_for_status()
+        except requests.HTTPError:
+            if serversig.status_code == 404:
+                return {"has_sig": False}
+            raise
 
         if not verify(key, simple.content, serversig.content):
             raise Exception("Simple API page does not match serversig")  # @@@ This Should be Custom Exception
@@ -438,4 +451,5 @@ class PyPIPackage(object):
         return {
             "simple": simple.content,
             "serversig": serversig.content,
+            "has_sig": True,
         }
