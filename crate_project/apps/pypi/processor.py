@@ -1,10 +1,12 @@
 import hashlib
 import logging
 import re
+import urlparse
 import xmlrpclib
 
 import redis
 import requests
+import lxml.html
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -13,12 +15,19 @@ from django.db import transaction
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
 from pypi.exceptions import PackageHashMismatch
+from pypi.utils.serversigs import load_key, verify
 
 logger = logging.getLogger(__name__)
 
 INDEX_URL = "http://pypi.python.org/pypi"
+SIMPLE_URL = "http://pypi.python.org/simple/"
+SERVERSIG_URL = "http://pypi.python.org/serversig/"
+SERVERKEY_URL = "http://pypi.python.org/serverkey"
+
+SERVERKEY_KEY = "crate:pypi:serverkey"
 
 _disutils2_version_capture = re.compile("^(.*?)(?:\(([^()]+)\))?$")
+_md5_re = re.compile(r"(https?://pypi\.python\.org/packages/.+)#md5=([a-f0-9]+)")
 
 
 def get_helper(data, key, default=None):
@@ -256,13 +265,19 @@ class PyPIPackage(object):
 
                     if stored_file_data:
                         # Stored data exists for this file
-                        if release_file.file and release_file.file.read():
-                            # We already have a file
-                            if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
-                                # The supposed MD5 from PyPI matches our local
-                                headers = {
-                                    "If-Modified-Since": stored_file_data["modified"],
-                                }
+                        if release_file.file:
+                            try:
+                                release_file.file.read()
+                            except IOError:
+                                pass
+                            else:
+                                if release_file.file and release_file.file.read():
+                                    # We already have a file
+                                    if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
+                                        # The supposed MD5 from PyPI matches our local
+                                        headers = {
+                                            "If-Modified-Since": stored_file_data["modified"],
+                                        }
 
                     resp = requests.get(file_data["file"], headers=headers, prefetch=True)
 
@@ -273,6 +288,25 @@ class PyPIPackage(object):
 
                     resp.raise_for_status()
 
+                    # Get the Server Key for PyPI
+                    if self.datastore.get(SERVERKEY_KEY):
+                        key = load_key(self.datastore.get(SERVERKEY_KEY))
+                    else:
+                        serverkey = requests.get(SERVERKEY_URL, prefetch=True)
+                        key = load_key(serverkey.content)
+                        self.datastore.set(SERVERKEY_KEY, serverkey.content)
+
+                    # Download the "simple" page from PyPI for this package
+                    simple = requests.get(urlparse.urljoin(SIMPLE_URL, data["package"]), prefetch=True)
+                    simple.raise_for_status()
+
+                    # Download the "serversig" page from PyPI for this package
+                    serversig = requests.get(urlparse.urljoin(SERVERSIG_URL, data["package"]), prefetch=True)
+                    serversig.raise_for_status()
+
+                    if not verify(key, simple.content, serversig.content):
+                        raise Exception("Simple API page does not match serversig")  # @@@ This Should be Custom Exception
+
                     # Make sure the MD5 of the file we receive matched what we were told it is
                     if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
                         raise PackageHashMismatch("%s does not match %s for %s %s" % (
@@ -282,7 +316,16 @@ class PyPIPackage(object):
                                                             file_data["filename"],
                                                         ))
 
-                    # @@@ Verify Signatures
+                    simple_html = lxml.html.fromstring(simple.content)
+                    simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
+
+                    for link in simple_html.iterlinks():
+                        m = _md5_re.search(link[2])
+                        if m:
+                            url, md5_hash = m.groups()
+                            if url == file_data["file"]:
+                                if md5_hash.lower() != file_data["digests"]["md5"].lower():
+                                    raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
 
                     release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
