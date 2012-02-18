@@ -327,11 +327,7 @@ class PyPIPackage(object):
                     if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
                         raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
 
-                    datastore_key = "crate:pypi:download:%(package)s:%(version)s:%(url)s" % {
-                                        "package": data["package"],
-                                        "version": data["version"],
-                                        "url": file_data["file"],
-                                    }
+                    datastore_key = "crate:pypi:download:%(url)s" % {"url": file_data["file"]}
                     stored_file_data = self.datastore.hgetall(datastore_key)
 
                     headers = None
@@ -344,13 +340,12 @@ class PyPIPackage(object):
                             except IOError:
                                 pass
                             else:
-                                if release_file.file and release_file.file.read():
-                                    # We already have a file
-                                    if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
-                                        # The supposed MD5 from PyPI matches our local
-                                        headers = {
-                                            "If-Modified-Since": stored_file_data["modified"],
-                                        }
+                                # We already have a file
+                                if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
+                                    # The supposed MD5 from PyPI matches our local
+                                    headers = {
+                                        "If-Modified-Since": stored_file_data["modified"],
+                                    }
 
                     resp = requests.get(file_data["file"], headers=headers, prefetch=True)
 
