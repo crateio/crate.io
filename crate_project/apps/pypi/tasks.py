@@ -92,7 +92,7 @@ def synchronize(since=None):
             line_hash = hashlib.sha256(":".join([str(x) for x in (name, version, timestamp, action)])).hexdigest()
             logdata = {"action": action, "name": name, "version": version, "timestamp": timestamp, "hash": line_hash}
 
-            if True:  # @@@ Switch To Checking a Hash of the Data
+            if not datastore.exists("crate:pypi:changelog:%s" % line_hash):
                 logger.debug("[PROCESS] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
 
@@ -116,6 +116,8 @@ def synchronize(since=None):
                         break
                 else:
                     logger.warn("[UNHANDLED] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
+
+                    datastore.setex("crate:pypi:changelog:%s" % line_hash, datetime.datetime.utcnow().isoformat(), 2629743)
             else:
                 logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
