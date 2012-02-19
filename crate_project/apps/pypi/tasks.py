@@ -26,15 +26,9 @@ SERVERKEY_KEY = "crate:pypi:serverkey"
 PYPI_SINCE_KEY = "crate:pypi:since"
 
 
-@task(time_limit=0)
-def download(package):
-    package.download()
-
-
 def process(name, version, timestamp, action, matches):
     package = PyPIPackage(name, version)
-    package.process(download=False)
-    download.delay(package)
+    package.process()
 
 
 def remove(name, version, timestamp, action, matches):
@@ -50,8 +44,7 @@ def remove_file(name, version, timestamp, action, matches):
 @task
 def bulk_process(name, version, timestamp, action, matches):
     package = PyPIPackage(name)
-    package.process(bulk=True, download=False)
-    download.delay(package)
+    package.process(bulk=True)
 
 
 @task
@@ -74,7 +67,7 @@ def synchronize(since=None):
     if since is None:
         s = datastore.get(PYPI_SINCE_KEY)
         if s is not None:
-            since = int(s)
+            since = int(float(s))
         #since = 1320000896
         #since = 1329500152
 
