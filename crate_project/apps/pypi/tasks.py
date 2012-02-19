@@ -60,11 +60,10 @@ def bulk_synchronize():
     Package.objects.exclude(name__in=names).update(deleted=True)
 
 
-@task
+@task(time_limit=0)
 def synchronize(since=None):
     datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-    # @@@ Since Needs Stored Somewhere
     if since is None:
         s = datastore.get(PYPI_SINCE_KEY)
         if s is not None:
