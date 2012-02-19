@@ -60,7 +60,7 @@ def bulk_synchronize():
     Package.objects.exclude(name__in=names).update(deleted=True)
 
 
-@task(time_limit=0)
+@task
 def synchronize(since=None):
     datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
