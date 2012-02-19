@@ -67,9 +67,7 @@ def synchronize(since=None):
     if since is None:
         s = datastore.get(PYPI_SINCE_KEY)
         if s is not None:
-            since = int(float(s))
-        #since = 1320000896
-        #since = 1329500152
+            since = int(float(s)) - 30
 
     current = time.mktime(datetime.datetime.utcnow().timetuple())
 
