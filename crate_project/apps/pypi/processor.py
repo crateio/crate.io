@@ -302,86 +302,89 @@ class PyPIPackage(object):
         pypi_pages = self.verify_and_sync_pages()
 
         for data in self.data.values():
-            with transaction.commit_on_success():
-                if pypi_pages.get("has_sig"):
-                    simple_html = lxml.html.fromstring(pypi_pages["simple"])
-                    simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
-
-                    verified_md5_hashes = {}
-
-                    for link in simple_html.iterlinks():
-                            m = _md5_re.search(link[2])
-                            if m:
-                                url, md5_hash = m.groups()
-                                verified_md5_hashes[url] = md5_hash
-
-                package = Package.objects.get(name=data["package"])
-                release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
-
-                for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
-                    file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
-
+            try:
+                with transaction.commit_on_success():
                     if pypi_pages.get("has_sig"):
-                        if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
-                            raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
+                        simple_html = lxml.html.fromstring(pypi_pages["simple"])
+                        simple_html.make_links_absolute(urlparse.urljoin(SIMPLE_URL, data["package"]) + "/")
 
-                    datastore_key = "crate:pypi:download:%(url)s" % {"url": file_data["file"]}
-                    stored_file_data = self.datastore.hgetall(datastore_key)
+                        verified_md5_hashes = {}
 
-                    headers = None
+                        for link in simple_html.iterlinks():
+                                m = _md5_re.search(link[2])
+                                if m:
+                                    url, md5_hash = m.groups()
+                                    verified_md5_hashes[url] = md5_hash
 
-                    if stored_file_data:
-                        # Stored data exists for this file
-                        if release_file.file:
-                            try:
-                                release_file.file.read()
-                            except IOError:
-                                pass
-                            else:
-                                # We already have a file
-                                if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
-                                    # The supposed MD5 from PyPI matches our local
-                                    headers = {
-                                        "If-Modified-Since": stored_file_data["modified"],
-                                    }
+                    package = Package.objects.get(name=data["package"])
+                    release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
-                    resp = requests.get(file_data["file"], headers=headers, prefetch=True)
+                    for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
+                        file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
-                    if resp.status_code == 304:
-                        logger.info("[DOWNLOAD] skipping %(filename)s because it has not been modified" % {"filename": release_file.filename})
-                        return
-                    logger.info("[DOWNLOAD] downloading %(filename)s" % {"filename": release_file.filename})
+                        if pypi_pages.get("has_sig"):
+                            if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
+                                raise Exception("MD5 does not match simple API md5 [Verified by ServerSig]")  # @@@ Custom Exception
 
-                    resp.raise_for_status()
+                        datastore_key = "crate:pypi:download:%(url)s" % {"url": file_data["file"]}
+                        stored_file_data = self.datastore.hgetall(datastore_key)
 
-                    # Make sure the MD5 of the file we receive matched what we were told it is
-                    if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
-                        raise PackageHashMismatch("%s does not match %s for %s %s" % (
-                                                            hashlib.md5(resp.content).hexdigest().lower(),
-                                                            file_data["digests"]["md5"].lower(),
-                                                            file_data["type"],
-                                                            file_data["filename"],
-                                                        ))
+                        headers = None
 
-                    release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
+                        if stored_file_data:
+                            # Stored data exists for this file
+                            if release_file.file:
+                                try:
+                                    release_file.file.read()
+                                except IOError:
+                                    pass
+                                else:
+                                    # We already have a file
+                                    if stored_file_data["md5"].lower() == file_data["digests"]["md5"].lower():
+                                        # The supposed MD5 from PyPI matches our local
+                                        headers = {
+                                            "If-Modified-Since": stored_file_data["modified"],
+                                        }
 
-                    release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
+                        resp = requests.get(file_data["file"], headers=headers, prefetch=True)
 
-                    # Store data relating to this file (if modified etc)
-                    stored_file_data = {
-                        "md5": file_data["digests"]["md5"].lower(),
-                        "modified": resp.headers.get("Last-Modified"),
-                    }
+                        if resp.status_code == 304:
+                            logger.info("[DOWNLOAD] skipping %(filename)s because it has not been modified" % {"filename": release_file.filename})
+                            return
+                        logger.info("[DOWNLOAD] downloading %(filename)s" % {"filename": release_file.filename})
 
-                    if resp.headers.get("Last-Modified"):
-                        self.datastore.hmset(datastore_key, {
+                        resp.raise_for_status()
+
+                        # Make sure the MD5 of the file we receive matched what we were told it is
+                        if hashlib.md5(resp.content).hexdigest().lower() != file_data["digests"]["md5"].lower():
+                            raise PackageHashMismatch("%s does not match %s for %s %s" % (
+                                                                hashlib.md5(resp.content).hexdigest().lower(),
+                                                                file_data["digests"]["md5"].lower(),
+                                                                file_data["type"],
+                                                                file_data["filename"],
+                                                            ))
+
+                        release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
+
+                        release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
+
+                        # Store data relating to this file (if modified etc)
+                        stored_file_data = {
                             "md5": file_data["digests"]["md5"].lower(),
-                            "modified": resp.headers["Last-Modified"],
-                        })
-                        # Set a year expire on the key so that stale entries disappear
-                        self.datastore.expire(datastore_key, 31556926)
-                    else:
-                        self.datastore.delete(datastore_key)
+                            "modified": resp.headers.get("Last-Modified"),
+                        }
+
+                        if resp.headers.get("Last-Modified"):
+                            self.datastore.hmset(datastore_key, {
+                                "md5": file_data["digests"]["md5"].lower(),
+                                "modified": resp.headers["Last-Modified"],
+                            })
+                            # Set a year expire on the key so that stale entries disappear
+                            self.datastore.expire(datastore_key, 31556926)
+                        else:
+                            self.datastore.delete(datastore_key)
+            except requests.HTTPError:
+                logger.exception("[DOWNLOAD ERROR]")
 
     def get_releases(self):
         if self.version is None:
