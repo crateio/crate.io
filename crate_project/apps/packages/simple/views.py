@@ -11,14 +11,21 @@ def not_found(request):
 
 
 class PackageIndex(ListView):
-    queryset = Package.objects.all().order_by("name")
+    queryset = Package.objects.filter(deleted=False).order_by("name")
     template_name = "packages/simple/package_list.html"
 
 
 class PackageDetail(DetailView):
-    queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files", "package_links")
+    queryset = Package.objects.filter(deleted=False).prefetch_related("releases__uris", "releases__files", "package_links")
     slug_field = "name__iexact"
     template_name = "packages/simple/package_detail.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PackageDetail, self).get_context_data(**kwargs)
+        ctx.update({
+            "releases": self.object.releases.filter(deleted=False),
+        })
+        return ctx
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
