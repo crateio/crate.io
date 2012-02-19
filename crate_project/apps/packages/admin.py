@@ -18,7 +18,7 @@ class PackageURIAdmin(admin.TabularInline):
 class PackageAdmin(admin.ModelAdmin):
     inlines = [PackageURIAdmin]
     list_display = ["name", "created", "modified", "downloads_synced_on"]
-    list_filter = ["created", "modified", "downloads_synced_on"]
+    list_filter = ["created", "modified", "deleted", "downloads_synced_on"]
     search_fields = ["name"]
 
 
@@ -51,7 +51,7 @@ class ReleaseAdmin(admin.ModelAdmin):
     inlines = [ReleaseURIInline, ReleaseFileInline, ReleaseRequireInline, ReleaseProvideInline, ReleaseObsoleteInline]
     actions = [releases_save]
     list_display = ["__unicode__", "package", "version", "summary", "author", "author_email", "maintainer", "maintainer_email", "created", "modified"]
-    list_filter = ["created", "modified", "hidden"]
+    list_filter = ["created", "modified", "deleted", "hidden"]
     search_fields = ["package__name", "version", "summary", "author", "author_email", "maintainer", "maintainer_email"]
     raw_id_fields = ["package"]
 
