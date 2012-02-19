@@ -121,7 +121,7 @@ def synchronize(since=None):
                 else:
                     logger.warn("[UNHANDLED] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
 
-                    datastore.setex("crate:pypi:changelog:%s" % line_hash, datetime.datetime.utcnow().isoformat(), 2629743)
+                datastore.setex("crate:pypi:changelog:%s" % line_hash, 2629743, datetime.datetime.utcnow().isoformat())
             else:
                 logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
