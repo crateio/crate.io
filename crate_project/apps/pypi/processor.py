@@ -62,13 +62,15 @@ class PyPIPackage(object):
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
         self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-    def process(self, bulk=False):
+    def process(self, bulk=False, download=True):
         self.bulk = bulk
 
         self.fetch()
         self.build()
         self.store()
-        self.download()
+
+        if download:
+            self.download()
 
     def delete(self):
         with transaction.commit_on_success():
