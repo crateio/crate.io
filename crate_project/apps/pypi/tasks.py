@@ -71,6 +71,8 @@ def synchronize(since=None):
         #since = 1320000896
         #since = 1329500152
 
+    current = time.mktime(datetime.datetime.utcnow().timetuple())
+
     pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
     headers = datastore.hgetall(SERVERKEY_KEY + ":headers")
@@ -122,4 +124,4 @@ def synchronize(since=None):
                 logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
 
-    datastore.set(PYPI_SINCE_KEY, time.mktime(datetime.datetime.utcnow().timetuple()))
+    datastore.set(PYPI_SINCE_KEY, current)
