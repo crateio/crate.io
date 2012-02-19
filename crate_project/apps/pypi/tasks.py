@@ -84,6 +84,8 @@ def synchronize(since=None):
         if sig.content != datastore.get(SERVERKEY_KEY):
             pass  # @@@ Key rolled over, redownload all sigs.
 
+    datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
+
     if since is None:  # @@@ Should we do this for more than just initial?
         bulk_synchronize.delay()
     else:
