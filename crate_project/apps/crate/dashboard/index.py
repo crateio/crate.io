@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from admin_tools.dashboard import modules, Dashboard
 from admin_tools.utils import get_admin_site_name
 
-from crate.dashboard.modules import StatusModule
+from crate.dashboard.modules import StatusModule, RedisStatusModule
 
 
 class CrateIndexDashboard(Dashboard):
@@ -45,6 +45,11 @@ class CrateIndexDashboard(Dashboard):
         ))
 
         self.children.append(StatusModule(_("Status")))
+
+        self.children.append(RedisStatusModule(
+            _("Redis Status"),
+
+        ))
 
         # append a recent actions module
         self.children.append(modules.RecentActions(_("Recent Actions"), 5))

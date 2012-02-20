@@ -26,3 +26,17 @@ class StatusModule(DashboardModule):
 
     def is_empty(self):
         return False
+
+
+class RedisStatusModule(DashboardModule):
+
+    title = "Redis Status"
+    template = "admin_tools/dashboard/modules/redis.html"
+
+    def init_with_context(self, context):
+        datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+
+        self.redis_info = datastore.info()
+
+    def is_empty(self):
+        return False
