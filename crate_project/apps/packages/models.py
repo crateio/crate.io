@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.importlib import import_module
@@ -66,7 +66,7 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False, db_index=True)
     downloads_synced_on = models.DateTimeField(default=now)
 
     def __unicode__(self):
@@ -74,6 +74,9 @@ class Package(TimeStampedModel):
 
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.name})
+
+    def get_simple_url(self):
+        return reverse("simple_package_detail", kwargs={"slug": self.name})
 
     @property
     def downloads(self):
@@ -118,14 +121,14 @@ class Release(models.Model):
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
 
-    deleted = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False, db_index=True)
 
     package = models.ForeignKey(Package, related_name="releases")
     version = models.CharField(max_length=512)
 
     hidden = models.BooleanField(default=False)
 
-    order = models.IntegerField(default=0)
+    order = models.IntegerField(default=0, db_index=True)
 
     platform = models.TextField(blank=True)
 
@@ -326,14 +329,17 @@ class ReleaseObsolete(models.Model):
         return self.name
 
 
-class ChangeLog(TimeStampedModel):
+class ChangeLog(models.Model):
 
     TYPES = Choices(
         ("new", "New"),
         ("updated", "Updated"),
     )
 
-    type = models.CharField(max_length=25, choices=TYPES)
+    created = AutoCreatedField(_("created"), db_index=True)
+    modified = AutoLastModifiedField(_("modified"))
+
+    type = models.CharField(max_length=25, choices=TYPES, db_index=True)
     package = models.ForeignKey(Package)
     release = models.ForeignKey(Release, blank=True, null=True)
 
@@ -386,3 +392,10 @@ def release_changelog(sender, **kwargs):
             diff = instance.created - instance.package.created
             if diff.days != 0 or diff.seconds > 600:
                 ChangeLog.objects.create(type=ChangeLog.TYPES.updated, package=instance.package, release=instance)
+
+
+@receiver(post_save, sender=Package)
+@receiver(post_delete, sender=Package)
+def regenerate_simple_index(sender, **kwargs):
+    from packages.tasks import refresh_package_index_cache
+    refresh_package_index_cache.delay()

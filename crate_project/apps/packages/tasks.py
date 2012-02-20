@@ -1,9 +1,9 @@
 from celery.task import task
 
-from packages.models import Release
+from packages.simple.views import PackageIndex
 
 
 @task
-def save_releases(releases):
-    for r in Release.objects.filter(pk__in=releases):
-        r.save()
+def refresh_package_index_cache():
+    pi = PackageIndex()
+    pi.get_queryset(force_uncached=True)
