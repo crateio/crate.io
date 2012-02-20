@@ -78,3 +78,7 @@ PyYAML==3.10
 
 # Admin Dashboard
 django-admin-tools==0.4.1
+
+# Templating
+MarkupSafe==0.15
+Jinja2==2.6
