@@ -13,7 +13,7 @@ LICENSES = {
 }
 
 
-class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
+class PackageIndex(PackageCelerySearchIndex):  # , indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     name = indexes.CharField(model_attr="name", boost=1.5)
     summary = indexes.CharField(null=True)
