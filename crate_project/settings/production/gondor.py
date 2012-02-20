@@ -21,6 +21,12 @@ CACHES = {
     }
 }
 
+PYPI_DATASTORE_CONFIG = {
+    "host": GONDOR_REDIS_HOST,
+    "port": GONDOR_REDIS_PORT,
+    "password": GONDOR_REDIS_PASSWORD,
+}
+
 # Configure Celery
 BROKER_TRANSPORT = "redis"
 BROKER_HOST = GONDOR_REDIS_HOST
