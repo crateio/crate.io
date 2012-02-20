@@ -326,14 +326,17 @@ class ReleaseObsolete(models.Model):
         return self.name
 
 
-class ChangeLog(TimeStampedModel):
+class ChangeLog(models.Model):
 
     TYPES = Choices(
         ("new", "New"),
         ("updated", "Updated"),
     )
 
-    type = models.CharField(max_length=25, choices=TYPES)
+    created = AutoCreatedField(_("created"), db_index=True)
+    modified = AutoLastModifiedField(_("modified"))
+
+    type = models.CharField(max_length=25, choices=TYPES, db_index=True)
     package = models.ForeignKey(Package)
     release = models.ForeignKey(Release, blank=True, null=True)
 

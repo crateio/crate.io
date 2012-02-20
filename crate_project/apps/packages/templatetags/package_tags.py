@@ -38,7 +38,11 @@ def get_oldest_package():
 
 @register.assignment_tag
 def new_packages(num):
-    return ChangeLog.objects.filter(type=ChangeLog.TYPES.new).exclude(package__releases=None).select_related("package", "release").order_by("-created")[:num]
+    return [
+        x for
+        x in ChangeLog.objects.filter(type=ChangeLog.TYPES.new).select_related("package", "release").prefetch_related("package__releases").order_by("-created")[:num * 3]
+        if len(x.package.releases.all())
+    ][:num]
 
 
 @register.assignment_tag
