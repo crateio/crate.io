@@ -1,8 +1,10 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
+from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.utils.decorators import method_decorator
 
 from crate.template2 import env
 
@@ -16,6 +18,10 @@ def not_found(request):
 class PackageIndex(ListView):
     queryset = Package.objects.filter(deleted=False).order_by("name")
     template_name = "packages/simple/package_list.html"
+
+    @method_decorator(cache_page(60 * 15))
+    def dispatch(self, *args, **kwargs):
+        return super(PackageIndex, self).dispatch(*args, **kwargs)
 
     def get_queryset(self, force_uncached=False):
         cached = cache.get("crate:packages:simple:PackageIndex:queryset")
