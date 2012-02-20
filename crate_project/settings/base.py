@@ -3,6 +3,7 @@
 
 import os.path
 import datetime
+import posixpath
 import time
 
 from django.utils.http import http_date
@@ -47,6 +48,8 @@ MEDIA_URL = "/site_media/media/"
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "site_media", "static")
 STATIC_URL = "/site_media/static/"
+
+ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, "static"),
