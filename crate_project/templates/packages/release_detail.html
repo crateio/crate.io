@@ -235,12 +235,15 @@
     <script src="{% static "js/prettify/prettify.js" %}"></script>
     <script>
         $(function(){
+            var History = window.History;
+
             $("#description pre.literal-block").addClass("prettyprint");
             prettyPrint();
 
             $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
-                console.log($(e.target).attr("href")); // activated tab
-                e.relatedTarget // previous tab
+                if (History.enabled) {
+                    History.pushState(null, null, $(e.target).attr("href"));
+                }
             });
         });
     </script>
