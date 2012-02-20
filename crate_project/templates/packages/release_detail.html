@@ -237,18 +237,18 @@
         $(function(){
             var History = window.History;
 
-            if ($(".tab-pane" + location.hash).length) {
+            $(window).bind("anchorchange", function(){
                 $("#package-tabs a[href='" + location.hash + "']").click();
-            }
-
-            $("#description pre.literal-block").addClass("prettyprint");
-            prettyPrint();
+            });
 
             $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
                 if (History.enabled) {
                     History.pushState(null, null, $(e.target).attr("href"));
                 }
             });
+
+            $("#description pre.literal-block").addClass("prettyprint");
+            prettyPrint();
         });
     </script>
 {% endblock %}
