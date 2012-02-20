@@ -184,16 +184,24 @@
                         <div id="all-versions" class="tab-pane fade in">
                             {% package_versions release.package.name as latest_versions %}
 
-                            <ul class="unstyled">
-                                {% for version in latest_versions %}
-                                    <li>
-                                        <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">
-                                            {{ version.version }}
-                                        </a>
-                                        <span class="date">{{ version.created|date:"DATE_FORMAT" }}</span>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Version</th>
+                                        <th>Release Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for version in latest_versions %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ version.get_absolute_url }}" title="{{ version.package.name }} {{ version.verison }}">{{ version.version }}</a>
+                                            </td>
+                                            <td><span class="date">{{ version.created|date:"DATE_FORMAT" }}</span></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -235,13 +243,20 @@
     <script src="{% static "js/prettify/prettify.js" %}"></script>
     <script>
         $(function(){
-            $("#description pre.literal-block").addClass("prettyprint");
-            prettyPrint();
+            var History = window.History;
+
+            $(window).bind("anchorchange", function(){
+                $("#package-tabs a[href='" + location.hash + "']").click();
+            });
 
             $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
-                console.log($(e.target).attr("href")); // activated tab
-                e.relatedTarget // previous tab
+                if (History.enabled) {
+                    History.pushState(null, null, $(e.target).attr("href"));
+                }
             });
+
+            $("#description pre.literal-block").addClass("prettyprint");
+            prettyPrint();
         });
     </script>
 {% endblock %}
