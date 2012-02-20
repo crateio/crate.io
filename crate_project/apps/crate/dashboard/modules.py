@@ -1,3 +1,4 @@
+import collections
 import datetime
 
 import redis
@@ -36,7 +37,7 @@ class RedisStatusModule(DashboardModule):
     def init_with_context(self, context):
         datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-        self.redis_info = datastore.info()
+        self.redis_info = collections.OrderedDict(sorted([(k, v) for k, v in datastore.info().iteritems()], key=lambda x: x[0]))
 
     def is_empty(self):
         return False
