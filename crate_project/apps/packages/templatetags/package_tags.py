@@ -1,5 +1,5 @@
 from django import template
-from django.db.models import F, Sum
+from django.db.models import Sum
 
 from packages.models import Package, Release, ReleaseFile, ChangeLog
 
