@@ -8,9 +8,9 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         i = 0
-        for rf in ReleaseFile.objects.filter(digest="").distinct("release__package"):
-            p = PyPIPackage(rf.release.package)
-            p.process()
-            i += 1
+        for rf in ReleaseFile.objects.filter(digest="").distinct("release")[:1]:
             print rf.release.package.name, rf.release.version
-        print "Fixed %d packages" % i
+            p = PyPIPackage(rf.release.package.name, version=rf.release.version)
+            p.process(skip_modified=False)
+            i += 1
+        print "Fixed %d releases" % i

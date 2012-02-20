@@ -62,8 +62,9 @@ class PyPIPackage(object):
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
         self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-    def process(self, bulk=False, download=True):
+    def process(self, bulk=False, download=True, skip_modified=True):
         self.bulk = bulk
+        self.skip_modified = skip_modified
 
         self.fetch()
         self.build()
@@ -331,7 +332,7 @@ class PyPIPackage(object):
 
                         headers = None
 
-                        if stored_file_data:
+                        if stored_file_data and self.skip_modified:
                             # Stored data exists for this file
                             if release_file.file:
                                 try:
