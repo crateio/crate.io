@@ -39,9 +39,15 @@ def package_count():
 
 @register.assignment_tag
 def get_oldest_package():
-    # @@@ Cache this to cut down on queries
+    cached = cache.get("crate:stats:oldest_package")
+
+    if cached:
+        return cached
+
     pkgs = Package.objects.all().order_by("created")[:1]
+
     if pkgs:
+        cache.set("crate:stats:oldest_package", pkgs[0], 60 * 60 * 24 * 7)
         return pkgs[0]
     else:
         return None
