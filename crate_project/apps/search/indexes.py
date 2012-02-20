@@ -2,7 +2,7 @@ from django.db.models import signals
 
 from celery_haystack.indexes import CelerySearchIndex as BaseCelerySearchIndex
 
-from packages.models import Package, Release, ReleaseFile
+from packages.models import Release, ReleaseFile
 
 
 class PackageCelerySearchIndex(BaseCelerySearchIndex):
@@ -33,20 +33,19 @@ class PackageCelerySearchIndex(BaseCelerySearchIndex):
         signals.post_delete.disconnect(self.enqueue_delete_from_release, sender=Release)
         signals.post_delete.disconnect(self.enqueue_delete_from_releasefile, sender=ReleaseFile)
 
+    def enqueue_save(self, instance, **kwargs):
+        if instance.deleted:
+            return self.enqueue("delete", instance)
+        return self.enqueue("update", instance)
+
     def enqueue_save_from_release(self, instance, **kwargs):
-        return self.enqueue('update', instance.package)
+        return self.enqueue("update", instance.package)
 
     def enqueue_delete_from_release(self, instance, **kwargs):
-        try:
-            return self.enqueue('update', instance.package)
-        except Package.DoesNotExist:
-            pass
+        return self.enqueue("update", instance.package)
 
     def enqueue_save_from_releasefile(self, instance, **kwargs):
         return self.enqueue('update', instance.release.package)
 
     def enqueue_delete_from_releasefile(self, instance, **kwargs):
-        try:
-            return self.enqueue('update', instance.release.package)
-        except Release.DoesNotExist:
-            pass
+        return self.enqueue('update', instance.release.package)
