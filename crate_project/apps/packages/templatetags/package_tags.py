@@ -33,8 +33,14 @@ def package_download_count(package_name=None):
 
 @register.assignment_tag
 def package_count():
-    # @@@ Cache this to cut down on queries
-    return Package.objects.all().count()
+    cached = cache.get("crate:stats:package_count")
+
+    if cached:
+        return cached
+
+    count = Package.objects.all().count()
+    cache.set("crate:stats:package_count", count, 60 * 60)
+    return count
 
 
 @register.assignment_tag
