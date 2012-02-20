@@ -75,6 +75,9 @@ class Package(TimeStampedModel):
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.name})
 
+    def get_simple_url(self):
+        return reverse("simple_package_detail", kwargs={"slug": self.name})
+
     @property
     def downloads(self):
         total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]

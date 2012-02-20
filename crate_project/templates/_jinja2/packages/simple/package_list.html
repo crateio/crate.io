@@ -1,11 +1,9 @@
 {% extends "packages/simple/base.html" %}
 
-{% load url from future %}
-
 {% block head_title %}Simple Index{% endblock %}
 
 {% block body %}
     {% for object in object_list %}
-        <a href="{% url 'simple_package_detail' slug=object.name %}" title="{{ object.name }}">{{ object.name}}</a>
+        <a href="{{ object.get_simple_url() }}" title="{{ object.name }}">{{ object.name}}</a>
     {% endfor %}
 {% endblock %}

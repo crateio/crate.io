@@ -1,8 +1,10 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseNotFound, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+
+from crate.template2 import env
 
 from packages.models import Package
 
@@ -24,6 +26,10 @@ class PackageIndex(ListView):
         qs = super(PackageIndex, self).get_queryset()
         cache.set("crate:packages:simple:PackageIndex:queryset", list(qs), 60 * 60 * 24 * 365)
         return qs
+
+    def render_to_response(self, context, **response_kwargs):
+        t = env.select_template(self.get_template_names())
+        return HttpResponse(t.render(request=self.request, **context))
 
 
 class PackageDetail(DetailView):
