@@ -1,4 +1,5 @@
 from django import template
+from django.core.cache import cache
 from django.db.models import Sum
 
 from packages.models import Package, Release, ReleaseFile, ChangeLog
@@ -8,16 +9,26 @@ register = template.Library()
 
 @register.assignment_tag
 def package_download_count(package_name=None):
-    # @@@ Cache this to cut down on queries
-    count = 0
     if package_name is None:
-        # Total Download Count
+        cached = cache.get("crate:stats:download_count")
+
+        if cached:
+            return cached
+
         count = ReleaseFile.objects.all().aggregate(total_downloads=Sum("downloads")).get("total_downloads", 0)
+        cache.set("crate:stats:download_count", count, 60 * 60)
+        return count
     else:
+        cached = cache.get("crate:stats:download_count:%s" % package_name)
+
+        if cached:
+            return cached
+
         count = ReleaseFile.objects.filter(
                     release__package__name=package_name
                 ).aggregate(total_downloads=Sum("downloads")).get("total_downloads", 0)
-    return count
+        cache.set("crate:stats:download_count:%s" % package_name, count, 60 * 60 * 24)
+        return count
 
 
 @register.assignment_tag
