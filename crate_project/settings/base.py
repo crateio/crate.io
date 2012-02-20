@@ -114,6 +114,12 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 ]
 
 INSTALLED_APPS = [
+    # Admin Dashboard
+    "admin_tools",
+    "admin_tools.theming",
+    "admin_tools.menu",
+    "admin_tools.dashboard",
+
     # Django
     "django.contrib.admin",
     "django.contrib.auth",

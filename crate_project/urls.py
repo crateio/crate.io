@@ -25,6 +25,7 @@ urlpatterns = patterns("",
     url(r"^profiles/", include("idios.urls")),
     # url(r"^notices/", include("notification.urls")),
     url(r"^announcements/", include("announcements.urls")),
+    url(r"^admin_tools/", include("admin_tools.urls")),
 
     url(r"^packages/", include("packages.urls")),
     url(r"^help/", include("helpdocs.urls")),
