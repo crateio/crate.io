@@ -8,6 +8,9 @@
 
     #redis-info .key { width: 160px; }
     #redis-info .value { text-align: right; width: 180px;}
+
+    #redis-info .short-key .key { width: 100px; }
+    #redis-info .short-key .value { text-align: right; width: 240px;}
 </style>
 
 {% if not module.is_empty %}
@@ -22,7 +25,7 @@
 
             <table id="redis-info">
                 {% for key, value in module.redis_info.iteritems %}
-                <tr>
+                <tr{% if key|length < 5 %} class="short-key"{% endif %}>
                     <td class="key"><strong>{{ key }}</strong>:</td>
                     <td class="value">{{ value }}</td>
                 </tr>
