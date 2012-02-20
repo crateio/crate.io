@@ -100,6 +100,10 @@ TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
 ]
 
+JINJA_TEMPLATE_DIRS = [
+    os.path.join(PROJECT_ROOT, "templates", "_jinja2"),
+]
+
 TEMPLATE_CONTEXT_PROCESSORS = [
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
