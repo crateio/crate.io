@@ -3,6 +3,7 @@
 
 import os.path
 import datetime
+import posixpath
 import time
 
 from django.utils.http import http_date
@@ -47,6 +48,8 @@ MEDIA_URL = "/site_media/media/"
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, "site_media", "static")
 STATIC_URL = "/site_media/static/"
+
+ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 
 STATICFILES_DIRS = [
     os.path.join(PROJECT_ROOT, "static"),
@@ -114,6 +117,12 @@ TEMPLATE_CONTEXT_PROCESSORS = [
 ]
 
 INSTALLED_APPS = [
+    # Admin Dashboard
+    "admin_tools",
+    "admin_tools.theming",
+    "admin_tools.menu",
+    "admin_tools.dashboard",
+
     # Django
     "django.contrib.admin",
     "django.contrib.auth",
@@ -228,3 +237,5 @@ METRON_SETTINGS = {
     "google": {3: "UA-28759418-1"},
     "gauges": {3: "4f1e4cd0613f5d7003000002"}
 }
+
+ADMIN_TOOLS_INDEX_DASHBOARD = "crate.dashboard.CrateIndexDashboard"
