@@ -24,16 +24,22 @@ class CrateIndexDashboard(Dashboard):
             ]
         ))
 
-        # append an app list module for "Applications"
-        self.children.append(modules.AppList(
-            _("Applications"),
-            exclude=('django.contrib.*',),
-        ))
-
         # append an app list module for "Administration"
         self.children.append(modules.AppList(
             _("Administration"),
             models=('django.contrib.*',),
+        ))
+
+        # append an app list module for "Applications"
+        self.children.append(modules.AppList(
+            _("Applications"),
+            exclude=[
+                "django.contrib.*",
+                "pinax.apps.*",
+                "djcelery.*",
+                "emailconfirmation.*",
+                "profiles.*",
+            ],
         ))
 
         # append a recent actions module
