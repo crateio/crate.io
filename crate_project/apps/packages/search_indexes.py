@@ -32,6 +32,9 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
     def get_model(self):
         return Package
 
+    def index_queryset(self):
+        return self.get_model().objects.filter(deleted=False)
+
     def prepare(self, obj):
         data = super(PackageIndex, self).prepare(obj)
 
@@ -85,7 +88,7 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
             data["python_versions"] = python_versions
 
         # Pack in all the versions in decending order.
-        releases = obj.releases.order_by("-order")
+        releases = obj.releases.filter(deleted=False).order_by("-order")
         data["versions"] = [release.version for release in releases if release.version]
         data["release_count"] = releases.count()
 

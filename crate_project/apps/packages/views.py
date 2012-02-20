@@ -9,6 +9,7 @@ from packages.models import Release
 class ReleaseDetail(DetailView):
 
     model = Release
+    queryset = Release.objects.filter(deleted=False, package__deleted=False)
 
     def get_context_data(self, **kwargs):
         ctx = super(ReleaseDetail, self).get_context_data(**kwargs)

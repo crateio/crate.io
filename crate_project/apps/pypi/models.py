@@ -1,12 +1,28 @@
 from django.db import models
 
 from model_utils import Choices
-from model_utils.fields import StatusField
 from model_utils.models import TimeStampedModel
 
-from uuidfield import UUIDField
 
-from packages.models import ReleaseFile
+class PyPIMirrorPage(models.Model):
+
+    TYPES = Choices(
+        ("simple", "Simple"),
+        ("serversig", "Server Sig"),
+    )
+
+    package = models.ForeignKey("packages.Package")
+    type = models.CharField(max_length=25, choices=TYPES)
+    content = models.TextField()
+
+    class Meta:
+        unique_together = ("package", "type")
+
+    def __unicode__(self):
+        return "%(type)s: %(package)s" % {
+            "type": self.get_type_display(),
+            "package": self.package.name,
+        }
 
 
 class Log(TimeStampedModel):
@@ -44,38 +60,6 @@ class ChangeLog(TimeStampedModel):
             "timestamp": self.timestamp,
             "action": self.action,
         }
-
-
-class PackageModified(TimeStampedModel):
-    release_file = models.ForeignKey(ReleaseFile, related_name="+")
-
-    url = models.TextField(unique=True)
-    last_modified = models.CharField(max_length=150)
-    md5 = models.CharField(max_length=32)
-
-    def __unicode__(self):
-        return u"%(url)s - %(modified)s - %(hash)s" % {
-            "url": self.url,
-            "modified": self.last_modified,
-            "hash": self.md5,
-        }
-
-
-class TaskLog(TimeStampedModel):
-    STATUS = Choices(
-        ("pending", "Pending"),
-        ("success", "Success"),
-        ("failed", "Failed"),
-        ("retry", "Retry"),
-        ("resubmitted", "Resubmitted"),
-    )
-
-    task_id = UUIDField(auto=False, editable=True, unique=True)
-    status = StatusField()
-    name = models.CharField(max_length=300)
-    args = models.TextField()
-    kwargs = models.TextField()
-    exception = models.TextField(blank=True)
 
 
 class DownloadChange(TimeStampedModel):
