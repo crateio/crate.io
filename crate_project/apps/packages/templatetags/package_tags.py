@@ -85,7 +85,7 @@ def random_packages(num):
 
 @register.assignment_tag
 def package_versions(package_name, num=None):
-    qs = Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")
+    qs = Release.objects.filter(package__name=package_name, deleted=False).select_related("package").order_by("-order")
     if num is not None:
         qs = qs[:num]
     return qs
