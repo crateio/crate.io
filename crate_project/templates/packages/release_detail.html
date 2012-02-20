@@ -237,6 +237,10 @@
         $(function(){
             var History = window.History;
 
+            if ($(".tab-pane" + location.hash).length) {
+                $("#package-tabs a[href='" + location.hash + "']").click();
+            }
+
             $("#description pre.literal-block").addClass("prettyprint");
             prettyPrint();
 
