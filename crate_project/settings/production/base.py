@@ -61,14 +61,14 @@ CONTACT_EMAIL = "support@crate.io"
 PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 PACKAGE_FILE_STORAGE_OPTIONS = {
     "bucket": "crate-production",
-    "custom_domain": "packages.crate.io",
+    "custom_domain": "packages.crate-cdn.com",
 }
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 # STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
-AWS_S3_CUSTOM_DOMAIN = "media.crate.io"
+AWS_S3_CUSTOM_DOMAIN = "media.crate-cdn.com"
 
 # PRIVATE_BETA_ALLOWED_URLS = [
 #     "/account/login/",
