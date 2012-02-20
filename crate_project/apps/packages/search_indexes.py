@@ -33,7 +33,7 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
         return Package
 
     def index_queryset(self):
-        self.get_model().objects.filter(deleted=False)
+        return self.get_model().objects.filter(deleted=False)
 
     def prepare(self, obj):
         data = super(PackageIndex, self).prepare(obj)
