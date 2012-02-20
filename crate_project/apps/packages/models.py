@@ -125,7 +125,7 @@ class Release(models.Model):
 
     hidden = models.BooleanField(default=False)
 
-    order = models.IntegerField(default=0)
+    order = models.IntegerField(default=0, db_index=True)
 
     platform = models.TextField(blank=True)
 
