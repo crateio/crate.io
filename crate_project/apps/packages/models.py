@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.importlib import import_module
@@ -389,3 +389,10 @@ def release_changelog(sender, **kwargs):
             diff = instance.created - instance.package.created
             if diff.days != 0 or diff.seconds > 600:
                 ChangeLog.objects.create(type=ChangeLog.TYPES.updated, package=instance.package, release=instance)
+
+
+@receiver(post_save, sender=Package)
+@receiver(post_delete, sender=Package)
+def regenerate_simple_index(sender, **kwargs):
+    from packages.tasks import refresh_package_index_cache
+    refresh_package_index_cache.delay()

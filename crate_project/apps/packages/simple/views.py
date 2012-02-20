@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseNotFound, HttpResponsePermanentRedirect
 from django.views.generic.detail import DetailView
@@ -13,6 +14,16 @@ def not_found(request):
 class PackageIndex(ListView):
     queryset = Package.objects.filter(deleted=False).order_by("name")
     template_name = "packages/simple/package_list.html"
+
+    def get_queryset(self, force_uncached=False):
+        cached = cache.get("crate:packages:simple:PackageIndex:queryset")
+
+        if cached and not force_uncached:
+            return cached
+
+        qs = super(PackageIndex, self).get_queryset()
+        cache.set("crate:packages:simple:PackageIndex:queryset", list(qs), 60 * 60 * 24 * 365)
+        return qs
 
 
 class PackageDetail(DetailView):
