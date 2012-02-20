@@ -70,7 +70,7 @@ def new_packages(num):
 
 @register.assignment_tag
 def updated_packages(num):
-    return ChangeLog.objects.filter(type=ChangeLog.TYPES.updated).select_related("package", "release").order_by("-created")[:num]
+    return ChangeLog.objects.filter(type=ChangeLog.TYPES.updated).select_related("package", "release", "release__package").order_by("-created")[:num]
 
 
 @register.assignment_tag
