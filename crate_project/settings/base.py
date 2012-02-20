@@ -237,3 +237,5 @@ METRON_SETTINGS = {
     "google": {3: "UA-28759418-1"},
     "gauges": {3: "4f1e4cd0613f5d7003000002"}
 }
+
+ADMIN_TOOLS_INDEX_DASHBOARD = "crate.dashboard.CrateIndexDashboard"
