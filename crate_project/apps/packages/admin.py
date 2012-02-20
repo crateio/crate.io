@@ -2,12 +2,6 @@ from django.contrib import admin
 
 from packages.models import Package, Release, ReleaseFile, TroveClassifier, PackageURI
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ChangeLog
-from packages.tasks import save_releases
-
-
-def releases_save(modeladmin, request, queryset):
-    save_releases.delay([x.pk for x in queryset])
-releases_save.short_description = "Trigger a Save on the Selected Releases"
 
 
 class PackageURIAdmin(admin.TabularInline):
@@ -49,7 +43,6 @@ class ReleaseURIInline(admin.TabularInline):
 
 class ReleaseAdmin(admin.ModelAdmin):
     inlines = [ReleaseURIInline, ReleaseFileInline, ReleaseRequireInline, ReleaseProvideInline, ReleaseObsoleteInline]
-    actions = [releases_save]
     list_display = ["__unicode__", "package", "version", "summary", "author", "author_email", "maintainer", "maintainer_email", "created", "modified"]
     list_filter = ["created", "modified", "deleted", "hidden"]
     search_fields = ["package__name", "version", "summary", "author", "author_email", "maintainer", "maintainer_email"]
