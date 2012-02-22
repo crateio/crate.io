@@ -6,6 +6,7 @@
 {% load package_tags %}
 {% load package_utils %}
 {% load evaluators %}
+{% load favorite %}
 
 {% block extra_head %}
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
@@ -13,13 +14,18 @@
 
 {% block head_title %}{{ release.package.name }} {{ release.version }}{% endblock %}
 
+{% block body_id %}release-detail{% endblock %}
+
 {% block body_base %}
     {% include "_announcements.html" %}
 
     <div class="container">
         <div class="content">
             <div class="page-header">
-                <h1>{{ release.package.name }} <small> {{ release.version }}</small></h1>
+                <div class="follow">
+                    {% favorite release.package %}
+                </div>
+                <h1 class="package-title">{{ release.package.name }} <small> {{ release.version }}</small></h1>
             </div>
 
             <div class="row">

@@ -53,6 +53,7 @@
 {% block nav %}
     {% if user.is_authenticated %}
         <ul class="nav">
+            <li id="tab_favorites"><a href="{% url 'user_favorites' %}">{% trans "My Favorites" %}</a></li>
             {# <li id="tab_profile"><a href="{% url 'profile_detail' user.username %}">{% trans "Profile" %}</a></li> #}
             {# <li id="tab_notices"><a href="{% url 'notification_notices' %}">{% trans "Notices" %}{% if notice_unseen_count %} ({{ notice_unseen_count }}){% endif %}</a></li> #}
         </ul>
@@ -73,7 +74,13 @@
 {% endblock %}
 
 {% block extra_body_base %}
+    <script src="{% static 'js/ajaxCSRF.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/lib/fayer.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/crate.js' %}" type="text/javascript"></script>
+
     {% analytics %}
+
     {% intercom_js request.user %}
+
     {% block extra_body %}{% endblock %}
 {% endblock %}

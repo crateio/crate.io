@@ -20,3 +20,5 @@ body,p,label,input,button,select,textarea,.navbar-search .search-query{font-fami
 #install-cmd h4:after{content:" >";}
 #release-evaluation .alert{padding-right:14px;}
 #release-evaluation .icon{position:relative;top:2px;}
+.follow{display:inline-block;margin-right:10px;}
+.package-title{display:inline-block;}
