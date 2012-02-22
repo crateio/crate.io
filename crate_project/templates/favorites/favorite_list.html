@@ -1,0 +1,22 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "My Favorites" %}{% endblock %}
+
+{% block body %}
+    <div class="page-header">
+        <h1>{% trans "My Favorites" %}</h1>
+    </div>
+
+    {% for object in object_list %}
+        <div>
+            <h3><a href="{{ object.package.get_absolute_url }}">{{ object.package.name }}</a> {% if object.package.latest %}<small>{{ object.package.latest.version }}{% endif %}</small></h3>
+            <blockquote>
+                {{ object.package.latest.summary }}
+            </blockquote>
+        </div>
+    {% empty %}
+        <div>You have no Favorites</div>
+    {% endfor %}
+{% endblock %}
