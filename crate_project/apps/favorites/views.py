@@ -14,6 +14,10 @@ from packages.models import Package
 
 class ToggleFavorite(View):
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UserFavorites, self).dispatch(*args, **kwargs)
+
     def render_json(self, **data):
         return HttpResponse(json.dumps(data), mimetype="application/json")
 
