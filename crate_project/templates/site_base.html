@@ -73,7 +73,13 @@
 {% endblock %}
 
 {% block extra_body_base %}
+    <script src="{% static 'js/ajaxCSRF.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/lib/fayer.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/crate.js' %}" type="text/javascript"></script>
+
     {% analytics %}
+
     {% intercom_js request.user %}
+
     {% block extra_body %}{% endblock %}
 {% endblock %}
