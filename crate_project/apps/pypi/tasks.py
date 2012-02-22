@@ -13,8 +13,10 @@ from celery.task import task
 
 from django.conf import settings
 from django.db import transaction
+from django.utils.timezone import now
 
-from packages.models import Package, TroveClassifier
+from packages.models import Package, Release, ReleaseFile, TroveClassifier
+from pypi.models import DownloadChange
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -23,6 +25,8 @@ INDEX_URL = "http://pypi.python.org/pypi"
 
 SERVERKEY_URL = "http://pypi.python.org/serverkey"
 SERVERKEY_KEY = "crate:pypi:serverkey"
+
+CLASSIFIER_URL = "http://pypi.python.org/pypi?%3Aaction=list_classifiers"
 
 PYPI_SINCE_KEY = "crate:pypi:since"
 
@@ -130,9 +134,7 @@ def synchronize(since=None):
 
 @task
 def synchronize_troves():
-    classifier_url = "http://pypi.python.org/pypi?%3Aaction=list_classifiers"
-
-    resp = requests.get(classifier_url)
+    resp = requests.get(CLASSIFIER_URL)
     resp.raise_for_status()
 
     current_troves = set(TroveClassifier.objects.all().values_list("trove", flat=True))
@@ -141,3 +143,34 @@ def synchronize_troves():
     with transaction.commit_on_success():
         for classifier in new_troves:
             TroveClassifier.objects.get_or_create(trove=classifier)
+
+
+@task
+def synchronize_downloads():
+    for package in Package.objects.all().order_by("downloads_synced_on").prefetch_related("releases", "releases__files")[:150]:
+        Package.objects.filter(pk=package.pk).update(downloads_synced_on=now())
+
+        for release in package.releases.all():
+            update_download_counts.delay(package.name, release.version, dict([(x.filename, x.pk) for x in release.files.all()]))
+
+
+@task
+def update_download_counts(package_name, version, files, index=None):
+    pypi = xmlrpclib.ServerProxy(INDEX_URL)
+
+    downloads = pypi.release_downloads(package_name, version)
+    changed = 0
+
+    for filename, download_count in downloads:
+        if filename in files:
+            try:
+                current_count = ReleaseFile.objects.get(pk=files[filename]).downloads
+                changed += (download_count - current_count)
+            except ReleaseFile.DoesNotExist:
+                pass
+            ReleaseFile.objects.filter(pk=files[filename]).update(downloads=download_count)
+
+    try:
+        DownloadChange.objects.create(release=Release.objects.get(package__name=package_name, version=version), change=changed)
+    except Release.DoesNotExist:
+        pass
