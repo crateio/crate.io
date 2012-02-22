@@ -12,8 +12,9 @@ import requests
 from celery.task import task
 
 from django.conf import settings
+from django.db import transaction
 
-from packages.models import Package
+from packages.models import Package, TroveClassifier
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -125,3 +126,18 @@ def synchronize(since=None):
                 logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
 
     datastore.set(PYPI_SINCE_KEY, current)
+
+
+@task
+def synchronize_troves():
+    classifier_url = "http://pypi.python.org/pypi?%3Aaction=list_classifiers"
+
+    resp = requests.get(classifier_url)
+    resp.raise_for_status()
+
+    current_troves = set(TroveClassifier.objects.all().values_list("trove", flat=True))
+    new_troves = set([x.strip() for x in resp.content.splitlines()]) - current_troves
+
+    with transaction.commit_on_success():
+        for classifier in new_troves:
+            TroveClassifier.objects.get_or_create(trove=classifier)
