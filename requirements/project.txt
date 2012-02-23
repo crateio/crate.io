@@ -84,4 +84,4 @@ MarkupSafe==0.15
 Jinja2==2.6
 
 # Security
-django-secure==0.1.1
+-e git+https://github.com/dstufft/django-secure.git@1c09c9f4105736c4c12fcbf6813aeca5aae3fd40#egg=django-secure
