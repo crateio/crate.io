@@ -75,6 +75,7 @@ TEMPLATE_LOADERS = [
 
 MIDDLEWARE_CLASSES = [
     "django_hosts.middleware.HostsMiddleware",
+    "djangosecure.middleware.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
