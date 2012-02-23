@@ -11,6 +11,9 @@ from django.contrib.auth.decorators import login_required
 from favorites.models import Favorite
 from packages.models import Package
 
+FAVORITES_QUERYSET_KEY = "crate:favorites:user(%s):queryset"
+FAVORITES_CACHE_VERSION = 2
+
 
 class ToggleFavorite(View):
 
@@ -28,6 +31,8 @@ class ToggleFavorite(View):
             return self.render_json(package=kwargs.get("package"), success=False, message="Package does not exist")
 
         fav = Favorite.objects.filter(package=package, user=request.user)
+
+        cache.delete(FAVORITES_QUERYSET_KEY % self.request.user.pk, version=FAVORITES_CACHE_VERSION)
 
         if fav:
             fav.delete()
@@ -47,7 +52,7 @@ class UserFavorites(ListView):
         return super(UserFavorites, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        cached = cache.get("crate:favorites:user(%s):queryset" % self.request.user.pk)
+        cached = cache.get(FAVORITES_QUERYSET_KEY % self.request.user.pk, version=FAVORITES_CACHE_VERSION)
 
         if cached:
             return cached
@@ -57,6 +62,6 @@ class UserFavorites(ListView):
 
         qs = sorted(qs, key=lambda x: x.package.latest.created, reverse=True)
 
-        cache.set("crate:favorites:user(%s):queryset" % self.request.user.pk, qs, 60 * 60)
+        cache.set(FAVORITES_QUERYSET_KEY % self.request.user.pk, qs, 60 * 60, version=FAVORITES_CACHE_VERSION)
 
         return qs
