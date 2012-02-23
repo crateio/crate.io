@@ -169,6 +169,7 @@ INSTALLED_APPS = [
     "intercom",
     "celery_haystack",
     "tastypie",
+    "djangosecure",
 
     # project
     "about",

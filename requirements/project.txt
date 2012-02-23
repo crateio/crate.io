@@ -82,3 +82,6 @@ django-admin-tools==0.4.1
 # Templating
 MarkupSafe==0.15
 Jinja2==2.6
+
+# Security
+django-secure==0.1.1
