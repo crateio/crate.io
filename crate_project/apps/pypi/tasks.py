@@ -83,7 +83,7 @@ def synchronize(since=None):
 
     if not sig.status_code == 304:
         sig.raise_for_status()
-    else:
+
         if sig.content != datastore.get(SERVERKEY_KEY):
             pass  # @@@ Key rolled over, redownload all sigs.
 
