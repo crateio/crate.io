@@ -65,15 +65,4 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-# Storage for Packages
-PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-PACKAGE_FILE_STORAGE_OPTIONS = {
-    "bucket": "crate-dev",
-}
-PACKAGE_DELETE_REQUIRED = False
-
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-
-AWS_STORAGE_BUCKET_NAME = "crate-media-dev"
-
 SIMPLE_API_URL = "http://simple.crate.io/"
