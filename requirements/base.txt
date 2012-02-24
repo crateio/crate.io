@@ -8,7 +8,7 @@
 --extra-index-url=http://dist.pinaxproject.com/fresh-start/
 
 # Django==1.4  # Wait for Django 1.4 to be released
--e git+https://github.com/django/django.git@dec08c3424b91672b412ce0c70131195191904e8#egg=Django
+-e git+https://github.com/django/django.git@7fe431f95137ec355cb8a27dc82fcdff3481df38#egg=Django
 -e git+https://github.com/dstufft/pinax.git@4f325913db26deaf723397aacb239de2ed24a75e#egg=Pinax
 
 
