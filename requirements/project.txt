@@ -5,46 +5,47 @@
 
 # Database
 psycopg2==2.4.1
--e hg+https://bitbucket.org/andrewgodwin/south@9338757f8b9a9defa579cb81f2aea2c17158d26#egg=South
+-e hg+https://bitbucket.org/andrewgodwin/south@09d357fa90fb#egg=South
 django-uuidfield==0.2
 
 # Utility
 PIL==1.1.7
--e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
+-e git+https://github.com/carljm/django-model-utils.git@38dee4c560ecfdcb6aaca662e06aecbd60864ace#egg=django-model-utils
 slumber==0.4
+django-appconf==0.5
 
 # Celery
 redis==2.4.11
 anyjson==0.3.1
 amqplib==1.0.2
-kombu==1.5.1
+kombu==2.1.0
 python-dateutil==1.5
 celery==2.4.6
 
 # Django Celery
-django-picklefield==0.1.9
--e git+https://github.com/ask/django-celery.git@d4e2f60331d7cfdc8d9f13eb7ad74da5338694f4#egg=django-celery
+django-picklefield==0.2
+-e git+https://github.com/ask/django-celery.git@4f249ed428409ce516b290e4f5c489ada9b3ab9b#egg=django-celery
 
 # Private Beta
 privatebeta==0.4.1
 
 # Scraping & Processing Utils
-requests==0.9.1
+requests==0.10.4
 lxml==2.3
 
 # Domain Name Utilities
-django-hosts==0.4.1
+django-hosts==0.4.2
 
 # Search
--e git+https://github.com/toastdriven/django-haystack.git@570785fdccb7373a3eec2ea3dbca8a3197e1c9c4#egg=django-haystack
--e git+https://github.com/toastdriven/pyelasticsearch.git@b1c8c6193560807e9f0e756dd1898b281076eea8#egg=pyelasticsearch
+-e git+https://github.com/toastdriven/django-haystack.git@b6c5a0eddbe08d2b0def3ee483e62b21fee403db#egg=django-haystack
+-e git+https://github.com/toastdriven/pyelasticsearch.git@a3f3ad7b7b245e87ffd832a4184db214fd3ee854#egg=pyelasticsearch
 celery-haystack==0.4
 
 # Markup
 docutils==0.8.1
 
 # Storage
-boto==2.1.1
+boto==2.2.2
 -e hg+https://bitbucket.org/dstufft/django-storages@7f9fd318450fa86110944a9890fd0e4ac10e6bde#egg=django-storages
 
 # Dev Tools
@@ -67,7 +68,7 @@ django-redis-cache==0.9.2
 
 # Logging
 simplejson==2.3.2
-raven==1.1.6
+raven==1.4.4
 httplib2==0.7.2
 Hoover==0.5.3
 
@@ -84,4 +85,4 @@ MarkupSafe==0.15
 Jinja2==2.6
 
 # Security
--e git+https://github.com/dstufft/django-secure.git@1c09c9f4105736c4c12fcbf6813aeca5aae3fd40#egg=django-secure
+-e git+https://github.com/carljm/django-secure.git@690b100aefc1f1410a960753a562be693f80b2e3#egg=django-secure

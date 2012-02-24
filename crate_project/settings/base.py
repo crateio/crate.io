@@ -18,7 +18,6 @@ DEBUG = False
 TEMPLATE_DEBUG = True
 
 SERVE_MEDIA = DEBUG
-SERVE_LESS = DEBUG
 
 # django-compressor is turned off by default due to deployment overhead for
 # most users. See <URL> for more information

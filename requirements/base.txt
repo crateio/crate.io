@@ -8,12 +8,12 @@
 --extra-index-url=http://dist.pinaxproject.com/fresh-start/
 
 # Django==1.4  # Wait for Django 1.4 to be released
--e git+https://github.com/django/django.git@dec08c3424b91672b412ce0c70131195191904e8#egg=Django
+-e git+https://github.com/django/django.git@7fe431f95137ec355cb8a27dc82fcdff3481df38#egg=Django
 -e git+https://github.com/dstufft/pinax.git@4f325913db26deaf723397aacb239de2ed24a75e#egg=Pinax
 
 
 django-debug-toolbar==0.9.4
-django-staticfiles==1.1.2
+django-staticfiles==1.2.1
 django_compressor==1.0.1
 
 -e git+https://github.com/dstufft/django-email-confirmation.git@9a502d30f13b21c67cc943d464dc665e8921c518#egg=django-email-confirmation
@@ -28,4 +28,4 @@ django-notification==0.2
 idios==0.2a1
 metron==0.1
 
-pinax-theme-bootstrap==0.2b2
+pinax-theme-bootstrap==2.0.1
