@@ -30,7 +30,7 @@ django-picklefield==0.2
 privatebeta==0.4.1
 
 # Scraping & Processing Utils
-requests==0.9.1
+requests==0.10.4
 lxml==2.3
 
 # Domain Name Utilities
