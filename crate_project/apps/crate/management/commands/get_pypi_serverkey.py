@@ -9,4 +9,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         r = redis.StrictRedis(host=settings.GONDOR_REDIS_HOST, port=settings.GONDOR_REDIS_PORT, password=settings.GONDOR_REDIS_PASSWORD)
         print r.get("crate:pypi:serverkey")
-        print r.get("crate:pypi:serverkey:headers")
+        print r.hgetall("crate:pypi:serverkey:headers")
