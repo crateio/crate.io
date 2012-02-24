@@ -5,12 +5,12 @@
 
 # Database
 psycopg2==2.4.1
--e hg+https://bitbucket.org/andrewgodwin/south@9338757f8b9a9defa579cb81f2aea2c17158d26#egg=South
+-e hg+https://bitbucket.org/andrewgodwin/south@09d357fa90fb#egg=South
 django-uuidfield==0.2
 
 # Utility
 PIL==1.1.7
--e git+https://github.com/carljm/django-model-utils.git@38dee4c560ecfdcb6aaca662e06aecbd60864aceegg=django-model-utils
+-e git+https://github.com/carljm/django-model-utils.git@38dee4c560ecfdcb6aaca662e06aecbd60864ace#egg=django-model-utils
 slumber==0.4
 django-appconf==0.5
 
