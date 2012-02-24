@@ -18,18 +18,18 @@ django-appconf==0.5
 redis==2.4.11
 anyjson==0.3.1
 amqplib==1.0.2
--e git+https://github.com/ask/kombu.git@db5888e4c623690e90b40f9398ccb32f355c4bef#egg=kombu
+kombu==2.1.1
 python-dateutil==1.5
--e git+https://github.com/ask/celery.git@2496b4c949447a688fdaa1ce9aa1596ec47f7198#egg=celery
+celery==2.5.0
 
 # Django Celery
 django-picklefield==0.2
--e git+https://github.com/ask/django-celery.git@4f249ed428409ce516b290e4f5c489ada9b3ab9b#egg=django-celery
+django-celery==2.5.0
 
 # Private Beta
 privatebeta==0.4.1
 
-# Scraping & Processing Utils
+# Scraping / Processing Utils
 requests==0.10.4
 lxml==2.3
 
