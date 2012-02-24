@@ -24,7 +24,7 @@ celery==2.4.6
 
 # Django Celery
 django-picklefield==0.2
--e git+https://github.com/ask/django-celery.git@d4e2f60331d7cfdc8d9f13eb7ad74da5338694f4#egg=django-celery
+-e git+https://github.com/ask/django-celery.git@4f249ed428409ce516b290e4f5c489ada9b3ab9b#egg=django-celery
 
 # Private Beta
 privatebeta==0.4.1
