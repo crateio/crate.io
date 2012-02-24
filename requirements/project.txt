@@ -10,7 +10,7 @@ django-uuidfield==0.2
 
 # Utility
 PIL==1.1.7
--e git+https://github.com/carljm/django-model-utils.git@f2db5fc05af49026e8b3d5210d4de1976ebbc87c#egg=django-model-utils
+-e git+https://github.com/carljm/django-model-utils.git@38dee4c560ecfdcb6aaca662e06aecbd60864aceegg=django-model-utils
 slumber==0.4
 django-appconf==0.5
 
