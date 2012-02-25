@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from pypi.models import PyPIMirrorPage
-from pypi.models import ChangeLog, Log, DownloadChange
+from pypi.models import ChangeLog, Log
 
 
 class PyPIMirrorPageAdmin(admin.ModelAdmin):
@@ -22,13 +22,6 @@ class LogAdmin(admin.ModelAdmin):
     list_filter = ["type", "created"]
 
 
-class DownloadChangeAdmin(admin.ModelAdmin):
-    list_display = ["release", "change", "created", "modified"]
-    list_filter = ["created", "modified"]
-    search_fields = ["release__package__name"]
-
-
 admin.site.register(PyPIMirrorPage, PyPIMirrorPageAdmin)
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(Log, LogAdmin)
-admin.site.register(DownloadChange, DownloadChangeAdmin)

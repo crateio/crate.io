@@ -9,17 +9,14 @@ from packages.models import Release
 class ReleaseDetail(DetailView):
 
     model = Release
-    queryset = Release.objects.filter(
-                    deleted=False,
-                    package__deleted=False
-                ).prefetch_related(
-                    "uris",
-                    "files",
-                    "requires",
-                    "provides",
-                    "obsoletes",
-                    "classifiers",
-                )
+    queryset = Release.objects.all().prefetch_related(
+                                        "uris",
+                                        "files",
+                                        "requires",
+                                        "provides",
+                                        "obsoletes",
+                                        "classifiers",
+                                    )
 
     def get_context_data(self, **kwargs):
         ctx = super(ReleaseDetail, self).get_context_data(**kwargs)

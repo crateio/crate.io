@@ -277,15 +277,12 @@ class PyPIPackage(object):
                     else:
                         setattr(release, key, value)
 
-                release.deleted = False
                 release.save()
-
-        if package.deleted:
-            Package.objects.filter(pk=package.pk).update(deleted=False)
 
         # Mark unsynced as deleted when bulk processing
         if self.bulk:
-            Release.objects.filter(package=package).exclude(version__in=self.data.keys()).update(deleted=True)
+            for release in Release.objects.filter(package=package).exclude(version__in=self.data.keys()):
+                release.delete()
 
         self.stored = True
 

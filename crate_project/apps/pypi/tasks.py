@@ -15,8 +15,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 
-from packages.models import Package, Release, ReleaseFile, TroveClassifier
-from pypi.models import DownloadChange
+from packages.models import Package, ReleaseFile, TroveClassifier
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -62,7 +61,8 @@ def bulk_synchronize():
         names.add(package)
         bulk_process.delay(package, None, None, None, None)
 
-    Package.objects.exclude(name__in=names).update(deleted=True)
+    for package in Package.objects.exclude(name__in=names):
+        package.delete()
 
 
 @task
@@ -159,18 +159,10 @@ def update_download_counts(package_name, version, files, index=None):
     pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
     downloads = pypi.release_downloads(package_name, version)
-    changed = 0
 
     for filename, download_count in downloads:
         if filename in files:
-            try:
-                current_count = ReleaseFile.objects.get(pk=files[filename]).downloads
-                changed += (download_count - current_count)
-            except ReleaseFile.DoesNotExist:
-                pass
-            ReleaseFile.objects.filter(pk=files[filename]).update(downloads=download_count)
-
-    try:
-        DownloadChange.objects.create(release=Release.objects.get(package__name=package_name, version=version), change=changed)
-    except Release.DoesNotExist:
-        pass
+            with transaction.commit_on_success():
+                for releasefile in ReleaseFile.objects.filter(pk=files[filename]).select_for_update():
+                    releasefile.downloads = download_count
+                    releasefile.save()

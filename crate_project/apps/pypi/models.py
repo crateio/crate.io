@@ -60,8 +60,3 @@ class ChangeLog(TimeStampedModel):
             "timestamp": self.timestamp,
             "action": self.action,
         }
-
-
-class DownloadChange(TimeStampedModel):
-    release = models.ForeignKey("packages.Release")
-    change = models.IntegerField(default=0)

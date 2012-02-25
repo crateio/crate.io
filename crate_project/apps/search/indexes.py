@@ -34,8 +34,6 @@ class PackageCelerySearchIndex(BaseCelerySearchIndex):
         signals.post_delete.disconnect(self.enqueue_delete_from_releasefile, sender=ReleaseFile)
 
     def enqueue_save(self, instance, **kwargs):
-        if instance.deleted:
-            return self.enqueue("delete", instance)
         return self.enqueue("update", instance)
 
     def enqueue_save_from_release(self, instance, **kwargs):
