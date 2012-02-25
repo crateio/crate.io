@@ -33,7 +33,7 @@ LOGGING = {
         "": {
             "handlers": ["console", "sentry"],
             "propagate": True,
-            "level": "INFO",
+            "level": "DEBUG",
         },
         "django.request": {
             "handlers": ["mail_admins"],
