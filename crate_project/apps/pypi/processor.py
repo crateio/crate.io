@@ -82,8 +82,8 @@ class PyPIPackage(object):
                 packages = Package.objects.filter(name=self.name).select_for_update()
                 releases = Release.objects.filter(package__in=packages).select_for_update()
 
-                packages.update(deleted=True)
-                releases.update(deleted=True)
+                for package in packages:
+                    package.delete()
             else:
                 # Delete only this release
                 try:
@@ -93,7 +93,8 @@ class PyPIPackage(object):
 
                 releases = Release.objects.filter(package=package, version=self.version).select_for_update()
 
-                releases.update(deleted=True)
+                for release in releases:
+                    release.delete()
 
     def remove_files(self, *files):
         self.verify_and_sync_pages()
