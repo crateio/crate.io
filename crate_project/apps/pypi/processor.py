@@ -444,8 +444,8 @@ class PyPIPackage(object):
         try:
             if not verify(key, simple.content, serversig.content):
                 raise Exception("Simple API page does not match serversig")  # @@@ This Should be Custom Exception
-        except (UnicodeDecodeError, UnicodeEncodeError):
-            pass  # @@@ Figure out a better way to handle this
+        except (UnicodeDecodeError, UnicodeEncodeError, ValueError):
+            logger.exception("Exception trying to verify %s" % self.name)  # @@@ Figure out a better way to handle this
 
         package = Package.objects.get(name=self.name)
 
