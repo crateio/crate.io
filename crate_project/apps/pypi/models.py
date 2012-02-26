@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 
 from model_utils import Choices
@@ -6,23 +7,31 @@ from model_utils.models import TimeStampedModel
 
 class PyPIMirrorPage(models.Model):
 
-    TYPES = Choices(
-        ("simple", "Simple"),
-        ("serversig", "Server Sig"),
-    )
-
-    package = models.ForeignKey("packages.Package")
-    type = models.CharField(max_length=25, choices=TYPES)
+    package = models.ForeignKey("packages.Package", unique=True)
     content = models.TextField()
 
-    class Meta:
-        unique_together = ("package", "type")
+    def __unicode__(self):
+        return self.package.name
+
+    def get_relative_url(self, current_url):
+        absolute_url_split = reverse("pypi_package_detail", kwargs={"slug": self.package.name}).split("/")
+        current_url_split = current_url.split("/")
+
+        relative_url_split = absolute_url_split[:]
+        for i, part in enumerate(absolute_url_split):
+            if len(current_url_split) > i and part == current_url_split[i]:
+                relative_url_split = relative_url_split[1:]
+
+        return "/".join(relative_url_split)
+
+
+class PyPIServerSigPage(models.Model):
+
+    package = models.ForeignKey("packages.Package")
+    content = models.TextField()
 
     def __unicode__(self):
-        return "%(type)s: %(package)s" % {
-            "type": self.get_type_display(),
-            "package": self.package.name,
-        }
+        return self.package.name
 
 
 class Log(TimeStampedModel):
