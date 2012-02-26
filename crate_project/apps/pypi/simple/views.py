@@ -58,3 +58,7 @@ class PackageDetail(DetailView):
 def file_redirect(request, filename):
     release_file = get_object_or_404(ReleaseFile, filename=filename)
     return HttpResponsePermanentRedirect(release_file.file.url)
+
+
+def simple_redirect(request):
+    return HttpResponsePermanentRedirect(reverse("pypi_package_index"))
