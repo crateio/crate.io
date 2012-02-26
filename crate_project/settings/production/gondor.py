@@ -39,12 +39,3 @@ CELERY_RESULT_BACKEND = "redis"
 CELERY_REDIS_HOST = GONDOR_REDIS_HOST
 CELERY_REDIS_PORT = GONDOR_REDIS_PORT
 CELERY_REDIS_PASSWORD = GONDOR_REDIS_PASSWORD
-
-LOGGING["handlers"]["loggly"] = {
-    "class": "hoover.LogglyHttpHandler",
-    "token": LOGGLY_TOKEN,
-    "level": "INFO",
-    "secure": False,
-}
-
-LOGGING["loggers"][""]["handlers"].append("loggly")
