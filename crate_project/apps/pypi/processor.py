@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import logging
 import re
@@ -449,11 +450,12 @@ class PyPIPackage(object):
 
         simple_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, defaults={"content": simple.content})
         if not c and simple_mirror.content != simple.content:
-            PyPIMirrorPage.objects.filter(pk=simple_mirror.pk).update(content=simple.content)
+            simple_mirror.content = simple.content
+            simple_mirror.save()
 
         serversig_mirror, c = PyPIServerSigPage.objects.get_or_create(package=package, defaults={"content": serversig.content.encode("base64")})
-        if not c and serversig_mirror.content.encode("base64") != serversig.content:
-            PyPIServerSigPage.objects.filter(pk=serversig_mirror.pk).update(content=serversig.content.encode("base64"))
+        serversig_mirror.content = base64.b64encode(serversig.content)
+        serversig_mirror.save()
 
         return {
             "simple": simple.content,
