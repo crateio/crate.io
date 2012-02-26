@@ -1,13 +1,15 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
+from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
-from django.utils.decorators import method_decorator
 
 from crate.template2 import env
 
+from packages.models import ReleaseFile
 from pypi.models import PyPIMirrorPage
 
 
@@ -51,3 +53,8 @@ class PackageDetail(DetailView):
             return HttpResponsePermanentRedirect(reverse("pypi_package_detail", kwargs={"slug": self.object.package.name}))
 
         return HttpResponse(self.object.content)
+
+
+def file_redirect(request, filename):
+    release_file = get_object_or_404(ReleaseFile, filename=filename)
+    return HttpResponsePermanentRedirect(release_file.file.url)
