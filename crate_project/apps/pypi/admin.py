@@ -5,13 +5,15 @@ from pypi.models import ChangeLog, Log
 
 
 class PyPIMirrorPageAdmin(admin.ModelAdmin):
-    list_display = ["package"]
+    list_display = ["package", "created", "modified"]
+    list_filter = ["created", "modified"]
     search_fields = ["package__name", "content"]
     raw_id_fields = ["package"]
 
 
 class PyPIServerSigPageAdmin(admin.ModelAdmin):
-    list_display = ["package"]
+    list_display = ["package", "created", "modified"]
+    list_filter = ["created", "modified"]
     search_fields = ["package__name", "content"]
     raw_id_fields = ["package"]
 

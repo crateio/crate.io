@@ -1,11 +1,13 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 
-class PyPIMirrorPage(models.Model):
+class PyPIMirrorPage(TimeStampedModel):
 
     package = models.ForeignKey("packages.Package", unique=True)
     content = models.TextField()
@@ -25,7 +27,7 @@ class PyPIMirrorPage(models.Model):
         return "/".join(relative_url_split)
 
 
-class PyPIServerSigPage(models.Model):
+class PyPIServerSigPage(TimeStampedModel):
 
     package = models.ForeignKey("packages.Package")
     content = models.TextField()
@@ -69,3 +71,10 @@ class ChangeLog(TimeStampedModel):
             "timestamp": self.timestamp,
             "action": self.action,
         }
+
+
+@receiver(post_save, sender=PyPIMirrorPage)
+@receiver(post_delete, sender=PyPIMirrorPage)
+def regenerate_simple_index(sender, **kwargs):
+    from pypi.tasks import refresh_pypi_package_index_cache
+    refresh_pypi_package_index_cache.delay()

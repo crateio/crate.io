@@ -85,7 +85,8 @@ def synchronize(since=None):
         sig.raise_for_status()
 
         if sig.content != datastore.get(SERVERKEY_KEY):
-            pass  # @@@ Key rolled over, redownload all sigs.
+            pypi_key_rollover.delay()
+            datastore.set(SERVERKEY_KEY, sig.content)
 
     datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
 
@@ -166,3 +167,22 @@ def update_download_counts(package_name, version, files, index=None):
                 for releasefile in ReleaseFile.objects.filter(pk=files[filename]).select_for_update():
                     releasefile.downloads = download_count
                     releasefile.save()
+
+
+@task
+def pypi_key_rollover():
+    for package in Package.objects.all():
+        fetch_server_key.delay(package.name)
+
+
+@task
+def fetch_server_key(package):
+    p = PyPIPackage(package)
+    p.verify_and_sync_pages()
+
+
+@task
+def refresh_pypi_package_index_cache():
+    from pypi.simple.views import PackageIndex
+    pi = PackageIndex()
+    pi.get_queryset(force_uncached=True)
