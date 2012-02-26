@@ -29,12 +29,11 @@ LOGGING = {
             "class": "raven.contrib.django.handlers.SentryHandler",
         },
     },
+    "root": {
+        "handlers": ["console", "sentry"],
+        "level": "INFO",
+    },
     "loggers": {
-        "": {
-            "handlers": ["console", "sentry"],
-            "propagate": True,
-            "level": "DEBUG",
-        },
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
