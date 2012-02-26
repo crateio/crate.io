@@ -6,23 +6,20 @@ from model_utils.models import TimeStampedModel
 
 class PyPIMirrorPage(models.Model):
 
-    TYPES = Choices(
-        ("simple", "Simple"),
-        ("serversig", "Server Sig"),
-    )
-
-    package = models.ForeignKey("packages.Package")
-    type = models.CharField(max_length=25, choices=TYPES)
+    package = models.ForeignKey("packages.Package", unique=True)
     content = models.TextField()
 
-    class Meta:
-        unique_together = ("package", "type")
+    def __unicode__(self):
+        return self.package.name
+
+
+class PyPIServerSigPage(models.Model):
+
+    package = models.ForeignKey("packages.Package")
+    content = models.TextField()
 
     def __unicode__(self):
-        return "%(type)s: %(package)s" % {
-            "type": self.get_type_display(),
-            "package": self.package.name,
-        }
+        return self.package.name
 
 
 class Log(TimeStampedModel):

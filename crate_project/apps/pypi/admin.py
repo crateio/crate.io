@@ -1,12 +1,17 @@
 from django.contrib import admin
 
-from pypi.models import PyPIMirrorPage
+from pypi.models import PyPIMirrorPage, PyPIServerSigPage
 from pypi.models import ChangeLog, Log
 
 
 class PyPIMirrorPageAdmin(admin.ModelAdmin):
-    list_display = ["package", "type"]
-    list_filter = ["type"]
+    list_display = ["package"]
+    search_fields = ["package__name", "content"]
+    raw_id_fields = ["package"]
+
+
+class PyPIServerSigPageAdmin(admin.ModelAdmin):
+    list_display = ["package"]
     search_fields = ["package__name", "content"]
     raw_id_fields = ["package"]
 
@@ -23,5 +28,6 @@ class LogAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PyPIMirrorPage, PyPIMirrorPageAdmin)
+admin.site.register(PyPIServerSigPage, PyPIServerSigPageAdmin)
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(Log, LogAdmin)
