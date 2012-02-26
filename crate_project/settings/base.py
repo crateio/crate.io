@@ -180,7 +180,6 @@ INSTALLED_APPS = [
     "crate",
     "evaluator",
     "favorites",
-    "privatebeta",
     "helpdocs",
 ]
 
