@@ -51,7 +51,3 @@ class PackageDetail(DetailView):
             return HttpResponsePermanentRedirect(reverse("pypi_package_detail", kwargs={"slug": self.object.package.name}))
 
         return HttpResponse(self.object.content)
-
-
-class PackageServerSig:
-    pass
