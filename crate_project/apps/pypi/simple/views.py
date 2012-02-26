@@ -1,3 +1,5 @@
+import base64
+
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
@@ -10,7 +12,7 @@ from django.views.generic.list import ListView
 from crate.template2 import env
 
 from packages.models import ReleaseFile
-from pypi.models import PyPIMirrorPage
+from pypi.models import PyPIMirrorPage, PyPIServerSigPage
 
 
 def not_found(request):
@@ -53,6 +55,20 @@ class PackageDetail(DetailView):
             return HttpResponsePermanentRedirect(reverse("pypi_package_detail", kwargs={"slug": self.object.package.name}))
 
         return HttpResponse(self.object.content)
+
+
+class PackageServerSig(DetailView):
+    queryset = PyPIServerSigPage.objects.all()
+    slug_field = "package__name__iexact"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        # Check that the case matches what it's supposed to be
+        if self.object.package.name != self.kwargs.get(self.slug_url_kwarg, None):
+            return HttpResponsePermanentRedirect(reverse("pypi_package_detail", kwargs={"slug": self.object.package.name}))
+
+        return HttpResponse(base64.b64decode(self.object.content), mimetype="application/octet-stream")
 
 
 def file_redirect(request, filename):
