@@ -87,6 +87,7 @@ def synchronize(since=None):
 
         if sig.content != datastore.get(SERVERKEY_KEY):
             logger.error("Key Rollover Detected")
+            pypi_key_rollover.delay()
             datastore.set(SERVERKEY_KEY, sig.content)
 
     datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
@@ -172,6 +173,13 @@ def update_download_counts(package_name, version, files, index=None):
 
 @task
 def pypi_key_rollover():
+    datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+
+    sig = requests.get(SERVERKEY_URL, prefetch=True)
+    sig.raise_for_status()
+
+    datastore.set(SERVERKEY_KEY, sig.content)
+
     for package in Package.objects.all():
         fetch_server_key.delay(package.name)
 
