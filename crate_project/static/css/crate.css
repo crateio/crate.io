@@ -2,6 +2,9 @@
 .alert-unknown{background-color:#eee;border-color:#eee;}
 .alert-unknown,.alert-unknown .alert-heading{color:#999;}
 body,p,label,input,button,select,textarea,.navbar-search .search-query{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
+.jumbotron h1{margin-bottom:9px;font-size:56px;letter-spacing:-1px;line-height:1;}
+.jumbotron p{margin-bottom:18px;font-weight:300;}
+.jumbotron .btn-large{font-size:20px;font-weight:normal;padding:14px 24px;margin-right:10px;-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px;}
 #search .hero-unit,#search-results .hero-unit{padding-top:30px;padding-left:45px;padding-right:45px;}
 #search-results .hero-unit{padding-bottom:10px;}
 #search .package-stats{margin-bottom:60px;font-size:16px;color:#404040;}#search .package-stats .downloads{display:block;font-size:24px;font-weight:bold;line-height:36px;}
@@ -22,3 +25,6 @@ body,p,label,input,button,select,textarea,.navbar-search .search-query{font-fami
 #release-evaluation .icon{position:relative;top:2px;}
 .follow{display:inline-block;margin-right:10px;}
 .package-title{display:inline-block;}
+#policy-page h2{margin-top:1em;}
+#policy-page p{line-height:22px;}
+#policy-page section{padding-top:20px;}
