@@ -85,7 +85,7 @@ def synchronize(since=None):
         sig.raise_for_status()
 
         if sig.content != datastore.get(SERVERKEY_KEY):
-            pypi_key_rollover.delay()
+            logger.error("Key Rollover Detected")
             datastore.set(SERVERKEY_KEY, sig.content)
 
     datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
