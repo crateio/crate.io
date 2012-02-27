@@ -2,6 +2,8 @@ import os
 import posixpath
 import urlparse
 import uuid
+import cStringIO
+import sys
 
 import lxml.html
 
@@ -201,14 +203,31 @@ class Release(models.Model):
     def description_html(self):
         # @@@ Consider Saving This to the DB
         docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
-        docutils_settings.update({"warning_stream": os.devnull})
+        docutils_settings.update({
+                        "raw_enabled": 0,  # no raw HTML code
+                        "file_insertion_enabled": 0,  # no file/URL access
+                        "halt_level": 2,  # at warnings or errors, raise an exception
+                        "report_level": 5,  # never report problems with the reST code
+                    })
+
+        old_stderr = sys.stderr
+        sys.stderr = s = cStringIO.StringIO()
+
+        msg = ""
 
         try:
             parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
         except SystemMessage:
-            return self.description
+            msg = "<pre>" + self.description + "</pre>"
         else:
-            return mark_safe(force_unicode(parts["fragment"]))
+            if parts is None or len(s.getvalue()) > 0:
+                msg = "<pre>" + self.description + "</pre>"
+            else:
+                msg = parts["fragment"]
+
+        sys.stderr = old_stderr
+
+        return mark_safe(force_unicode(msg))
 
     @property
     def show_install_command(self):
