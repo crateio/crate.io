@@ -57,6 +57,7 @@ class PackageServerSig(DetailView):
         return HttpResponse(base64.b64decode(self.object.content), mimetype="application/octet-stream")
 
 
+@cache_page(60 * 15)
 def package_index(request, force_uncached=False):
     idx = PyPIIndexPage.objects.all().order_by("-created")[:1]
 
@@ -77,7 +78,6 @@ def package_index(request, force_uncached=False):
             raise
 
 
-#@cache_page(60 * 15)
 def last_modified(request):
     datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
     ts = datastore.get(PYPI_SINCE_KEY)
