@@ -1,7 +1,9 @@
 import base64
 import datetime
+import logging
 
 import redis
+import requests
 
 from django.conf import settings
 from django.core.cache import cache
@@ -16,37 +18,15 @@ from django.views.generic.list import ListView
 from crate.template2 import env
 
 from packages.models import ReleaseFile
-from pypi.models import PyPIMirrorPage, PyPIServerSigPage
+from pypi.models import PyPIMirrorPage, PyPIServerSigPage, PyPIIndexPage
 
 PYPI_SINCE_KEY = "crate:pypi:since"
+
+logger = logging.getLogger(__name__)
 
 
 def not_found(request):
     return HttpResponseNotFound("Not Found")
-
-
-class PackageIndex(ListView):
-
-    queryset = PyPIMirrorPage.objects.all().select_related("package").order_by("package__name")
-    template_name = "pypi/simple/package_list.html"
-
-    @method_decorator(cache_page(60 * 15))
-    def dispatch(self, *args, **kwargs):
-        return super(PackageIndex, self).dispatch(*args, **kwargs)
-
-    def get_queryset(self, force_uncached=False):
-        cached = cache.get("crate:pypi:simple:PackageIndex:queryset")
-
-        if cached and not force_uncached:
-            return cached
-
-        qs = super(PackageIndex, self).get_queryset()
-        cache.set("crate:pypi:simple:PackageIndex:queryset", list(qs), 60 * 60 * 24 * 365)
-        return qs
-
-    def render_to_response(self, context, **response_kwargs):
-        t = env.select_template(self.get_template_names())
-        return HttpResponse(t.render(request=self.request, **context))
 
 
 class PackageDetail(DetailView):
@@ -77,6 +57,27 @@ class PackageServerSig(DetailView):
         return HttpResponse(base64.b64decode(self.object.content), mimetype="application/octet-stream")
 
 
+def package_index(request, force_uncached=False):
+    idx = PyPIIndexPage.objects.all().order_by("-created")[:1]
+
+    if idx and not force_uncached:
+        return HttpResponse(idx[0].content)
+    else:
+        try:
+            r = requests.get("http://pypi.python.org/simple/", prefetch=True)
+            idx = PyPIIndexPage.objects.create(content=r.content)
+            return HttpResponse(idx.content)
+        except Exception:
+            logger.exception("Error trying to Get New Simple Index")
+
+            idx = PyPIIndexPage.objects.all().order_by("-created")[:1]
+
+            if idx:
+                return HttpResponse(idx[0].content)  # Serve Stale Cache
+            raise
+
+
+#@cache_page(60 * 15)
 def last_modified(request):
     datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
     ts = datastore.get(PYPI_SINCE_KEY)

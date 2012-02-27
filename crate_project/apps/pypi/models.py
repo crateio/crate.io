@@ -36,6 +36,14 @@ class PyPIServerSigPage(TimeStampedModel):
         return self.package.name
 
 
+class PyPIIndexPage(TimeStampedModel):
+
+    content = models.TextField()
+
+    def __unicode__(self):
+        return "PyPI Index Page: %s" % self.created.isoformat()
+
+
 class Log(TimeStampedModel):
     TYPES = Choices(
         ("sync", "Synchronize Mirror"),
@@ -73,8 +81,8 @@ class ChangeLog(TimeStampedModel):
         }
 
 
-#@receiver(post_save, sender=PyPIMirrorPage)
-#@receiver(post_delete, sender=PyPIMirrorPage)
+@receiver(post_save, sender=PyPIMirrorPage)
+@receiver(post_delete, sender=PyPIMirrorPage)
 def regenerate_simple_index(sender, **kwargs):
     from pypi.tasks import refresh_pypi_package_index_cache
     refresh_pypi_package_index_cache.delay()

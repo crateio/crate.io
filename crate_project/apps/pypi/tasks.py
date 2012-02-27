@@ -183,6 +183,5 @@ def fetch_server_key(package):
 
 @task
 def refresh_pypi_package_index_cache():
-    from pypi.simple.views import PackageIndex
-    pi = PackageIndex()
-    pi.get_queryset(force_uncached=True)
+    from pypi.simple.views import package_index
+    package_index(None, force_uncached=True)
