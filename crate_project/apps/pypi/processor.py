@@ -446,7 +446,11 @@ class PyPIPackage(object):
         except (UnicodeDecodeError, UnicodeEncodeError, ValueError):
             logger.exception("Exception trying to verify %s" % self.name)  # @@@ Figure out a better way to handle this
 
-        package = Package.objects.get(name=self.name)
+        try:
+            package = Package.objects.get(name=self.name)
+        except Package.DoesNotExist:
+            logger.exception("Error Trying To Verify %s (Querying Package)" % self.name)
+            return
 
         simple_mirror, c = PyPIMirrorPage.objects.get_or_create(package=package, defaults={"content": simple.content})
         if not c and simple_mirror.content != simple.content:
