@@ -16,6 +16,7 @@ from django.db import transaction
 from django.utils.timezone import now
 
 from packages.models import Package, ReleaseFile, TroveClassifier
+from pypi.models import PyPIIndexPage
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -183,5 +184,5 @@ def fetch_server_key(package):
 
 @task
 def refresh_pypi_package_index_cache():
-    from pypi.simple.views import package_index
-    package_index(None, force_uncached=True)
+    r = requests.get("http://pypi.python.org/simple/", prefetch=True)
+    PyPIIndexPage.objects.create(content=r.content)
