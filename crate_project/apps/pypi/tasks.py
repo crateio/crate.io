@@ -16,7 +16,7 @@ from django.db import transaction
 from django.utils.timezone import now
 
 from packages.models import Package, ReleaseFile, TroveClassifier
-from pypi.models import PyPIIndexPage
+from pypi.models import PyPIIndexPage, PyPIDownloadChange
 from pypi.processor import PyPIPackage
 
 logger = logging.getLogger(__name__)
@@ -167,8 +167,12 @@ def update_download_counts(package_name, version, files, index=None):
         if filename in files:
             with transaction.commit_on_success():
                 for releasefile in ReleaseFile.objects.filter(pk=files[filename]).select_for_update():
+                    old = releasefile.downloads
                     releasefile.downloads = download_count
                     releasefile.save()
+
+                    change = releasefile.downloads - old
+                    PyPIDownloadChange.objects.create(file=releasefile, change=change)
 
 
 @task
