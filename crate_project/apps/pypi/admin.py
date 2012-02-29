@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from pypi.models import PyPIMirrorPage, PyPIServerSigPage, PyPIIndexPage
-from pypi.models import ChangeLog, Log
+from pypi.models import PyPIDownloadChange
 
 
 class PyPIMirrorPageAdmin(admin.ModelAdmin):
@@ -23,19 +23,14 @@ class PyPIIndexPageAdmin(admin.ModelAdmin):
     list_filter = ["created", "modified"]
 
 
-class ChangeLogAdmin(admin.ModelAdmin):
-    list_display = ["package", "version", "timestamp", "action", "handled"]
-    list_filter = ["timestamp", "handled"]
-    search_fields = ["package", "action"]
-
-
-class LogAdmin(admin.ModelAdmin):
-    list_display = ["type", "created", "message"]
-    list_filter = ["type", "created"]
+class PyPIDownloadChangeAdmin(admin.ModelAdmin):
+    list_display = ["file", "change", "created", "modified"]
+    list_filter = ["created", "modified"]
+    search_fields = ["file__release__package__name"]
+    raw_id_fields = ["file"]
 
 
 admin.site.register(PyPIMirrorPage, PyPIMirrorPageAdmin)
 admin.site.register(PyPIServerSigPage, PyPIServerSigPageAdmin)
 admin.site.register(PyPIIndexPage, PyPIIndexPageAdmin)
-admin.site.register(ChangeLog, ChangeLogAdmin)
-admin.site.register(Log, LogAdmin)
+admin.site.register(PyPIDownloadChange, PyPIDownloadChangeAdmin)

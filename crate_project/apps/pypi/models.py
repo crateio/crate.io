@@ -3,7 +3,6 @@ from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
-from model_utils import Choices
 from model_utils.models import TimeStampedModel
 
 
@@ -44,41 +43,10 @@ class PyPIIndexPage(TimeStampedModel):
         return "PyPI Index Page: %s" % self.created.isoformat()
 
 
-class Log(TimeStampedModel):
-    TYPES = Choices(
-        ("sync", "Synchronize Mirror"),
-        ("package", "Synchronize Package"),
-        ("version", "Synchronize Package Version"),
-    )
+class PyPIDownloadChange(TimeStampedModel):
 
-    type = models.CharField(max_length=50, choices=TYPES)
-    index = models.CharField(max_length=255)
-    message = models.TextField(blank=True)
-
-    class Meta:
-        ordering = ["-created"]
-
-    def __unicode__(self):
-        return self.message
-
-
-class ChangeLog(TimeStampedModel):
-    package = models.CharField(max_length=150)
-    version = models.CharField(max_length=150, null=True, blank=True)
-    timestamp = models.DateTimeField()
-    action = models.TextField(blank=True, null=True)
-    handled = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ["-timestamp"]
-
-    def __unicode__(self):
-        return u"%(package)s %(version)s %(timestamp)s %(action)s" % {
-            "package": self.package,
-            "version": self.version,
-            "timestamp": self.timestamp,
-            "action": self.action,
-        }
+    file = models.ForeignKey("packages.ReleaseFile")
+    change = models.IntegerField(default=0)
 
 
 @receiver(post_save, sender=PyPIMirrorPage)
