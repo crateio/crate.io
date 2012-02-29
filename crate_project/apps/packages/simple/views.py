@@ -16,6 +16,8 @@ def not_found(request):
 
 
 class PackageIndex(ListView):
+
+    restricted = False
     queryset = Package.objects.all().order_by("name")
     template_name = "packages/simple/package_list.html"
 
@@ -39,6 +41,8 @@ class PackageIndex(ListView):
 
 
 class PackageDetail(DetailView):
+
+    restricted = False
     queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files", "package_links")
     slug_field = "name__iexact"
     template_name = "packages/simple/package_detail.html"
@@ -47,6 +51,7 @@ class PackageDetail(DetailView):
         ctx = super(PackageDetail, self).get_context_data(**kwargs)
         ctx.update({
             "releases": self.object.releases.all(),
+            "restricted": self.restricted,
         })
         return ctx
 
