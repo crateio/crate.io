@@ -172,7 +172,8 @@ def update_download_counts(package_name, version, files, index=None):
                     releasefile.save()
 
                     change = releasefile.downloads - old
-                    PyPIDownloadChange.objects.create(file=releasefile, change=change)
+                    if change:
+                        PyPIDownloadChange.objects.create(file=releasefile, change=change)
 
 
 @task
