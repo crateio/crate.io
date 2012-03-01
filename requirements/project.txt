@@ -37,8 +37,8 @@ lxml==2.3
 django-hosts==0.4.2
 
 # Search
--e git+https://github.com/toastdriven/django-haystack.git@b6c5a0eddbe08d2b0def3ee483e62b21fee403db#egg=django-haystack
--e git+https://github.com/toastdriven/pyelasticsearch.git@a3f3ad7b7b245e87ffd832a4184db214fd3ee854#egg=pyelasticsearch
+-e git+https://github.com/toastdriven/django-haystack.git@50eb733f885f482b5fa584fbe99824293f183369#egg=django-haystack
+-e git+https://github.com/toastdriven/pyelasticsearch.git@0c7824695f32ea8efa4fb14c3a0db52cb55e3217#egg=pyelasticsearch
 celery-haystack==0.4
 
 # Markup
