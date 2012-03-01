@@ -35,6 +35,11 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
     def prepare(self, obj):
         data = super(PackageIndex, self).prepare(obj)
 
+        # For ES, because it doesn't tokenize on ``_``, which causes problems
+        # on lots of searches.
+        if '_' in data['name']:
+            data['name'] += ' ' + data['name'].replace('_', '-')
+
         if obj.latest:
             data["summary"] = obj.latest.summary
             data["author"] = obj.latest.author if obj.latest.author else None
