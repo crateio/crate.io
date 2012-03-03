@@ -118,12 +118,12 @@ class RTDocs(object):
         if hosted_on_rtd:
             return {
                 "level": "success",
-                "message": mark_safe('Docs Available on <a href="%s">Read The Docs</a>' % url),
+                "message": mark_safe('Available on <a href="%s">Read The Docs</a>' % url),
             }
         else:
             return {
                 "level": "unknown",
-                "message": mark_safe('Docs Unavailable on <a href="http://readthedocs.org/">Read The Docs</a>')
+                "message": mark_safe('Unavailable on <a href="http://readthedocs.org/">Read The Docs</a>')
             }
 
 
