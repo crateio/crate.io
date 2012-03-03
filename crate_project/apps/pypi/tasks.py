@@ -3,6 +3,7 @@ import datetime
 import hashlib
 import logging
 import re
+import socket
 import time
 import xmlrpclib
 
@@ -159,21 +160,24 @@ def synchronize_downloads():
 
 @task
 def update_download_counts(package_name, version, files, index=None):
-    pypi = xmlrpclib.ServerProxy(INDEX_URL)
+    try:
+        pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
-    downloads = pypi.release_downloads(package_name, version)
+        downloads = pypi.release_downloads(package_name, version)
 
-    for filename, download_count in downloads:
-        if filename in files:
-            with transaction.commit_on_success():
-                for releasefile in ReleaseFile.objects.filter(pk=files[filename]).select_for_update():
-                    old = releasefile.downloads
-                    releasefile.downloads = download_count
-                    releasefile.save()
+        for filename, download_count in downloads:
+            if filename in files:
+                with transaction.commit_on_success():
+                    for releasefile in ReleaseFile.objects.filter(pk=files[filename]).select_for_update():
+                        old = releasefile.downloads
+                        releasefile.downloads = download_count
+                        releasefile.save()
 
-                    change = releasefile.downloads - old
-                    if change:
-                        PyPIDownloadChange.objects.create(file=releasefile, change=change)
+                        change = releasefile.downloads - old
+                        if change:
+                            PyPIDownloadChange.objects.create(file=releasefile, change=change)
+    except socket.error:
+        logger.exception("[DOWNLOAD SYNC] Network Error")
 
 
 @task
