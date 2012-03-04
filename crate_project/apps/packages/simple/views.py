@@ -1,10 +1,14 @@
+import re
+
 from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 
 from crate.template2 import env
 
@@ -46,6 +50,42 @@ class PackageDetail(DetailView):
     queryset = Package.objects.all().prefetch_related("releases__uris", "releases__files", "package_links")
     slug_field = "name__iexact"
     template_name = "packages/simple/package_detail.html"
+
+    def get_object(self, queryset=None):
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # Next, try looking up by slug.
+        elif slug is not None:
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        else:
+            raise AttributeError(u"Generic detail view %s must be called with "
+                                 u"either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            try:
+                queryset = self.get_queryset()
+                queryset = queryset.filter(normalized_name=re.sub('[^A-Za-z0-9.]+', '-', slug).lower())
+                obj = queryset.get()
+            except ObjectDoesNotExist:
+                raise Http404(_(u"No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+
+        return obj
 
     def get_context_data(self, **kwargs):
         ctx = super(PackageDetail, self).get_context_data(**kwargs)

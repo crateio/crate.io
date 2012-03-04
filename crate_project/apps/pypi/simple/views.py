@@ -1,21 +1,19 @@
 import base64
 import datetime
 import logging
+import re
 
 import redis
 import requests
 
 from django.conf import settings
-from django.core.cache import cache
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect
+from django.http import HttpResponse, HttpResponseNotFound, HttpResponsePermanentRedirect, Http404
 from django.shortcuts import get_object_or_404
-from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
 from django.views.decorators.cache import cache_page
 from django.views.generic.detail import DetailView
-from django.views.generic.list import ListView
-
-from crate.template2 import env
 
 from packages.models import ReleaseFile
 from pypi.models import PyPIMirrorPage, PyPIServerSigPage, PyPIIndexPage
@@ -33,6 +31,42 @@ class PackageDetail(DetailView):
     queryset = PyPIMirrorPage.objects.all()
     slug_field = "package__name__iexact"
 
+    def get_object(self, queryset=None):
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # Next, try looking up by slug.
+        elif slug is not None:
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        else:
+            raise AttributeError(u"Generic detail view %s must be called with "
+                                 u"either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            try:
+                queryset = self.get_queryset()
+                queryset = queryset.filter(package__normalized_name=re.sub('[^A-Za-z0-9.]+', '-', slug).lower())
+                obj = queryset.get()
+            except ObjectDoesNotExist:
+                raise Http404(_(u"No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+
+        return obj
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
@@ -47,12 +81,48 @@ class PackageServerSig(DetailView):
     queryset = PyPIServerSigPage.objects.all()
     slug_field = "package__name__iexact"
 
+    def get_object(self, queryset=None):
+        # Use a custom queryset if provided; this is required for subclasses
+        # like DateDetailView
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        slug = self.kwargs.get(self.slug_url_kwarg, None)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk)
+
+        # Next, try looking up by slug.
+        elif slug is not None:
+            slug_field = self.get_slug_field()
+            queryset = queryset.filter(**{slug_field: slug})
+
+        # If none of those are defined, it's an error.
+        else:
+            raise AttributeError(u"Generic detail view %s must be called with "
+                                 u"either an object pk or a slug."
+                                 % self.__class__.__name__)
+
+        try:
+            obj = queryset.get()
+        except ObjectDoesNotExist:
+            try:
+                queryset = self.get_queryset()
+                queryset = queryset.filter(package__normalized_name=re.sub('[^A-Za-z0-9.]+', '-', slug).lower())
+                obj = queryset.get()
+            except ObjectDoesNotExist:
+                raise Http404(_(u"No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+
+        return obj
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
 
         # Check that the case matches what it's supposed to be
         if self.object.package.name != self.kwargs.get(self.slug_url_kwarg, None):
-            return HttpResponsePermanentRedirect(reverse("pypi_package_detail", kwargs={"slug": self.object.package.name}))
+            return HttpResponsePermanentRedirect(reverse("pypi_package_serversig", kwargs={"slug": self.object.package.name}))
 
         return HttpResponse(base64.b64decode(self.object.content), mimetype="application/octet-stream")
 
