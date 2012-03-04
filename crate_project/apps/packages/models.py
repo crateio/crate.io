@@ -1,5 +1,6 @@
 import os
 import posixpath
+import re
 import urlparse
 import uuid
 import cStringIO
@@ -68,10 +69,15 @@ class TroveClassifier(models.Model):
 
 class Package(TimeStampedModel):
     name = models.SlugField(max_length=150, unique=True)
+    normalized_name = models.SlugField(max_length=150, unique=True)
     downloads_synced_on = models.DateTimeField(default=now)
 
     def __unicode__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.normalized_name = re.sub('[^A-Za-z0-9.]+', '-', self.name).lower()
+        return super(Package, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.name})
