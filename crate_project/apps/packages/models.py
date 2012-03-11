@@ -95,7 +95,7 @@ class Package(TimeStampedModel):
     @property
     def latest(self):
         if not hasattr(self, "_latest_release"):
-            releases = self.releases.order_by("-order")[:1]
+            releases = self.releases.filter(hidden=False).order_by("-order")[:1]
             if releases:
                 self._latest_release = releases[0]
             else:
@@ -259,6 +259,8 @@ class ReleaseFile(models.Model):
 
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
+
+    hidden = models.BooleanField(default=False)
 
     release = models.ForeignKey(Release, related_name="files")
 

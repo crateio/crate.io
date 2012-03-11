@@ -28,3 +28,5 @@ body,p,label,input,button,select,textarea,.navbar-search .search-query{font-fami
 #policy-page h2{margin-top:1em;}
 #policy-page p{line-height:22px;}
 #policy-page section{padding-top:20px;}
+.versions .yanked{text-decoration:line-through;font-style:italic;color:#999;}.versions .yanked a,.versions .yanked a:hover,.versions .yanked a:link,.versions .yanked a:active,.versions .yanked a:visited{color:#999;}
+.yank-explanation{padding-top:120px;padding-right:2em;}

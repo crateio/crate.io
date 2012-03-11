@@ -21,6 +21,7 @@ class ReleaseDetail(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super(ReleaseDetail, self).get_context_data(**kwargs)
         ctx.update({
+            "release_files": self.object.files.filter(hidden=False),
             "version_specific": self.kwargs.get("version", None),
         })
         return ctx
@@ -37,7 +38,7 @@ class ReleaseDetail(DetailView):
         if version:
             queryset = queryset.filter(version=version)
         else:
-            queryset = queryset.order_by("-order")[:1]
+            queryset = queryset.filter(hidden=False).order_by("-order")[:1]
 
         try:
             obj = queryset.get()

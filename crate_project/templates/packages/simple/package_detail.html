@@ -9,7 +9,9 @@
 
     {% for release in releases %}
         {% for file in release.files.all %}
-            <a href="{{ file.file.url }}{% if file.digest %}#{{ file.digest|digest_type }}={{ file.digest|digest_value }}{% endif %}" rel="package">{{ file.file.name|filename }}</a>
+            {% if not file.hidden or show_hidden %}
+                <a href="{{ file.file.url }}{% if file.digest %}#{{ file.digest|digest_type }}={{ file.digest|digest_value }}{% endif %}" rel="package">{{ file.file.name|filename }}</a>
+            {% endif %}
         {% endfor %}
     {% endfor %}
 
