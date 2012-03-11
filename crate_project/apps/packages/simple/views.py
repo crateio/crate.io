@@ -89,10 +89,20 @@ class PackageDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         ctx = super(PackageDetail, self).get_context_data(**kwargs)
+
+        releases = self.object.releases.all()
+
+        if self.kwargs.get("version"):
+            releases = releases.filter(version=self.kwargs["version"])
+        else:
+            releases = releases.filter(hidden=False)
+
         ctx.update({
-            "releases": self.object.releases.all(),
+            "releases": releases,
             "restricted": self.restricted,
+            "show_hidden": True if self.kwargs.get("version") else False,
         })
+
         return ctx
 
     def get(self, request, *args, **kwargs):
