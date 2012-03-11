@@ -95,7 +95,7 @@ class Package(TimeStampedModel):
     @property
     def latest(self):
         if not hasattr(self, "_latest_release"):
-            releases = self.releases.order_by("-order")[:1]
+            releases = self.releases.filter(hidden=False).order_by("-order")[:1]
             if releases:
                 self._latest_release = releases[0]
             else:
