@@ -260,6 +260,8 @@ class ReleaseFile(models.Model):
     created = AutoCreatedField(_("created"), db_index=True)
     modified = AutoLastModifiedField(_("modified"))
 
+    hidden = models.BooleanField(default=False)
+
     release = models.ForeignKey(Release, related_name="files")
 
     type = models.CharField(max_length=25, choices=TYPES)
