@@ -95,7 +95,8 @@ class PyPIPackage(object):
                 releases = Release.objects.filter(package=package, version=self.version).select_for_update()
 
                 for release in releases:
-                    release.delete()
+                    release.hidden = True
+                    release.save()
 
     def remove_files(self, *files):
         self.verify_and_sync_pages()
@@ -104,7 +105,8 @@ class PyPIPackage(object):
         releases = Release.objects.filter(package__in=packages)
 
         for rf in ReleaseFile.objects.filter(release__in=releases, filename__in=files):
-            rf.delete()
+            rf.hidden = True
+            rf.save()
 
     def fetch(self):
         logger.debug("[FETCH] %s%s" % (self.name, " %s" % self.version if self.version else ""))
@@ -147,8 +149,6 @@ class PyPIPackage(object):
             data["stable_version"] = get_helper(self.release_data[release], "stable_version")  # @@@ What Is This?
 
             data["classifiers"] = get_helper(self.release_data[release], "classifiers", [])
-
-            data["hidden"] = get_helper(self.release_data[release], "_pypi_hidden")  # @ Do We Need This?
 
             # Construct the URIs
             data["uris"] = {}
@@ -229,6 +229,9 @@ class PyPIPackage(object):
                 # This is an extra database call nut it should prevent ShareLocks
                 Release.objects.filter(pk=release.pk).select_for_update()
 
+                if release.hidden:
+                    release.hidden = False
+
                 for key, value in data.iteritems():
                     if key in ["package", "version"]:
                         # Short circuit package and version
@@ -261,6 +264,10 @@ class PyPIPackage(object):
                                 defaults=dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
                             )
 
+                            if rf.hidden:
+                                rf.hidden = False
+                                rf.save()
+
                             if f["filename"] in filenames.keys():
                                 del filenames[f["filename"]]
 
@@ -274,7 +281,9 @@ class PyPIPackage(object):
                                 rf.save()
 
                         if filenames:
-                            ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]).delete()
+                            for rf in ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]):
+                                rf.hidden = True
+                                rf.save()
                     else:
                         setattr(release, key, value)
 
@@ -283,7 +292,8 @@ class PyPIPackage(object):
         # Mark unsynced as deleted when bulk processing
         if self.bulk:
             for release in Release.objects.filter(package=package).exclude(version__in=self.data.keys()):
-                release.delete()
+                release.hidden = True
+                release.save()
 
         self.stored = True
 
