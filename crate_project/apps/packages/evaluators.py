@@ -89,7 +89,7 @@ class RTDocs(object):
                 "<a href='mailto:support@crate.io'>support@crate.io</a></small>")
 
     def evaluate(self, release):
-        qs = ReadTheDocsPackageSlug.objects.filter(slug=release.package.name)
+        qs = ReadTheDocsPackageSlug.objects.filter(package=release.package)
         slug = qs[0].slug if qs else release.package.name
 
         key = "evaluate:rtd:%s" % slug

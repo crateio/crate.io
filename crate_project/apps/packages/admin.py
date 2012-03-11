@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from packages.models import Package, Release, ReleaseFile, TroveClassifier, PackageURI
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ChangeLog
+from packages.models import ReadTheDocsPackageSlug
 
 
 class PackageURIAdmin(admin.TabularInline):
@@ -68,8 +69,15 @@ class ChangeLogAdmin(admin.ModelAdmin):
     raw_id_fields = ["package", "release"]
 
 
+class ReadTheDocsPackageSlugAdmin(admin.ModelAdmin):
+    list_display = ["package", "slug"]
+    search_fields = ["package__name", "slug"]
+    raw_id_fields = ["package"]
+
+
 admin.site.register(Package, PackageAdmin)
 admin.site.register(Release, ReleaseAdmin)
 admin.site.register(ReleaseFile, ReleaseFileAdmin)
 admin.site.register(TroveClassifier, TroveClassifierAdmin)
 admin.site.register(ChangeLog, ChangeLogAdmin)
+admin.site.register(ReadTheDocsPackageSlug, ReadTheDocsPackageSlugAdmin)
