@@ -329,7 +329,7 @@ class PyPIPackage(object):
                     package = Package.objects.get(name=data["package"])
                     release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
-                    for release_file in ReleaseFile.objects.filter(release=release, hidden=False).select_for_update():
+                    for release_file in ReleaseFile.objects.filter(release=release, filename__in=[x["filename"] for x in data["files"]]).select_for_update():
                         file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
 
                         if pypi_pages.get("has_sig"):
