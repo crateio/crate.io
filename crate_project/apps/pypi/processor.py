@@ -330,7 +330,12 @@ class PyPIPackage(object):
                     release = Release.objects.filter(package=package, version=data["version"]).select_for_update()
 
                     for release_file in ReleaseFile.objects.filter(release=release).select_for_update():
-                        file_data = [x for x in data["files"] if x["filename"] == release_file.filename][0]
+                        _files = [x for x in data["files"] if x["filename"] == release_file.filename]
+
+                        if not _files:
+                            continue
+
+                        file_data = _files[0]
 
                         if pypi_pages.get("has_sig"):
                             if verified_md5_hashes[file_data["file"]].lower() != file_data["digests"]["md5"].lower():
