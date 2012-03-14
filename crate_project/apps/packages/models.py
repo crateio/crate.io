@@ -6,11 +6,12 @@ import uuid
 import cStringIO
 import sys
 
+import bleach
 import lxml.html
 
 from docutils.core import publish_string, publish_parts
 from docutils.utils import SystemMessage
-from lxml.html.clean import clean_html
+
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -30,6 +31,17 @@ from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
 from packages.utils import verlib
+
+ALLOWED_TAGS = bleach.ALLOWED_TAGS + [
+                    "br", "img", "span", "div", "pre", "p",
+                    "dl", "dd", "dt", "tt", "cite",
+                    "h1", "h2", "h3", "h4", "h5", "h6",
+                ]
+
+ALLOWED_ATTRIBUTES = dict(bleach.ALLOWED_ATTRIBUTES.items())
+ALLOWED_ATTRIBUTES.update({
+    "img": ["src"],
+})
 
 # Get the Storage Engine for Packages
 if getattr(settings, "PACKAGE_FILE_STORAGE", None):
@@ -231,7 +243,11 @@ class Release(models.Model):
                 if parts is None or len(s.getvalue()) > 0:
                     msg = None
                 else:
-                    msg = mark_safe(force_unicode(clean_html(parts["fragment"])))
+                    cnt = force_unicode(parts["fragment"])
+                    cnt = bleach.clean(cnt, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+                    cnt = bleach.linkify(cnt, skip_pre=True, parse_email=True)
+
+                    msg = mark_safe(cnt)
 
             sys.stderr = old_stderr
             self._description_html = msg

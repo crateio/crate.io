@@ -85,3 +85,7 @@ Jinja2==2.6
 # Security
 -e git+https://github.com/carljm/django-secure.git@690b100aefc1f1410a960753a562be693f80b2e3#egg=django-secure
 py-bcrypt==0.2
+
+# Html Sanitation
+html5lib==0.95
+bleach==1.1.1
