@@ -10,6 +10,7 @@ import lxml.html
 
 from docutils.core import publish_string, publish_parts
 from docutils.utils import SystemMessage
+from lxml.html.clean import clean_html
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -207,33 +208,35 @@ class Release(models.Model):
 
     @property
     def description_html(self):
-        # @@@ Consider Saving This to the DB
-        docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
-        docutils_settings.update({
-                        "raw_enabled": 0,  # no raw HTML code
-                        "file_insertion_enabled": 0,  # no file/URL access
-                        "halt_level": 2,  # at warnings or errors, raise an exception
-                        "report_level": 5,  # never report problems with the reST code
-                    })
+        if not hasattr(self, "_description_html"):
+            # @@@ Consider Saving This to the DB
+            docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+            docutils_settings.update({
+                            "raw_enabled": 0,  # no raw HTML code
+                            "file_insertion_enabled": 0,  # no file/URL access
+                            "halt_level": 2,  # at warnings or errors, raise an exception
+                            "report_level": 5,  # never report problems with the reST code
+                        })
 
-        old_stderr = sys.stderr
-        sys.stderr = s = cStringIO.StringIO()
+            old_stderr = sys.stderr
+            sys.stderr = s = cStringIO.StringIO()
 
-        msg = ""
+            msg = ""
 
-        try:
-            parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
-        except SystemMessage:
-            msg = "<pre>" + self.description + "</pre>"
-        else:
-            if parts is None or len(s.getvalue()) > 0:
-                msg = "<pre>" + self.description + "</pre>"
+            try:
+                parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+            except SystemMessage:
+                msg = None
             else:
-                msg = parts["fragment"]
+                if parts is None or len(s.getvalue()) > 0:
+                    msg = None
+                else:
+                    msg = mark_safe(force_unicode(clean_html(parts["fragment"])))
 
-        sys.stderr = old_stderr
+            sys.stderr = old_stderr
+            self._description_html = msg
 
-        return mark_safe(force_unicode(msg))
+        return self._description_html
 
     @property
     def show_install_command(self):

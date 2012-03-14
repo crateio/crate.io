@@ -65,7 +65,11 @@
                     <div class="tab-content">
                         <div id="description" class="tab-pane fade in{% if release.description %} active{% endif %}">
                             {% if release.description %}
-                                {{ release.description_html }}
+                                {% if release.description_html %}
+                                    {{ release.description_html }}
+                                {% else %}
+                                    <pre>{{ release.description }}</pre>
+                                {% endif %}
                             {% else %}
                                 <p>No Description Provided</p>
                             {% endif %}
