@@ -11,6 +11,7 @@ import requests
 import lxml.html
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.files.base import ContentFile
 from django.db import transaction
 from django.utils.timezone import utc
@@ -240,7 +241,15 @@ class PyPIPackage(object):
                     if key == "uris":
                         ReleaseURI.objects.filter(release=release).delete()
                         for label, uri in value.iteritems():
-                            ReleaseURI.objects.get_or_create(release=release, label=label, uri=uri)
+                            try:
+                                ReleaseURI.objects.get(release=release, label=label, uri=uri)
+                            except ReleaseURI.DoesNotExist:
+                                try:
+                                    release_uri = ReleaseURI(release=release, label=label, uri=uri)
+                                    release_uri.full_clean()
+                                    release_uri.save(force_insert=True)
+                                except ValidationError:
+                                    logger.exception("%s, %s for %s-%s Invalid Data" % (label, uri, release.package.name, release.version))
                     elif key == "classifiers":
                         release.classifiers.clear()
                         for classifier in value:
