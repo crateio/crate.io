@@ -278,29 +278,38 @@ class PyPIPackage(object):
                         filenames = dict([(x.filename, x) for x in files])
 
                         for f in value:
-                            rf, c = ReleaseFile.objects.get_or_create(
-                                release=release,
-                                type=f["type"],
-                                filename=f["filename"],
-                                python_version=f["python_version"],
-                                defaults=dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
-                            )
+                            try:
+                                rf = ReleaseFile.objects.get(
+                                        release=release,
+                                        type=f["type"],
+                                        filename=f["filename"],
+                                        python_version=f["python_version"],
+                                    )
 
-                            if rf.hidden:
+                                for k, v in f.iteritems():
+                                    if k in ["digests", "file", "filename", "type", "python_version"]:
+                                        continue
+                                    setattr(rf, k, v)
+
                                 rf.hidden = False
+                                rf.full_clean()
+                                rf.save()
+
+                            except ReleaseFile.DoesNotExist:
+                                rf = ReleaseFile(
+                                        release=release,
+                                        type=f["type"],
+                                        filename=f["filename"],
+                                        python_version=f["python_version"],
+                                        **dict([(k, v) for k, v in f.iteritems() if k not in ["digests", "file", "filename", "type", "python_version"]])
+                                    )
+
+                                rf.hidden = False
+                                rf.full_clean()
                                 rf.save()
 
                             if f["filename"] in filenames.keys():
                                 del filenames[f["filename"]]
-
-                            if not c:
-                                for k, v in f.iteritems():
-                                    if k in ["digests", "file", "filename", "type", "python_version"]:
-                                        continue
-
-                                    setattr(rf, k, v)
-
-                                rf.save()
 
                         if filenames:
                             for rf in ReleaseFile.objects.filter(pk__in=[f.pk for f in filenames.values()]):
