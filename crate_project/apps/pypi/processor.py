@@ -408,6 +408,7 @@ class PyPIPackage(object):
 
                         release_file.digest = "$".join(["sha256", hashlib.sha256(resp.content).hexdigest().lower()])
 
+                        release_file.full_clean()
                         release_file.file.save(file_data["filename"], ContentFile(resp.content), save=True)
 
                         # Store data relating to this file (if modified etc)
