@@ -267,7 +267,12 @@ class PyPIPackage(object):
                         model = {"requires": ReleaseRequire, "provides": ReleaseProvide, "obsoletes": ReleaseObsolete}.get(key)
                         model.objects.filter(release=release).delete()
                         for item in value:
-                            model.objects.get_or_create(release=release, **item)
+                            try:
+                                model.objects.get(release=release, **item)
+                            except model.DoesNotExist:
+                                m = model(release=release, **item)
+                                m.full_clean()
+                                m.save(force_insert=True)
                     elif key == "files":
                         files = ReleaseFile.objects.filter(release=release)
                         filenames = dict([(x.filename, x) for x in files])
