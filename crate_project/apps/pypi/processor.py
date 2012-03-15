@@ -225,10 +225,13 @@ class PyPIPackage(object):
 
         for data in self.data.values():
             with transaction.commit_on_success():
-                release, _ = Release.objects.get_or_create(package=package, version=data["version"])
+                try:
+                    release = Release.objects.get(package=package, version=data["version"])
 
-                # This is an extra database call nut it should prevent ShareLocks
-                Release.objects.filter(pk=release.pk).select_for_update()
+                    # This is an extra database call nut it should prevent ShareLocks
+                    Release.objects.filter(pk=release.pk).select_for_update()
+                except Release.DoesNotExist:
+                    release = Release(package=package, vesion=data["version"])
 
                 if release.hidden:
                     release.hidden = False
@@ -296,6 +299,7 @@ class PyPIPackage(object):
                     else:
                         setattr(release, key, value)
 
+                release.full_clean()
                 release.save()
 
         # Mark unsynced as deleted when bulk processing
