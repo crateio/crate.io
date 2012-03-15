@@ -151,7 +151,7 @@ class Release(models.Model):
 
     platform = models.TextField(blank=True)
 
-    summary = models.TextField()
+    summary = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
     keywords = models.TextField(blank=True)
