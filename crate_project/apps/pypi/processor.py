@@ -256,7 +256,12 @@ class PyPIPackage(object):
                     elif key == "classifiers":
                         release.classifiers.clear()
                         for classifier in value:
-                            trove, _ = TroveClassifier.objects.get_or_create(trove=classifier)
+                            try:
+                                trove = TroveClassifier.objects.get(trove=classifier)
+                            except TroveClassifier.DoesNotExist:
+                                trove = TroveClassifier(trove=classifier)
+                                trove.full_clean()
+                                trove.save(force_insert=True)
                             release.classifiers.add(trove)
                     elif key in ["requires", "provides", "obsoletes"]:
                         model = {"requires": ReleaseRequire, "provides": ReleaseProvide, "obsoletes": ReleaseObsolete}.get(key)
