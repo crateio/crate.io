@@ -318,7 +318,17 @@ class PyPIPackage(object):
                     else:
                         setattr(release, key, value)
 
-                release.full_clean()
+                while True:
+                    try:
+                        release.full_clean()
+                    except ValidationError as e:
+                        if "download_uri" in e.message_dict:
+                            release.download_uri = ""
+                            logger.exception("%s-%s Release Validation Error %s" % (release.package.name, release.version, str(e.message_dict)))
+                        else:
+                            raise
+                    else:
+                        break
                 release.save()
 
         # Mark unsynced as deleted when bulk processing
