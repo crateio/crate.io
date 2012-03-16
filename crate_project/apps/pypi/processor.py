@@ -231,7 +231,7 @@ class PyPIPackage(object):
                     # This is an extra database call nut it should prevent ShareLocks
                     Release.objects.filter(pk=release.pk).select_for_update()
                 except Release.DoesNotExist:
-                    release = Release(package=package, vesion=data["version"])
+                    release = Release(package=package, version=data["version"])
 
                 if release.hidden:
                     release.hidden = False
