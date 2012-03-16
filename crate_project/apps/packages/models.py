@@ -327,7 +327,7 @@ class ReleaseRequire(models.Model):
 
     kind = models.CharField(max_length=50, choices=KIND)
     name = models.CharField(max_length=150)
-    version = models.CharField(max_length=50)
+    version = models.CharField(max_length=50, blank=True)
 
     environment = models.TextField(blank=True)
 
@@ -346,7 +346,7 @@ class ReleaseProvide(models.Model):
 
     kind = models.CharField(max_length=50, choices=KIND)
     name = models.CharField(max_length=150)
-    version = models.CharField(max_length=50)
+    version = models.CharField(max_length=50, blank=True)
 
     environment = models.TextField(blank=True)
 
@@ -365,7 +365,7 @@ class ReleaseObsolete(models.Model):
 
     kind = models.CharField(max_length=50, choices=KIND)
     name = models.CharField(max_length=150)
-    version = models.CharField(max_length=50)
+    version = models.CharField(max_length=50, blank=True)
 
     environment = models.TextField(blank=True)
 
