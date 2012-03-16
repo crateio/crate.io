@@ -285,9 +285,9 @@ class ReleaseFile(models.Model):
     release = models.ForeignKey(Release, related_name="files")
 
     type = models.CharField(max_length=25, choices=TYPES)
-    file = models.FileField(upload_to=release_file_upload_to, storage=package_storage, max_length=512)
+    file = models.FileField(upload_to=release_file_upload_to, storage=package_storage, max_length=512, blank=True)
     filename = models.CharField(max_length=200, help_text="This is the file name given to us by PyPI", blank=True, null=True, default=None)
-    digest = models.CharField(max_length=512)
+    digest = models.CharField(max_length=512, blank=True)
 
     python_version = models.CharField(max_length=25)
 

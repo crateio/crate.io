@@ -232,6 +232,8 @@ class PyPIPackage(object):
                     Release.objects.filter(pk=release.pk).select_for_update()
                 except Release.DoesNotExist:
                     release = Release(package=package, version=data["version"])
+                    release.full_clean()
+                    release.save()
 
                 if release.hidden:
                     release.hidden = False
