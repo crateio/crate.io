@@ -7,14 +7,14 @@
         <div class="span8">
             <h2>Per Command</h2>
             <div>
-                <p>To use Crate.io on a per command basis you can use pip's -i option to tell it to use <a href="http://simple.crate.io/">http://simple.crate.io/</a> as it's index.</p>
-                <p>For Example if you wanted to install lxml from Crate.io you would simple type <code>pip install -i http://simple.crate.io/ lxml</code></p>
+                <p>To use Crate.io on a per command basis you can use pip's -i option to tell it to use <a href="https://simple.crate.io/">https://simple.crate.io/</a> as it's index.</p>
+                <p>For Example if you wanted to install lxml from Crate.io you would simple type <code>pip install -i https://simple.crate.io/ lxml</code></p>
             </div>
 
             <h2>Per Requirements File</h2>
             <div>
                 <p>Pip also allows you to setup a custom index per requirements file, doing this is just as simple as per command, but it saves you from having to type it out each time.</p>
-                <p>To enable Crate.io for a particular requirements file, just edit the file and add <code>-i http://simple.crate.io/</code> as the first line of the file. Save it and then run <code>pip install -r requirements.txt</code></p>
+                <p>To enable Crate.io for a particular requirements file, just edit the file and add <code>-i https://simple.crate.io/</code> as the first line of the file. Save it and then run <code>pip install -r requirements.txt</code></p>
             </div>
 
             <h2>Globally</h2>
@@ -25,7 +25,7 @@
                 <p>Once you have your pip.conf file open and ready to edit, just add (or edit!) your file so it includes a section like
 <pre class="span6">
     [global]
-    index-url = http://simple.crate.io/
+    index-url = https://simple.crate.io/
 </pre></p>
             </div>
         </div>
@@ -33,17 +33,17 @@
             <div class="well">
                 <h2>Super Tip</h2>
                 <p>
-                    Typing <code>http://simple.crate.io/</code> on the command line can be kind of a drag, it is a little long after all.
-                    That's why we've created a simple shortcut for you to use, instead of using <code>http://simple.crate.io/</code> you
-                    can use <code>http://crate.io/s/</code>.
+                    Typing <code>https://simple.crate.io/</code> on the command line can be kind of a drag, it is a little long after all.
+                    That's why we've created a simple shortcut for you to use, instead of using <code>https://simple.crate.io/</code> you
+                    can use <code>https://crate.io/s/</code>.
                 </p>
                 <p>An example would be:
-                    <div><code>pip install -i http://crate.io/s/ lxml</code></div>
+                    <div><code>pip install -i https://crate.io/s/ lxml</code></div>
                 </p>
                 <p style="margin-top: 1em;">
-                    Behind the scenes this just uses a simple redirect to send you to the <code>http://simple.crate.io/</code> page so
+                    Behind the scenes this just uses a simple redirect to send you to the <code>https://simple.crate.io/</code> page so
                     everything will work with this new shortcut! (However I don't recommend using it in a requirements file or the global option,
-                    for those you should still use the full fledged <code>http://simple.crate.io/</code> option.
+                    for those you should still use the full fledged <code>https://simple.crate.io/</code> option.
                 </p>
             </div>
         </div>

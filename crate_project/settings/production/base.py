@@ -69,7 +69,7 @@ AWS_S3_CUSTOM_DOMAIN = "media.crate-cdn.com"
 
 INTERCOM_APP_ID = "79qt2qu3"
 
-SIMPLE_API_URL = "http://simple.crate.io/"
+SIMPLE_API_URL = "https://simple.crate.io/"
 
 # Security
 SECURE_SSL_REDIRECT = True

@@ -64,7 +64,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-SIMPLE_API_URL = "http://simple.crate.io/"
+SIMPLE_API_URL = "https://simple.crate.io/"
 
 DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.version.VersionDebugPanel',
