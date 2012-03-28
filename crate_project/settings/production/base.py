@@ -67,6 +67,9 @@ DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
 AWS_S3_CUSTOM_DOMAIN = "media.crate-cdn.com"
 
+AWS_STATS_BUCKET_NAME = "crate-logs"
+AWS_STATS_LOG_REGEX = "^(cloudfront\.production/|cloudfront/production/packages/)"
+
 INTERCOM_APP_ID = "79qt2qu3"
 
 SIMPLE_API_URL = "https://simple.crate.io/"
