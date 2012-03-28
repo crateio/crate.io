@@ -17,3 +17,11 @@ class Log(models.Model):
     ip = models.GenericIPAddressField(unpack_ipv4=True)
     referer = models.TextField(blank=True)
     user_agent = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return "%(method)s %(uri_stem)s" % self.__dict__
+
+
+class LogProcessed(models.Model):
+
+    name = models.TextField(unique=True)
