@@ -172,6 +172,7 @@ INSTALLED_APPS = [
 
     # project
     "about",
+    "aws_stats",
     "profiles",
     "packages",
     "pypi",
