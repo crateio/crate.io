@@ -78,3 +78,5 @@ DEBUG_TOOLBAR_PANELS = (
     'debug_toolbar.panels.logger.LoggingPanel',
     'haystack.panels.HaystackDebugPanel',
 )
+
+AWS_STATS_LOG_REGEX = "^cloudfront/dev/packages/"
