@@ -5,7 +5,7 @@
 
 # Database
 psycopg2==2.4.1
--e hg+https://bitbucket.org/andrewgodwin/south@09d357fa90fb#egg=South
+South==0.7.4
 django-uuidfield==0.2
 
 # Utility
@@ -18,26 +18,29 @@ django-appconf==0.5
 redis==2.4.11
 anyjson==0.3.1
 amqplib==1.0.2
--e git+https://github.com/ask/kombu.git@db5888e4c623690e90b40f9398ccb32f355c4bef#egg=kombu
+#-e git+https://github.com/ask/kombu.git@db5888e4c623690e90b40f9398ccb32f355c4bef#egg=kombu
+kombu==2.1.2
 python-dateutil==1.5
--e git+https://github.com/ask/celery.git@2496b4c949447a688fdaa1ce9aa1596ec47f7198#egg=celery
+#-e git+https://github.com/ask/celery.git@2496b4c949447a688fdaa1ce9aa1596ec47f7198#egg=celery
+celery==2.5.1
 
 # Django Celery
 django-picklefield==0.2
--e git+https://github.com/ask/django-celery.git@4f249ed428409ce516b290e4f5c489ada9b3ab9b#egg=django-celery
+#-e git+https://github.com/ask/django-celery.git@4f249ed428409ce516b290e4f5c489ada9b3ab9b#egg=django-celery
+django-celery==2.5.1
 
 # Private Beta
 privatebeta==0.4.1
 
 # Scraping & Processing Utils
-requests==0.10.4
+requests==0.10.8
 lxml==2.3
 
 # Domain Name Utilities
 django-hosts==0.4.2
 
 # Search
--e git+https://github.com/toastdriven/django-haystack.git@50eb733f885f482b5fa584fbe99824293f183369#egg=django-haystack
+-e git+https://github.com/toastdriven/django-haystack.git@ec1f917588b3be1ce89f077a6c3c72be1551f84d#egg=django-haystack
 -e git+https://github.com/toastdriven/pyelasticsearch.git@0c7824695f32ea8efa4fb14c3a0db52cb55e3217#egg=pyelasticsearch
 celery-haystack==0.4
 
@@ -45,7 +48,7 @@ celery-haystack==0.4
 docutils==0.8.1
 
 # Storage
-boto==2.2.2
+boto==2.3.0
 -e hg+https://bitbucket.org/dstufft/django-storages@7f9fd318450fa86110944a9890fd0e4ac10e6bde#egg=django-storages
 
 # Dev Tools
@@ -67,8 +70,8 @@ django-intercom-io==0.1.1
 django-redis-cache==0.9.2
 
 # Logging
-simplejson==2.3.2
-raven==1.4.4
+simplejson==2.4.0
+raven==1.5
 
 # API
 mimeparse==0.1.3
