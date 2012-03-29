@@ -7,8 +7,6 @@ from local_settings import *  # Instance specific settings (in deploy.settings_[
 SERVER_EMAIL = "server@crate.io"
 DEFAULT_FROM_EMAIL = "support@crate.io"
 
-DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql_psycopg2"
-
 CACHES = {
     "default": {
         "BACKEND": "redis_cache.RedisCache",
