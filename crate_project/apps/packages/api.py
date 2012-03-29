@@ -28,6 +28,7 @@ class InlineTroveClassifierResource(ModelResource):
 class PackageResource(ModelResource):
     releases = fields.ToManyField("packages.api.ReleaseResource", "releases")
     downloads = fields.IntegerField("downloads")
+    latest = fields.ToOneField("packages.api.InlineReleaseResource", "latest", full=True)
 
     class Meta:
         allowed_methods = ["get"]
@@ -62,6 +63,28 @@ class PackageResource(ModelResource):
             kwargs["api_name"] = self._meta.api_name
 
         return self._build_reverse_url("api_dispatch_detail", kwargs=kwargs)
+
+
+class InlineReleaseResource(ModelResource):
+    files = fields.ToManyField("packages.api.ReleaseFileResource", "files", full=True)
+    uris = fields.ToManyField("packages.api.ReleaseURIResource", "uris", full=True)
+    classifiers = fields.ListField()
+    requires = fields.ToManyField("packages.api.ReleaseRequireResource", "requires", full=True)
+    provides = fields.ToManyField("packages.api.ReleaseProvideResource", "provides", full=True)
+    obsoletes = fields.ToManyField("packages.api.ReleaseObsoleteResource", "obsoletes", full=True)
+    downloads = fields.IntegerField("downloads")
+
+    class Meta:
+        allowed_methods = ["get"]
+        cache = SimpleCache()
+        fields = [
+                    "author", "author_email", "created", "description", "download_uri", "downloads",
+                    "license", "maintainer", "maintainer_email", "package", "platform", "classifiers",
+                    "requires_python", "summary", "version"
+                ]
+        include_absolute_url = True
+        include_resource_uri = False
+        queryset = Release.objects.all()
 
 
 class ReleaseResource(ModelResource):
