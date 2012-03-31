@@ -290,7 +290,7 @@ class Release(models.Model):
             sys.stderr = old_stderr
             self._changelog_html = msg
 
-        return self._description_html
+        return self._changelog_html
 
     @property
     def show_install_command(self):
