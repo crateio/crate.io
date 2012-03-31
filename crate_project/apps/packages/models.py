@@ -237,7 +237,8 @@ class Release(models.Model):
             msg = ""
 
             try:
-                parts = publish_parts(source=smart_str(self.description), writer_name="html4css1", settings_overrides=docutils_settings)
+                description, changelog = self.description.split(".. :changelog:", 1)
+                parts = publish_parts(source=smart_str(description), writer_name="html4css1", settings_overrides=docutils_settings)
             except SystemMessage:
                 msg = None
             else:
@@ -252,6 +253,42 @@ class Release(models.Model):
 
             sys.stderr = old_stderr
             self._description_html = msg
+
+        return self._description_html
+
+    @property
+    def changelog_html(self):
+        if not hasattr(self, "_changelog_html"):
+            docutils_settings = getattr(settings, "RESTRUCTUREDTEXT_FILTER_SETTINGS", {})
+            docutils_settings.update({
+                            "raw_enabled": 0,  # no raw HTML code
+                            "file_insertion_enabled": 0,  # no file/URL access
+                            "halt_level": 2,  # at warnings or errors, raise an exception
+                            "report_level": 5,  # never report problems with the reST code
+                        })
+
+            old_stderr = sys.stderr
+            sys.stderr = s = cStringIO.StringIO()
+
+            msg = ""
+
+            try:
+                description, changelog = self.description.split(".. :changelog:", 1)
+                parts = publish_parts(source=smart_str(changelog), writer_name="html4css1", settings_overrides=docutils_settings)
+            except SystemMessage:
+                msg = None
+            else:
+                if parts is None or len(s.getvalue()) > 0:
+                    msg = None
+                else:
+                    cnt = force_unicode(parts["fragment"])
+                    cnt = bleach.clean(cnt, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
+                    cnt = bleach.linkify(cnt, skip_pre=True, parse_email=True)
+
+                    msg = mark_safe(cnt)
+
+            sys.stderr = old_stderr
+            self._changelog_html = msg
 
         return self._description_html
 
