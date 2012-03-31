@@ -31,7 +31,7 @@ class Lock(object):
         self.key = "%s-lock" % key
         self.timeout = timeout
         self.expires = expires
-        
+
         self.datastore = redis.StrictRedis(**getattr(settings, "LOCK_DATASTORE_CONFIG", {}))
 
     def __enter__(self):
@@ -39,15 +39,15 @@ class Lock(object):
         while timeout >= 0:
             expires = time.time() + self.expires + 1
 
-            if redis.setnx(self.key, expires):
+            if self.datastore.setnx(self.key, expires):
                 # We gained the lock; enter critical section
                 return
 
-            current_value = redis.get(self.key)
+            current_value = self.datastore.get(self.key)
 
             # We found an expired lock and nobody raced us to replacing it
             if current_value and float(current_value) < time.time() and \
-                redis.getset(self.key, expires) == current_value:
+                self.datastore.getset(self.key, expires) == current_value:
                     return
 
             timeout -= 1
@@ -56,4 +56,4 @@ class Lock(object):
         raise LockTimeout("Timeout whilst waiting for lock")
 
     def __exit__(self, exc_type, exc_value, traceback):
-        redis.delete(self.key)
+        self.datastore.delete(self.key)
