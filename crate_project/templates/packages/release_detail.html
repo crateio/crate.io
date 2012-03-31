@@ -57,6 +57,7 @@
                         {% package_version_count release.package.name as total_versions %}
 
                         <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">Description</a></li>
+                        {% if release.changelog_html %}<li><a href="#changelog" data-toggle="tab">Change Log</a></li>{% endif %}
                         <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#files" data-toggle="tab">Files</a></li>
                         <li><a href="#all-versions" data-toggle="tab">All Versions ({{ total_versions }})</a></li>
@@ -151,6 +152,12 @@
                                 </div>
                             </div>
                         </div>
+
+                        {% if release.changelog_html %}
+                            <div id="changelog" class="tab-pane fade in">
+                                {{ release.changelog_html }}
+                            </div>
+                        {% endif %}
 
                         <div id="files" class="tab-pane fade in">
                             <table class="table table-striped table-bordered">
