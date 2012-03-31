@@ -58,6 +58,7 @@
 
                         <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">Description</a></li>
                         {% if release.changelog_html %}<li><a href="#changelog" data-toggle="tab">Change Log</a></li>{% endif %}
+                        {% if release.license %}<li><a href="#license" data-toggle="tab">License</a></li>{% endif %}
                         <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#files" data-toggle="tab">Files</a></li>
                         <li><a href="#all-versions" data-toggle="tab">All Versions ({{ total_versions }})</a></li>
@@ -156,6 +157,12 @@
                         {% if release.changelog_html %}
                             <div id="changelog" class="tab-pane fade in">
                                 {{ release.changelog_html }}
+                            </div>
+                        {% endif %}
+
+                        {% if release.license %}
+                            <div id="license" class="tab-pane fade in">
+                                <pre>{{ release.license }}</pre>
                             </div>
                         {% endif %}
 
