@@ -16,6 +16,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils.timezone import now
 
+from crate.utils.lock import Lock
 from packages.models import Package, ReleaseFile, TroveClassifier
 from pypi.models import PyPIIndexPage, PyPIDownloadChange
 from pypi.processor import PyPIPackage
@@ -69,71 +70,72 @@ def bulk_synchronize():
 
 @task
 def synchronize(since=None):
-    datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+    with Lock("synchronize", expires=60 * 5, timeout=30):
+        datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
 
-    if since is None:
-        s = datastore.get(PYPI_SINCE_KEY)
-        if s is not None:
-            since = int(float(s)) - 30
+        if since is None:
+            s = datastore.get(PYPI_SINCE_KEY)
+            if s is not None:
+                since = int(float(s)) - 30
 
-    current = time.mktime(datetime.datetime.utcnow().timetuple())
+        current = time.mktime(datetime.datetime.utcnow().timetuple())
 
-    pypi = xmlrpclib.ServerProxy(INDEX_URL)
+        pypi = xmlrpclib.ServerProxy(INDEX_URL)
 
-    headers = datastore.hgetall(SERVERKEY_KEY + ":headers")
-    sig = requests.get(SERVERKEY_URL, headers=headers, prefetch=True)
+        headers = datastore.hgetall(SERVERKEY_KEY + ":headers")
+        sig = requests.get(SERVERKEY_URL, headers=headers, prefetch=True)
 
-    if not sig.status_code == 304:
-        sig.raise_for_status()
+        if not sig.status_code == 304:
+            sig.raise_for_status()
 
-        if sig.content != datastore.get(SERVERKEY_KEY):
-            logger.error("Key Rollover Detected")
-            pypi_key_rollover.delay()
-            datastore.set(SERVERKEY_KEY, sig.content)
+            if sig.content != datastore.get(SERVERKEY_KEY):
+                logger.error("Key Rollover Detected")
+                pypi_key_rollover.delay()
+                datastore.set(SERVERKEY_KEY, sig.content)
 
-    datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
+        datastore.hmset(SERVERKEY_KEY + ":headers", {"If-Modified-Since": sig.headers["Last-Modified"]})
 
-    if since is None:  # @@@ Should we do this for more than just initial?
-        bulk_synchronize.delay()
-    else:
-        logger.info("[SYNCING] Changes since %s" % since)
-        changes = pypi.changelog(since)
+        if since is None:  # @@@ Should we do this for more than just initial?
+            bulk_synchronize.delay()
+        else:
+            logger.info("[SYNCING] Changes since %s" % since)
+            changes = pypi.changelog(since)
 
-        for name, version, timestamp, action in changes:
-            line_hash = hashlib.sha256(":".join([str(x) for x in (name, version, timestamp, action)])).hexdigest()
-            logdata = {"action": action, "name": name, "version": version, "timestamp": timestamp, "hash": line_hash}
+            for name, version, timestamp, action in changes:
+                line_hash = hashlib.sha256(":".join([str(x) for x in (name, version, timestamp, action)])).hexdigest()
+                logdata = {"action": action, "name": name, "version": version, "timestamp": timestamp, "hash": line_hash}
 
-            if not datastore.exists("crate:pypi:changelog:%s" % line_hash):
-                logger.debug("[PROCESS] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
-                logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
+                if not datastore.exists("crate:pypi:changelog:%s" % line_hash):
+                    logger.debug("[PROCESS] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
+                    logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
 
-                dispatch = collections.OrderedDict([
-                    (re.compile("^create$"), process),
-                    (re.compile("^new release$"), process),
-                    (re.compile("^add [\w\d\.]+ file .+$"), process),
-                    (re.compile("^remove$"), remove),
-                    (re.compile("^remove file (.+)$"), remove_file),
-                    (re.compile("^update [\w]+(, [\w]+)*$"), process),
-                    #(re.compile("^docupdate$"), docupdate),  # @@@ Do Something
-                    #(re.compile("^add (Owner|Maintainer) .+$"), add_user_role),  # @@@ Do Something
-                    #(re.compile("^remove (Owner|Maintainer) .+$"), remove_user_role),  # @@@ Do Something
-                ])
+                    dispatch = collections.OrderedDict([
+                        (re.compile("^create$"), process),
+                        (re.compile("^new release$"), process),
+                        (re.compile("^add [\w\d\.]+ file .+$"), process),
+                        (re.compile("^remove$"), remove),
+                        (re.compile("^remove file (.+)$"), remove_file),
+                        (re.compile("^update [\w]+(, [\w]+)*$"), process),
+                        #(re.compile("^docupdate$"), docupdate),  # @@@ Do Something
+                        #(re.compile("^add (Owner|Maintainer) .+$"), add_user_role),  # @@@ Do Something
+                        #(re.compile("^remove (Owner|Maintainer) .+$"), remove_user_role),  # @@@ Do Something
+                    ])
 
-                # Dispatch Based on the action
-                for pattern, func in dispatch.iteritems():
-                    matches = pattern.search(action)
-                    if matches is not None:
-                        func(name, version, timestamp, action, matches)
-                        break
+                    # Dispatch Based on the action
+                    for pattern, func in dispatch.iteritems():
+                        matches = pattern.search(action)
+                        if matches is not None:
+                            func(name, version, timestamp, action, matches)
+                            break
+                    else:
+                        logger.warn("[UNHANDLED] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
+
+                    datastore.setex("crate:pypi:changelog:%s" % line_hash, 2629743, datetime.datetime.utcnow().isoformat())
                 else:
-                    logger.warn("[UNHANDLED] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
+                    logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
+                    logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
 
-                datastore.setex("crate:pypi:changelog:%s" % line_hash, 2629743, datetime.datetime.utcnow().isoformat())
-            else:
-                logger.debug("[SKIP] %(name)s %(version)s %(timestamp)s %(action)s" % logdata)
-                logger.debug("[HASH] %(name)s %(version)s %(hash)s" % logdata)
-
-    datastore.set(PYPI_SINCE_KEY, current)
+        datastore.set(PYPI_SINCE_KEY, current)
 
 
 @task
