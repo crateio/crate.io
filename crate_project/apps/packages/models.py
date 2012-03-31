@@ -237,7 +237,8 @@ class Release(models.Model):
             msg = ""
 
             try:
-                description, changelog = self.description.split(".. :changelog:", 1)
+                bits = self.description.split(".. :changelog:", 1)
+                description = bits[0]
                 parts = publish_parts(source=smart_str(description), writer_name="html4css1", settings_overrides=docutils_settings)
             except SystemMessage:
                 msg = None
@@ -273,7 +274,14 @@ class Release(models.Model):
             msg = ""
 
             try:
-                description, changelog = self.description.split(".. :changelog:", 1)
+                bits = self.description.split(".. :changelog:", 1)
+
+                if len(bits) > 1:
+                    changelog = bits[1]
+                else:
+                    self._changelog_html = None
+                    return
+
                 parts = publish_parts(source=smart_str(changelog), writer_name="html4css1", settings_overrides=docutils_settings)
             except SystemMessage:
                 msg = None
