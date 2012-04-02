@@ -62,8 +62,6 @@ STATICFILES_FINDERS = [
 
 COMPRESS_OUTPUT_DIR = "cache"
 
-SECRET_KEY = ")ys)^6l18seiq)veen^41ox%l@6#o-2t*9-8n5$7$f+qi*x03$"
-
 TEMPLATE_LOADERS = [
     ("django.template.loaders.cached.Loader", [
         "django.template.loaders.filesystem.Loader",
