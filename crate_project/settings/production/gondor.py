@@ -1,4 +1,3 @@
-import json
 import os
 
 from .base import *
@@ -53,6 +52,12 @@ EMAIL_USE_TLS = True
 AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
 AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
 
-HAYSTACK_CONNECTIONS = json.loads(os.environ["HAYSTACK_CONNECTIONS"])
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": os.environ["HAYSTACK_DEFAULT_ENGINE"],
+        "URL": os.environ["HAYSTACK_DEFAULT_URL"],
+        "INDEX_NAME": os.environ["HAYSTACK_DEFAULT_INDEX_NAME"],
+    },
+}
 
 INTERCOM_USER_HASH_KEY = os.environ["INTERCOM_USER_HASH_KEY"]
