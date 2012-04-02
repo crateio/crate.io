@@ -1,6 +1,8 @@
+import json
+import os
+
 from .base import *
 
-from secret_settings import *
 from local_settings import *  # Instance specific settings (in deploy.settings_[INSTANCE_NAME]))
 
 # Fix Email Settings
@@ -39,3 +41,16 @@ CELERY_RESULT_BACKEND = "redis"
 CELERY_REDIS_HOST = GONDOR_REDIS_HOST
 CELERY_REDIS_PORT = GONDOR_REDIS_PORT
 CELERY_REDIS_PASSWORD = GONDOR_REDIS_PASSWORD
+
+EMAIL_HOST = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_PORT = int(os.environ["EMAIL_PORT"])
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_USE_TLS = True
+
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+
+HAYSTACK_CONNECTIONS = json.loads(os.environ["HAYSTACK_CONNECTIONS"])
+
+INTERCOM_USER_HASH_KEY = os.environ["INTERCOM_USER_HASH_KEY"]
