@@ -71,6 +71,8 @@ def history_release_update(instance, created, **kwargs):
 
 @receiver(post_save, sender=ReleaseFile)
 def history_releasefile_update(instance, created, **kwargs):
+    e = None
+
     if created:
         e = Event.objects.create(
             package=instance.release.package.name,
@@ -91,10 +93,10 @@ def history_releasefile_update(instance, created, **kwargs):
                 version=instance.release.version,
                 action=Event.ACTIONS.release_create
             )
-
-    e.data = {
-        "filename": instance.filename,
-        "digest": instance.digest,
-        "uri": instance.get_absolute_url(),
-    }
-    e.save()
+    if e is not None:
+        e.data = {
+            "filename": instance.filename,
+            "digest": instance.digest,
+            "uri": instance.get_absolute_url(),
+        }
+        e.save()
