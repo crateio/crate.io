@@ -95,5 +95,6 @@ def history_releasefile_update(instance, created, **kwargs):
     e.data = {
         "filename": instance.filename,
         "digest": instance.digest,
+        "uri": instance.get_absolute_url(),
     }
     e.save()
