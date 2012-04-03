@@ -62,6 +62,7 @@
                         <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">Info</a></li>
                         <li><a href="#files" data-toggle="tab">Files</a></li>
                         <li><a href="#all-versions" data-toggle="tab">All Versions ({{ total_versions }})</a></li>
+                        <li><a href="#history" data-toggle="tab">History</a></li>
                     </ul>
 
                     <div class="tab-content">
@@ -234,6 +235,54 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div id="history" class="tab-pane fade in">
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Package</th>
+                                        <th>Version</th>
+                                        <th>Action</th>
+                                        <th></th>
+                                </thead>
+                                <tbody>
+                                    {% for h in release.history %}
+                                        <tr>
+                                            <td>{{ h.created|date:"DATE_FORMAT" }}</td>
+                                            <td>{{ h.package }}</td>
+                                            <td>{{ h.version }}</td>
+                                            <td>{{ h.get_action_display }}</td>
+                                            <td>{% if h.data %}<a data-toggle="modal" href="#history-info-{{ h.pk }}">Info</a>{% endif %}</td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="5">This Package is older than the start of History Tracking.</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                            {% for h in release.history %}
+                                {% if h.data %}
+                                    <div id="history-info-{{ h.pk }}" class="modal hide fade">
+                                        <div class="modal-header">
+                                            <a href="#" class="close" data-dismiss="modal">×</a>
+                                            <h3>{{ h.package }} {{ h.version }} &mdash; {{ h.get_action_display }}</h3>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <dl>
+                                                {% for k,v in h.data.iteritems %}
+                                                    <dt>{{ k }}</dt>
+                                                    <dd>{{ v }}</dd>
+                                                {% endfor %}
+                                            </dl>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 {% endif %}
