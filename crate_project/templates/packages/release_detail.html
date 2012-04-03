@@ -278,6 +278,8 @@
                                                     <dt>{{ k }}</dt>
                                                     {% if k == "uri" %}
                                                         <dd><a href="{{ v }}">Download URI</a></dd>
+                                                    {% elif k == "digest" %}
+                                                        <dd><strong>{{ v|digest_type }}</strong>: {{ v|digest_value }}</dd>
                                                     {% else %}
                                                         <dd>{{ v }}</dd>
                                                     {% endif %}
