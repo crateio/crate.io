@@ -25,7 +25,7 @@ class Event(TimeStampedModel):
 
     action = models.CharField(max_length=25, choices=ACTIONS)
 
-    data = JSONField()
+    data = JSONField(null=True, blank=True)
 
 
 @receiver(post_save, sender=Package)
