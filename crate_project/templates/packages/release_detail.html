@@ -276,7 +276,11 @@
                                             <dl>
                                                 {% for k,v in h.data.iteritems %}
                                                     <dt>{{ k }}</dt>
-                                                    <dd>{{ v }}</dd>
+                                                    {% if k == "uri" %}
+                                                        <dd><a href="{{ v }}">Download URI</a></dd>
+                                                    {% else %}
+                                                        <dd>{{ v }}</dd>
+                                                    {% endif %}
                                                 {% endfor %}
                                             </dl>
                                         </div>
