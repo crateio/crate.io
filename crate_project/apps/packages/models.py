@@ -312,6 +312,7 @@ class Release(models.Model):
         return self._show_install_command
 
 
+@track_data("hidden")
 class ReleaseFile(models.Model):
 
     TYPES = Choices(
