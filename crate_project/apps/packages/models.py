@@ -30,6 +30,7 @@ from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
+from crate.utils.datatools import track_data
 from packages.utils import verlib
 
 ALLOWED_TAGS = bleach.ALLOWED_TAGS + [
@@ -137,6 +138,7 @@ class PackageURI(models.Model):
         return self.uri
 
 
+@track_data("hidden")
 class Release(models.Model):
 
     created = AutoCreatedField(_("created"), db_index=True)
