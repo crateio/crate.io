@@ -126,6 +126,12 @@ class Package(TimeStampedModel):
         if self.latest is not None:
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
+    @property
+    def history(self):
+        from history.models import Event
+
+        return Event.objects.filter(package=self.package.name)
+
 
 class PackageURI(models.Model):
     package = models.ForeignKey(Package, related_name="package_links")
@@ -310,6 +316,12 @@ class Release(models.Model):
             else:
                 self._show_install_command = True
         return self._show_install_command
+
+    @property
+    def history(self):
+        from history.models import Event
+
+        return Event.objects.filter(package=self.package.name, version=self.version)
 
 
 @track_data("hidden")
