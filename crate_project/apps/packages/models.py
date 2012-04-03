@@ -30,6 +30,7 @@ from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
+from crate.utils.datatools import track_data
 from packages.utils import verlib
 
 ALLOWED_TAGS = bleach.ALLOWED_TAGS + [
@@ -125,6 +126,12 @@ class Package(TimeStampedModel):
         if self.latest is not None:
             return "%(package)s==%(version)s" % {"package": self.name, "version": self.latest.version}
 
+    @property
+    def history(self):
+        from history.models import Event
+
+        return Event.objects.filter(package=self.package.name).order_by("-created")
+
 
 class PackageURI(models.Model):
     package = models.ForeignKey(Package, related_name="package_links")
@@ -137,6 +144,7 @@ class PackageURI(models.Model):
         return self.uri
 
 
+@track_data("hidden")
 class Release(models.Model):
 
     created = AutoCreatedField(_("created"), db_index=True)
@@ -309,7 +317,14 @@ class Release(models.Model):
                 self._show_install_command = True
         return self._show_install_command
 
+    @property
+    def history(self):
+        from history.models import Event
 
+        return Event.objects.filter(package=self.package.name).order_by("-created")
+
+
+@track_data("hidden")
 class ReleaseFile(models.Model):
 
     TYPES = Choices(
