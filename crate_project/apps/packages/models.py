@@ -324,7 +324,7 @@ class Release(models.Model):
         return Event.objects.filter(package=self.package.name).order_by("-created")
 
 
-@track_data("hidden", "file")
+@track_data("hidden")
 class ReleaseFile(models.Model):
 
     TYPES = Choices(

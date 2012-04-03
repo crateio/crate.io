@@ -16,6 +16,7 @@ from django.core.files.base import ContentFile
 from django.db import transaction
 from django.utils.timezone import utc
 
+from history.models import Event
 from packages.models import Package, Release, TroveClassifier
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ReleaseFile
 from pypi.exceptions import PackageHashMismatch
@@ -423,6 +424,17 @@ class PyPIPackage(object):
                         release_file.full_clean()
                         release_file.file.save(file_data["filename"], ContentFile(resp.content), save=False)
                         release_file.save()
+
+                        Event.objects.create(
+                            package=release_file.release.package.name,
+                            version=release_file.release.version,
+                            action=Event.ACTIONS.file_add,
+                            data={
+                                "filename": release_file.filename,
+                                "digest": release_file.digest,
+                                "uri": release_file.get_absolute_url(),
+                            }
+                        )
 
                         # Store data relating to this file (if modified etc)
                         stored_file_data = {

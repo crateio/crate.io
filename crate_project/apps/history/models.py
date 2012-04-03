@@ -73,26 +73,20 @@ def history_release_update(instance, created, **kwargs):
 def history_releasefile_update(instance, created, **kwargs):
     e = None
 
-    if instance.has_changed("file"):
-        e = Event.objects.create(
-            package=instance.release.package.name,
-            version=instance.release.version,
-            action=Event.ACTIONS.file_add
-        )
-    else:
-        if instance.has_changed("hidden"):
-            if instance.hidden:
-                e = Event.objects.create(
-                    package=instance.release.package.name,
-                    version=instance.release.version,
-                    action=Event.ACTIONS.file_remove
-                )
-            else:
-                e = Event.objects.create(
-                    package=instance.release.package.name,
-                    version=instance.release.version,
-                    action=Event.ACTIONS.file_add
-                )
+    if instance.has_changed("hidden"):
+        if instance.hidden:
+            e = Event.objects.create(
+                package=instance.release.package.name,
+                version=instance.release.version,
+                action=Event.ACTIONS.file_remove
+            )
+        else:
+            e = Event.objects.create(
+                package=instance.release.package.name,
+                version=instance.release.version,
+                action=Event.ACTIONS.file_add
+            )
+
     if e is not None:
         e.data = {
             "filename": instance.filename,
