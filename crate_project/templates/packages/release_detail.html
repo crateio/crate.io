@@ -250,7 +250,7 @@
                                 <tbody>
                                     {% for h in release.history %}
                                         <tr>
-                                            <td>{{ h.created|date:"DATE_FORMAT" }}</td>
+                                            <td>{{ h.created|date:"DATETIME_FORMAT" }}</td>
                                             <td>{{ h.package }}</td>
                                             <td>{{ h.version }}</td>
                                             <td>{{ h.get_action_display }}</td>
