@@ -80,12 +80,6 @@ def history_releasefile_update(instance, created, **kwargs):
                 version=instance.release.version,
                 action=Event.ACTIONS.file_remove
             )
-        else:
-            e = Event.objects.create(
-                package=instance.release.package.name,
-                version=instance.release.version,
-                action=Event.ACTIONS.file_add
-            )
 
     if e is not None:
         e.data = {
