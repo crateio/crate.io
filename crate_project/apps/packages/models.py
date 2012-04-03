@@ -130,7 +130,7 @@ class Package(TimeStampedModel):
     def history(self):
         from history.models import Event
 
-        return Event.objects.filter(package=self.package.name)
+        return Event.objects.filter(package=self.package.name).order_by("-created")
 
 
 class PackageURI(models.Model):
@@ -321,7 +321,7 @@ class Release(models.Model):
     def history(self):
         from history.models import Event
 
-        return Event.objects.filter(package=self.package.name, version=self.version)
+        return Event.objects.filter(package=self.package.name).order_by("-created")
 
 
 @track_data("hidden")
