@@ -83,13 +83,13 @@ def history_releasefile_update(instance, created, **kwargs):
         if instance.has_changed("hidden"):
             if instance.hidden:
                 e = Event.objects.create(
-                    package=instance.release.name,
+                    package=instance.release.package.name,
                     version=instance.release.version,
                     action=Event.ACTIONS.file_remove
                 )
             else:
                 e = Event.objects.create(
-                    package=instance.release.name,
+                    package=instance.release.package.name,
                     version=instance.release.version,
                     action=Event.ACTIONS.file_add
                 )
