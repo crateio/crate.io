@@ -50,7 +50,7 @@ def history_release_update(instance, created, **kwargs):
     if created:
         Event.objects.create(
             package=instance.package.name,
-            release=instance.version,
+            version=instance.version,
             action=Event.ACTIONS.release_create
         )
 
@@ -58,13 +58,13 @@ def history_release_update(instance, created, **kwargs):
         if instance.hidden:
             Event.objects.create(
                 package=instance.package.name,
-                release=instance.version,
+                version=instance.version,
                 action=Event.ACTIONS.release_delete
             )
         else:
             Event.objects.create(
                 package=instance.package.name,
-                release=instance.version,
+                version=instance.version,
                 action=Event.ACTIONS.release_create
             )
 
@@ -74,7 +74,7 @@ def history_releasefile_update(instance, created, **kwargs):
     if created:
         e = Event.objects.create(
             package=instance.release.package.name,
-            release=instance.release.version,
+            version=instance.release.version,
             action=Event.ACTIONS.release_create
         )
 
@@ -82,13 +82,13 @@ def history_releasefile_update(instance, created, **kwargs):
         if instance.hidden:
             e = Event.objects.create(
                 package=instance.release.name,
-                release=instance.release.version,
+                version=instance.release.version,
                 action=Event.ACTIONS.release_delete
             )
         else:
             e = Event.objects.create(
                 package=instance.release.name,
-                release=instance.release.version,
+                version=instance.release.version,
                 action=Event.ACTIONS.release_create
             )
 
