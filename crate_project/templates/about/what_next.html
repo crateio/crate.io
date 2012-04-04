@@ -1,12 +1,11 @@
 {% extends "site_base.html" %}
 
-{% load i18n %}
 {% load ifsetting_tag %}
 
-{% block head_title %}{% trans "What Next?" %}{% endblock %}
+{% block head_title %}What Next?{% endblock %}
 
 {% block body %}
-    <h1>{% trans "What Next?" %}</h1>
+    <h1>What Next?</h1>
 
     {% if user.is_authenticated %}
         <p>Here are some things to do to get started with this site:</p>
@@ -35,9 +34,9 @@
             <p class="what_next">
                 {% ifsetting ACCOUNT_OPEN_SIGNUP %}
                     {% url acct_signup as signup_url %}
-                    {% blocktrans %}Start by <a href="{{ signup_url }}">signing up</a> and <a href="{{ login_url }}">logging in</a>.{% endblocktrans %}
+                    Start by <a href="{{ signup_url }}">signing up</a> and <a href="{{ login_url }}">logging in</a>.
                 {% else %}
-                    {% blocktrans %}Start by <a href="{{ login_url }}">logging in</a>.{% endblocktrans %}
+                    Start by <a href="{{ login_url }}">logging in</a>.
                 {% endifsetting %}
             </p>
         {% endif %}

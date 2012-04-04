@@ -31,7 +31,7 @@
                                 {{ form.q.errors }}
                                 {{ form.q }}
 
-                                <input type="submit" class="btn btn-primary" value="Search">
+                                <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
                             </div>
                         </div>
 
@@ -52,65 +52,65 @@
         <div class="row">
             <div class="span3">
                 <div class="well">
-                    <h3>Refine Results</h3>
+                    <h3>{% trans "Refine Results" %}</h3>
 
                     <ul class="nav nav-list">
                         {% if facets.fields and facets.fields.python_versions %}
-                            <li class="nav-header">By Python Version</li>
+                            <li class="nav-header">{% trans "By Python Version" %}</li>
                             {% if faceted_by.python %}
                                 {% for ver in facets.fields.python_versions %}
                                     {% if ver.0 == faceted_by.python %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon icon-remove"></i> {{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon icon-remove"></i> {% trans ver.0 %} ({{ ver.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
                                 {% for ver in facets.fields.python_versions %}
-                                    <li><a href="{{ request.get_full_path|facet_python:ver.0 }}">{{ ver.0|default:'No python version' }} ({{ ver.1 }})</a></li>
+                                    <li><a href="{{ request.get_full_path|facet_python:ver.0 }}">{% trans ver.0 %} ({{ ver.1 }})</a></li>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
 
                         {% if facets.fields and facets.fields.operating_systems %}
-                            <li class="nav-header">By Operating System</li>
+                            <li class="nav-header">{% trans "By Operating System" %}</li>
                             {% if faceted_by.os %}
                                 {% for os in facets.fields.operating_systems %}
                                     {% if os.0 == faceted_by.os %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon icon-remove"></i> {{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon icon-remove"></i> {% trans os.0 %} ({{ os.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
                                 {% for os in facets.fields.operating_systems %}
-                                    <li><a href="{{ request.get_full_path|facet_os:os.0 }}">{{ os.0|default:'No operating system' }} ({{ os.1 }})</a></li>
+                                    <li><a href="{{ request.get_full_path|facet_os:os.0 }}">{% trans os.0 %} ({{ os.1 }})</a></li>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
 
                         {% if facets.fields and facets.fields.licenses %}
-                            <li class="nav-header">By License</li>
+                            <li class="nav-header">{% trans "By License" %}</li>
                             {% if faceted_by.license %}
                                 {% for lice in facets.fields.licenses %}
                                     {% if lice.0 == faceted_by.license %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon icon-remove"></i> {{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon icon-remove"></i> {% trans lice.0 %} ({{ lice.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
                                 {% for lice in facets.fields.licenses %}
-                                    <li><a href="{{ request.get_full_path|facet_license:lice.0 }}">{{ lice.0|default:'No license' }} ({{ lice.1 }})</a></li>
+                                    <li><a href="{{ request.get_full_path|facet_license:lice.0 }}">{% trans lice.0 %} ({{ lice.1 }})</a></li>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
 
                         {% if facets.fields and facets.fields.implementations %}
-                            <li class="nav-header">By Implementation</li>
+                            <li class="nav-header">{% trans "By Implementation" %}</li>
                             {% if faceted_by.implementation %}
                                 {% for impl in facets.fields.implementations %}
                                     {% if impl.0 == faceted_by.implementation %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon icon-remove"></i> {{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
+                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon icon-remove"></i> {% trans impl.0 %} ({{ impl.1 }})</a></li>
                                     {% endif %}
                                 {% endfor %}
                             {% else %}
                                 {% for impl in facets.fields.implementations %}
-                                    <li><a href="{{ request.get_full_path|facet_implementation:impl.0 }}">{{ impl.0|default:'No implementation' }} ({{ impl.1 }})</a></li>
+                                    <li><a href="{{ request.get_full_path|facet_implementation:impl.0 }}">{% trans impl.0 %} ({{ impl.1 }})</a></li>
                                 {% endfor %}
                             {% endif %}
                         {% endif %}
@@ -125,20 +125,20 @@
                             {% include "search/partials/package.html" with result=result %}
                         </div>
                     {% empty %}
-                        <p>No results found.</p>
+                        <p>{% trans "No results found." %}</p>
                     {% endfor %}
                 </div>
 
                 {% if is_paginated %}
                     <div class="pagination">
                         <ul>
-                            <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; Previous</a></li>
+                            <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; {% trans "Previous" %}</a></li>
 
                             {% for page_num in paginator.page_range|paginate_numbers:page.number %}
                                 <li{% if page_num == page.number %} class="active"{% endif %}><a href="{{ request.get_full_path|repage:page_num }}">{{ page_num }}</a></li>
                             {% endfor %}
 
-                            <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">Next &rarr;</a></li>
+                            <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">{% trans "Next" %} &rarr;</a></li>
                         </ul>
                     </div>
                 {% endif %}

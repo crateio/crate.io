@@ -147,8 +147,8 @@ class PackageURI(models.Model):
 @track_data("hidden")
 class Release(models.Model):
 
-    created = AutoCreatedField(_("created"), db_index=True)
-    modified = AutoLastModifiedField(_("modified"))
+    created = AutoCreatedField("created", db_index=True)
+    modified = AutoLastModifiedField("modified")
 
     package = models.ForeignKey(Package, related_name="releases")
     version = models.CharField(max_length=512)
@@ -337,8 +337,8 @@ class ReleaseFile(models.Model):
         ("bdist_wininst", "bdist_wininst"),
     )
 
-    created = AutoCreatedField(_("created"), db_index=True)
-    modified = AutoLastModifiedField(_("modified"))
+    created = AutoCreatedField("created", db_index=True)
+    modified = AutoLastModifiedField("modified")
 
     hidden = models.BooleanField(default=False)
 
@@ -440,8 +440,8 @@ class ChangeLog(models.Model):
         ("updated", "Updated"),
     )
 
-    created = AutoCreatedField(_("created"), db_index=True)
-    modified = AutoLastModifiedField(_("modified"))
+    created = AutoCreatedField("created", db_index=True)
+    modified = AutoLastModifiedField("modified")
 
     type = models.CharField(max_length=25, choices=TYPES, db_index=True)
     package = models.ForeignKey(Package)

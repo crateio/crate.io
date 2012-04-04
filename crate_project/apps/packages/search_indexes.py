@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_noop as _
+
 from haystack import indexes
 
 from packages.models import Package
@@ -9,7 +11,7 @@ LICENSES = {
     "GNU Affero General Public License v3": "Affero GPL",
     "Apache Software License": "Apache License",
     "ISC License (ISCL)": "ISC License",
-    "Other/Proprietary License": "Other/Proprietary",
+    "Other/Proprietary License": _("Other/Proprietary"),
 }
 
 
@@ -70,7 +72,7 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
                         python_versions.append(classifier.trove.rsplit("::", 1)[1].strip())
 
             if not licenses:
-                licenses = ["Unknown"]
+                licenses = [_("Unknown")]
 
             licenses = [x for x in licenses if x not in ["OSI Approved"]]
             licenses = [LICENSES.get(x, x) for x in licenses]
@@ -78,15 +80,15 @@ class PackageIndex(PackageCelerySearchIndex, indexes.Indexable):
             data["licenses"] = licenses
 
             if not operating_systems:
-                operating_systems = ["Unknown"]
+                operating_systems = [_("Unknown")]
             data["operating_systems"] = operating_systems
 
             if not implementations:
-                implementations = ["Unknown"]
+                implementations = [_("Unknown")]
             data["implementations"] = implementations
 
             if not python_versions:
-                python_versions = ["Unknown"]
+                python_versions = [_("Unknown")]
             data["python_versions"] = python_versions
 
         # Pack in all the versions in decending order.

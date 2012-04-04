@@ -19,7 +19,7 @@
         <div class="hero-unit">
             {% block banner %}
                 <h1>Crate.io</h1>
-                <p>Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.</p>
+                <p>{% trans "Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation." %}</p>
             {% endblock %}
             <div class="row">
             <div id="main-search" class="span5">
@@ -29,9 +29,9 @@
                         <label class="control-label visuallyhidden" for="id_q">{{ form.q.label }}</label>
                         <div class="controls">
                             {{ form.q.errors }}
-                            <input id="id_q" type="text" placeholder="Search" class="span4" name="q">
+                            <input id="id_q" type="text" placeholder="{% trans "Search" %}" class="span4" name="q">
 
-                            <input type="submit" class="btn btn-primary" value="Search">
+                            <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
                         </div>
                     </div>
 
@@ -42,18 +42,17 @@
                         {% package_count as total_packages %}
                         {% get_oldest_package as oldest_package %}
 
-                        <span class="downloads">{{ download_count|intcomma }} downloads</span>
-                        of {{ total_packages|intcomma }} packages since {{ oldest_package.created|date:"YEAR_MONTH_FORMAT" }}
+                        {% blocktrans with count=download_count|intcomma total=total_packages|intcomma since=oldest_package.created|date:"YEAR_MONTH_FORMAT" %}<span class="downloads">{{ count }} downloads</span> of {{ total }} packages since {{ since }}{% endblocktrans %}
                     </div>
             </div>
             <div class="row">
                 <div class="span3">
-                    <h4>New Packages</h4>
+                    <h4>{% trans "New Packages" %}</h4>
                     {% new_packages 5 as changelogs %}
                     {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
                 </div>
                 <div class="span3">
-                    <h4>Just Updated</h4>
+                    <h4>{% trans "Just Updated" %}</h4>
                     {% updated_packages 5 as changelogs %}
                     {% include "packages/partials/small_list.html" with changelogs=changelogs only %}
                 </div>
