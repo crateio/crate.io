@@ -1,17 +1,20 @@
+{% load i18n %}
+{% load humanize %}
+
 <div class="result row">
         <div class="span9 package-name"><a href="{{ result.url }}">{{ result.object.name }}</a></div>
 
         <div class="span3">
             {% if result.author %}
-                <div class="author"><em>by {{ result.author }}</em></div>
+                <div class="author"><em>{% blocktrans with author=result.author %}by {{ author }}{% endblocktrans %}</em></div>
             {% elif result.maintainer %}
-                <div class="maintainer"><em>by {{ result.maintainer }}</em></div>
+                <div class="maintainer"><em>{% blocktrans with author=result.maintainer %}by {{ author }}{% endblocktrans %}</em></div>
             {% else %}
                 &nbsp;
             {% endif %}
         </div>
         <div class="span2">
-            <div class="downloads"><span class="count">{{ result.downloads }}</span> downloads</div>
+            <div class="downloads">{% blocktrans with downloads=result.downloads|intcomma %}<span class="count">{{ downloads }}</span> downloads{% endblocktrans %}</div>
         </div>
         <div class="span2">{# @@@ Link to Source #}</div>
         <div class="span2">{# @@@ Link to Documentation #}</div>

@@ -40,6 +40,10 @@ USE_I18N = False
 USE_L10N = True
 USE_TZ = True
 
+LOCALE_PATHS = [
+    os.path.join(PROJECT_ROOT, os.pardir, "locale"),
+]
+
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, "site_media", "media")
 MEDIA_URL = "/site_media/media/"
 

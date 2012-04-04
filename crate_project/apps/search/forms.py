@@ -1,18 +1,20 @@
 from django import forms
+from django.utils.translation import ugettext as _
+
 from haystack.forms import SearchForm as HaystackSearchForm
 from haystack.inputs import AutoQuery
 from haystack.query import SQ
 
 
 class SearchForm(HaystackSearchForm):
-    has_releases = forms.BooleanField(label="Has Releases", required=False, initial=True)
+    has_releases = forms.BooleanField(label=_("Has Releases"), required=False, initial=True)
 
     def __init__(self, *args, **kwargs):
         super(SearchForm, self).__init__(*args, **kwargs)
 
         self.fields["q"].widget.attrs.update({
             "class": "span10",
-            "placeholder": "Search",
+            "placeholder": _("Search"),
         })
 
     def search(self):
