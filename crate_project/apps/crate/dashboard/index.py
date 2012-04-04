@@ -1,4 +1,3 @@
-from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from admin_tools.dashboard import modules, Dashboard
@@ -13,28 +12,28 @@ class CrateIndexDashboard(Dashboard):
         site_name = get_admin_site_name(context)
         # append a link list module for "quick links"
         self.children.append(modules.LinkList(
-            _("Quick links"),
+            "Quick links",
             layout="inline",
             draggable=False,
             deletable=False,
             collapsible=False,
             children=[
-                [_("Return to site"), "/"],
-                [_("Change password"),
+                ["Return to site", "/"],
+                ["Change password",
                  reverse("%s:password_change" % site_name)],
-                [_("Log out"), reverse("%s:logout" % site_name)],
+                ["Log out", reverse("%s:logout" % site_name)],
             ]
         ))
 
         # append an app list module for "Administration"
         self.children.append(modules.AppList(
-            _("Administration"),
+            "Administration",
             models=('django.contrib.*',),
         ))
 
         # append an app list module for "Applications"
         self.children.append(modules.AppList(
-            _("Applications"),
+            "Applications",
             exclude=[
                 "django.contrib.*",
                 "pinax.apps.*",
@@ -44,12 +43,12 @@ class CrateIndexDashboard(Dashboard):
             ],
         ))
 
-        self.children.append(StatusModule(_("Status")))
+        self.children.append(StatusModule("Status"))
 
         self.children.append(RedisStatusModule(
-            _("Redis Status"),
+            "Redis Status",
 
         ))
 
         # append a recent actions module
-        self.children.append(modules.RecentActions(_("Recent Actions"), 5))
+        self.children.append(modules.RecentActions("Recent Actions", 5))
