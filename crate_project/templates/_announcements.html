@@ -8,11 +8,4 @@
             </div>
         {% endfor %}
     </div>
-    <script>
-        $(function(){
-            $('#site_wide_announcements div.alert .close').bind('click', function () {
-                $.get($(this).data("closeUrl"));
-            });
-        });
-    </script>
 {% endif %}
