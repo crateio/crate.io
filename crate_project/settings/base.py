@@ -49,6 +49,7 @@ LOCALE_PATHS = [
 LANGUAGES = (
     ("en", gettext("English")),
     ("fr", gettext("French")),
+    ("de", gettext("German")),
     ("pt-br", gettext("Portuguese (Brazil)")),
     ("ru", gettext("Russian")),
 )
