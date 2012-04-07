@@ -52,6 +52,7 @@ LANGUAGES = (
     ("de", gettext("German")),
     ("pt-br", gettext("Portuguese (Brazil)")),
     ("ru", gettext("Russian")),
+    # ("sv", gettext("Swedish")),
 )
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, "site_media", "media")
