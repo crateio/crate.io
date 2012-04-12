@@ -14,6 +14,7 @@ from docutils.utils import SystemMessage
 
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
@@ -102,9 +103,15 @@ class Package(TimeStampedModel):
 
     @property
     def downloads(self):
-        total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        KEY = "crate:packages:package:%s:downloads" % self.pk
+
+        total_downloads = cache.get(KEY)
         if total_downloads is None:
-            return 0
+            total_downloads = ReleaseFile.objects.filter(release__package=self).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+            if total_downloads is None:
+                total_downloads = 0
+
+            cache.set(KEY, total_downloads)
         return total_downloads
 
     @property
@@ -154,6 +161,7 @@ class Release(models.Model):
     version = models.CharField(max_length=512)
 
     hidden = models.BooleanField(default=False)
+    show_install_command = models.BooleanField(default=True)
 
     order = models.IntegerField(default=0, db_index=True)
 
@@ -207,6 +215,11 @@ class Release(models.Model):
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
 
+        if self.classifiers.filter(trove="Framework :: Plone").exists():
+            self.show_install_command = False
+        else:
+            self.show_install_command = True
+
         return super(Release, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -214,9 +227,16 @@ class Release(models.Model):
 
     @property
     def downloads(self):
-        total_downloads = ReleaseFile.objects.filter(release__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        KEY = "crate:packages:release:%s:downloads" % self.pk
+
+        total_downloads = cache.get(KEY)
+
         if total_downloads is None:
-            return 0
+            total_downloads = self.files.aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+            if total_downloads is None:
+                total_downloads = 0
+            cache.set(KEY, total_downloads)
+
         return total_downloads
 
     @property
@@ -307,15 +327,6 @@ class Release(models.Model):
             self._changelog_html = msg
 
         return self._changelog_html
-
-    @property
-    def show_install_command(self):
-        if not hasattr(self, "_show_install_command"):
-            if self.classifiers.filter(trove="Framework :: Plone").exists():
-                self._show_install_command = False
-            else:
-                self._show_install_command = True
-        return self._show_install_command
 
     @property
     def history(self):

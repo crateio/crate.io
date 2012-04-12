@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
+from model_utils.fields import AutoCreatedField, AutoLastModifiedField
 from model_utils.models import TimeStampedModel
 
 
@@ -35,7 +36,10 @@ class PyPIServerSigPage(TimeStampedModel):
         return self.package.name
 
 
-class PyPIIndexPage(TimeStampedModel):
+class PyPIIndexPage(models.Model):
+
+    created = AutoCreatedField("created", db_index=True)
+    modified = AutoLastModifiedField("modified")
 
     content = models.TextField()
 
