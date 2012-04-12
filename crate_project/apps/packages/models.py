@@ -154,6 +154,7 @@ class Release(models.Model):
     version = models.CharField(max_length=512)
 
     hidden = models.BooleanField(default=False)
+    show_install_command = models.BooleanField(default=True)
 
     order = models.IntegerField(default=0, db_index=True)
 
@@ -207,6 +208,11 @@ class Release(models.Model):
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
 
+        if self.classifiers.filter(trove="Framework :: Plone").exists():
+            self.show_install_command = False
+        else:
+            self.show_install_command = True
+
         return super(Release, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -226,15 +232,6 @@ class Release(models.Model):
     @property
     def requirement_line(self):
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
-
-    @property
-    def show_install_command(self):
-        if not hasattr(self, "_show_install_command"):
-            if self.classifiers.filter(trove="Framework :: Plone").exists():
-                self._show_install_command = False
-            else:
-                self._show_install_command = True
-        return self._show_install_command
 
     @property
     def description_html(self):
