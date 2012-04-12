@@ -85,7 +85,14 @@ def random_packages(num):
 
 @register.assignment_tag
 def package_versions(package_name, num=None):
-    qs = Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")
+    KEY = "crate:packages:package_versions:%s" % package_name
+
+    qs = cache.get(KEY)
+
+    if qs is None:
+        qs = Release.objects.filter(package__name=package_name).select_related("package").order_by("-order")
+        cache.set(KEY, list(qs))
+
     if num is not None:
         qs = qs[:num]
     return qs
