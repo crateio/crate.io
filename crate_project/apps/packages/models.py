@@ -328,13 +328,13 @@ class Release(models.Model):
 class ReleaseFile(models.Model):
 
     TYPES = Choices(
-        ("sdist", "Source"),
+        ("sdist", _("Source")),
         ("bdist_egg", "Egg"),
         ("bdist_msi", "MSI"),
         ("bdist_dmg", "DMG"),
         ("bdist_rpm", "RPM"),
-        ("bdist_dumb", "bdist_dumb"),
-        ("bdist_wininst", "bdist_wininst"),
+        ("bdist_dumb", _("Dumb Binary Distribution")),
+        ("bdist_wininst", _("Windows Installer Binary Distribution")),
     )
 
     created = AutoCreatedField("created", db_index=True)

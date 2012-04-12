@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
+from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
 from model_utils import Choices
@@ -12,12 +13,12 @@ from packages.models import Package, Release, ReleaseFile
 class Event(TimeStampedModel):
 
     ACTIONS = Choices(
-            ("package_create", "Package Created"),
-            ("package_delete", "Package Deleted"),
-            ("release_create", "Release Created"),
-            ("release_delete", "Release Deleted"),
-            ("file_add", "File Added"),
-            ("file_remove", "File Removed"),
+            ("package_create", _("Package Created")),
+            ("package_delete", _("Package Deleted")),
+            ("release_create", _("Release Created")),
+            ("release_delete", _("Release Deleted")),
+            ("file_add", _("File Added")),
+            ("file_remove", _("File Removed")),
         )
 
     package = models.SlugField(max_length=150)

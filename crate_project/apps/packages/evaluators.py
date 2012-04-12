@@ -4,6 +4,7 @@ from slumber import exceptions
 
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext as _
 
 from evaluator import suite
 
@@ -12,13 +13,13 @@ from packages.utils import verlib
 
 
 class PEP386Compatability(object):
-    title = "PEP386 Compatibility"
-    message = mark_safe("PEP386 defines a specific allowed syntax for Python package versions."
+    title = _("PEP386 Compatibility")
+    message = mark_safe(_("PEP386 defines a specific allowed syntax for Python package versions."
                 "<br /><br />"
                 "Previously it was impossible to accurately determine across any Python package what "
                 "order the versions should go in, but with PEP386 we can now intelligently sort by version..."
                 "<br /><br />"
-                "But only if the version numbers are compatible!")
+                "But only if the version numbers are compatible!"))
 
     def evaluate(self, release):
         normalized = verlib.suggest_normalized_version(release.version)
@@ -27,25 +28,25 @@ class PEP386Compatability(object):
             # Release Is Already Normalized
             return {
                 "level": "success",
-                "message": mark_safe('Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.'),
+                "message": mark_safe(_('Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.')),
             }
         elif normalized is not None:
             # Release Isn't Normalized, But We Can Figure It Out
             return {
                 "level": None,
-                "message": mark_safe('Almost Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.'),
+                "message": mark_safe(_('Almost Compatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.')),
             }
         else:
             # We Can't Normalize the Release Version
             return {
                 "level": "error",
-                "message": mark_safe('Incompatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.'),
+                "message": mark_safe(_('Incompatible with <a href="http://www.python.org/dev/peps/pep-0386/">PEP386</a>.')),
             }
 
 
 class PackageHosting(object):
-    title = "Package Hosting"
-    message = mark_safe("Did you know that packages listed on PyPI aren't required to host there?"
+    title = _("Package Hosting")
+    message = mark_safe(_("Did you know that packages listed on PyPI aren't required to host there?"
                 "<br /><br />"
                 "When your package manager tries to install a package from PyPI it looks in number "
                 "of locations, one such location is an author specified url of where the package can "
@@ -53,29 +54,29 @@ class PackageHosting(object):
                 "<br /><br />"
                 "Packages hosted by the author means that installing this package depends on the "
                 "authors server staying up, adding another link in the chain that can cause your "
-                "installation to fail")
+                "installation to fail"))
 
     def evaluate(self, release):
         if release.files.all().exists():
             return {
                 "level": "success",
-                "message": "Package is hosted on PyPI",
+                "message": _("Package is hosted on PyPI"),
             }
         elif release.download_uri:
             return {
                 "level": "error",
-                "message": "Package isn't hosted on PyPI",
+                "message": _("Package isn't hosted on PyPI"),
             }
         else:
             return {
                 "level": "error",
-                "message": "No Package Hosting",
+                "message": _("No Package Hosting"),
             }
 
 
 class RTDocs(object):
-    title = "Documentation hosted on Read The Docs"
-    message = mark_safe("Documentation can be one of the most important parts of any library. "
+    title = _("Documentation hosted on Read The Docs")
+    message = mark_safe(_("Documentation can be one of the most important parts of any library. "
                 "Even more important than just having documentation, is making sure that people are "
                 "able to find it easily."
                 "<br /><br />"
@@ -86,7 +87,7 @@ class RTDocs(object):
                 "what is quickly becoming a one stop shop for online open source documentation."
                 "<br /><br />"
                 "<small>If this says you aren't hosted on Read The Docs and you are please contact "
-                "<a href='mailto:support@crate.io'>support@crate.io</a></small>")
+                "<a href='mailto:support@crate.io'>support@crate.io</a></small>"))
 
     def evaluate(self, release):
         qs = ReadTheDocsPackageSlug.objects.filter(package=release.package)
@@ -103,7 +104,7 @@ class RTDocs(object):
             except exceptions.SlumberHttpBaseException:
                 return {
                     "level": "unknown",
-                    "message": mark_safe('There was an error with the <a href="http://readthedocs.org/">Read The Docs</a> API.'),
+                    "message": mark_safe(_('There was an error with the <a href="http://readthedocs.org/">Read The Docs</a> API.')),
                 }
 
             if results["objects"]:
@@ -118,12 +119,12 @@ class RTDocs(object):
         if hosted_on_rtd:
             return {
                 "level": "success",
-                "message": mark_safe('Available on <a href="%s">Read The Docs</a>' % url),
+                "message": mark_safe(_('Available on <a href="%s">Read The Docs</a>') % url),
             }
         else:
             return {
                 "level": "unknown",
-                "message": mark_safe('Unavailable on <a href="http://readthedocs.org/">Read The Docs</a>')
+                "message": mark_safe(_('Unavailable on <a href="http://readthedocs.org/">Read The Docs</a>'))
             }
 
 
