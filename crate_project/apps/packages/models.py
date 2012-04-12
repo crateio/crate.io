@@ -14,6 +14,7 @@ from docutils.utils import SystemMessage
 
 
 from django.conf import settings
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Sum
@@ -102,9 +103,15 @@ class Package(TimeStampedModel):
 
     @property
     def downloads(self):
-        total_downloads = ReleaseFile.objects.filter(release__package=self).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        KEY = "crate:packages:package:%s:downloads" % self.pk
+
+        total_downloads = cache.get(KEY)
         if total_downloads is None:
-            total_downloads = 0
+            total_downloads = ReleaseFile.objects.filter(release__package=self).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+            if total_downloads is None:
+                total_downloads = 0
+
+            cache.set(KEY, total_downloads)
         return total_downloads
 
     @property
@@ -220,9 +227,16 @@ class Release(models.Model):
 
     @property
     def downloads(self):
-        total_downloads = self.files.aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        KEY = "crate:packages:release:%s:downloads" % self.pk
+
+        total_downloads = cache.get(KEY)
+
         if total_downloads is None:
-            total_downloads = 0
+            total_downloads = self.files.aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+            if total_downloads is None:
+                total_downloads = 0
+            cache.set(KEY, total_downloads)
+
         return total_downloads
 
     @property
