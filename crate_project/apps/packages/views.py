@@ -21,7 +21,7 @@ class ReleaseDetail(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super(ReleaseDetail, self).get_context_data(**kwargs)
         ctx.update({
-            "release_files": self.object.files.filter(hidden=False),
+            "release_files": [x for x in self.object.files.all() if not x.hidden],
             "version_specific": self.kwargs.get("version", None),
         })
         return ctx
