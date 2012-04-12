@@ -215,12 +215,17 @@ class Release(models.Model):
             # @@@ We Swallow Exceptions here, but it's the best way that I can think of atm.
             pass
 
+        super(Release, self).save(*args, **kwargs)
+
+        _current_show_install_command = self.show_install_command
+
         if self.classifiers.filter(trove="Framework :: Plone").exists():
             self.show_install_command = False
         else:
             self.show_install_command = True
 
-        return super(Release, self).save(*args, **kwargs)
+        if _current_show_install_command != self.show_install_command:
+            super(Release, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("package_detail", kwargs={"package": self.package.name, "version": self.version})
