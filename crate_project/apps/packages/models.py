@@ -102,9 +102,9 @@ class Package(TimeStampedModel):
 
     @property
     def downloads(self):
-        total_downloads = ReleaseFile.objects.filter(release__package__pk=self.pk).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
+        total_downloads = ReleaseFile.objects.filter(release__package=self).aggregate(total_downloads=Sum("downloads"))["total_downloads"]
         if total_downloads is None:
-            return 0
+            total_downloads = 0
         return total_downloads
 
     @property
