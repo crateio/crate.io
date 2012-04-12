@@ -228,6 +228,15 @@ class Release(models.Model):
         return "%(package)s==%(version)s" % {"package": self.package.name, "version": self.version}
 
     @property
+    def show_install_command(self):
+        if not hasattr(self, "_show_install_command"):
+            if self.classifiers.filter(trove="Framework :: Plone").exists():
+                self._show_install_command = False
+            else:
+                self._show_install_command = True
+        return self._show_install_command
+
+    @property
     def description_html(self):
         if not hasattr(self, "_description_html"):
             # @@@ Consider Saving This to the DB
@@ -307,15 +316,6 @@ class Release(models.Model):
             self._changelog_html = msg
 
         return self._changelog_html
-
-    @property
-    def show_install_command(self):
-        if not hasattr(self, "_show_install_command"):
-            if self.classifiers.filter(trove="Framework :: Plone").exists():
-                self._show_install_command = False
-            else:
-                self._show_install_command = True
-        return self._show_install_command
 
     @property
     def history(self):
