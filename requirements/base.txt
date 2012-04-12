@@ -8,7 +8,7 @@
 --extra-index-url=http://dist.pinaxproject.com/fresh-start/
 
 Django==1.4
--e git+https://github.com/dstufft/pinax.git@4f325913db26deaf723397aacb239de2ed24a75e#egg=Pinax
+-e git+https://github.com/dstufft/pinax.git@#egg=Pinax
 
 
 django-debug-toolbar==0.9.4

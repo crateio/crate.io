@@ -9,8 +9,6 @@ from django.utils.http import http_date
 
 import djcelery
 
-gettext = lambda s: s
-
 djcelery.setup_loader()
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
@@ -47,13 +45,13 @@ LOCALE_PATHS = [
 ]
 
 LANGUAGES = (
-    ("en", gettext("English")),
-    ("es", gettext("Spanish")),
-    ("fr", gettext("French")),
-    ("de", gettext("German")),
-    ("pt-br", gettext("Portuguese (Brazil)")),
-    ("ru", gettext("Russian")),
-    # ("sv", gettext("Swedish")),
+    ("en", "English"),
+    ("es", "Spanish"),
+    ("fr", "French"),
+    ("de", "German"),
+    ("pt-br", "Portuguese (Brazil)"),
+    ("ru", "Russian"),
+    # ("sv", "Swedish"),
 )
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, "site_media", "media")
