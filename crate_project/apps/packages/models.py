@@ -377,10 +377,7 @@ class ReleaseFile(models.Model):
         return os.path.basename(self.file.name)
 
     def get_absolute_url(self):
-        try:
-            return self.file.url
-        except ValueError:
-            return
+        return self.file.url
 
     def get_python_version_display(self):
         if self.python_version.lower() == "source":
