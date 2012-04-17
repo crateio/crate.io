@@ -1,3 +1,4 @@
+import datetime
 import os
 import posixpath
 import re
@@ -447,6 +448,13 @@ class ReleaseObsolete(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class DownloadDelta(models.Model):
+
+    file = models.ForeignKey(ReleaseFile, related_name="download_deltas")
+    date = models.DateField(default=datetime.date.today)
+    delta = models.IntegerField(default=0)
 
 
 class ChangeLog(models.Model):
