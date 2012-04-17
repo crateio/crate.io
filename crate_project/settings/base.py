@@ -51,6 +51,7 @@ LANGUAGES = (
     ("de", "German"),
     ("pt-br", "Portuguese (Brazil)"),
     ("ru", "Russian"),
+    ("ko", "Korean"),
     # ("sv", "Swedish"),
 )
 
