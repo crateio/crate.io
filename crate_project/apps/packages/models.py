@@ -456,6 +456,12 @@ class DownloadDelta(models.Model):
     date = models.DateField(default=datetime.date.today)
     delta = models.IntegerField(default=0)
 
+    class Meta:
+        verbose_name = "Download Delta"
+        verbose_name_plural = "Download Deltas"
+
+        unique_together = ("file", "date")
+
 
 class ChangeLog(models.Model):
 
