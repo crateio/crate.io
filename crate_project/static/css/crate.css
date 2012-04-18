@@ -30,3 +30,4 @@ body,p,label,input,button,select,textarea,.navbar-search .search-query{font-fami
 #policy-page section{padding-top:20px;}
 .versions .yanked{text-decoration:line-through;font-style:italic;color:#999;}.versions .yanked a,.versions .yanked a:hover,.versions .yanked a:link,.versions .yanked a:active,.versions .yanked a:visited{color:#999;}
 .yank-explanation{padding-top:120px;padding-right:2em;}
+#download-chart .loading{min-height:200px;min-width:270px;background:url(../img/ajax-loader.gif);background-repeat:no-repeat;background-position:center;}

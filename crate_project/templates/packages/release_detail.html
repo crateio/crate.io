@@ -308,7 +308,7 @@
                     </div>
 
                     <div id="download-chart">
-                        <div class="chart"></div>
+                        <div class="chart loading"></div>
                         <div class="timeline"></div>
                         <div class="slider"></div>
                     </div>
@@ -397,6 +397,9 @@
 
                 xAxis.render();
                 yAxis.render();
+
+                // Hide the Spinner
+                $("#download-chart .loading").removeClass("loading");
             }
         });
     </script>
