@@ -14,6 +14,7 @@ PIL==1.1.7
 -e git+https://github.com/carljm/django-model-utils.git@38dee4c560ecfdcb6aaca662e06aecbd60864ace#egg=django-model-utils
 slumber==0.4
 django-appconf==0.5
+isoweek==1.2.0
 
 # Celery
 redis==2.4.11
