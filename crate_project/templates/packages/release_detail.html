@@ -374,7 +374,12 @@
             renderer: 'area',
             stroke: true,
             dataURL: 'http://localhost:8000/stats/requests/delta.json',
-            onData: function(d){ return $.map(d, function(i){ i["color"] = palette.color(); return i; }); },
+            onData: function(d){
+                // Hide the Spinner
+                $("#download-chart .loading").removeClass("loading");
+
+                return $.map(d, function(i){ i["color"] = palette.color(); return i; });
+            },
             onComplete: function(s){
                 var hoverDetail = new Rickshaw.Graph.HoverDetail({
                     graph: s.graph,
@@ -398,9 +403,6 @@
 
                 xAxis.render();
                 yAxis.render();
-
-                // Hide the Spinner
-                $("#download-chart .loading").removeClass("loading");
             }
         });
     </script>

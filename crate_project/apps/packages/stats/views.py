@@ -20,7 +20,7 @@ def fetch_stats(package):
 
     # @@@ Sanity Checks
     if not deltas:
-        return []
+        return [{}]
 
     data = [{"name": "Other", "data": []}] + [{"name": release.version, "data": []} for release in releases if release.version in specific_releases]
 
