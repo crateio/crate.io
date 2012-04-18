@@ -1,5 +1,4 @@
 import collections
-import datetime
 import json
 import time
 
@@ -10,16 +9,8 @@ from django.shortcuts import get_object_or_404
 
 from packages.models import Package, Release, DownloadDelta, DownloadStatsCache
 
-def stats_delta(request, slug):
-    package = get_object_or_404(Package, name=slug)
 
-    try:
-        cached = DownloadStatsCache.objects.get(package=package)
-    except DownloadStatsCache.DoesNotExist:
-        pass
-    else:
-        return HttpResponse(json.dumps(cached.data), mimetype="application/json")
-
+def fetch_stats(package):
     releases = Release.objects.filter(package=package)
     releases = sorted(releases, key=lambda x: x.downloads)
 
@@ -33,7 +24,7 @@ def stats_delta(request, slug):
 
     # Get First Week
     start_week = isoweek.Week.withdate(deltas[0].date)
-    end_week =  isoweek.Week.thisweek()
+    end_week = isoweek.Week.thisweek()
 
     current = isoweek.Week(start_week.year, start_week.week)
 
@@ -51,6 +42,21 @@ def stats_delta(request, slug):
     for i in xrange(0, len(data)):
         for j in xrange(0, len(data[i]["data"])):
             data[i]["data"][j]["y"] = _data[data[i]["name"] if data[i]["name"] in specific_releases else "Other"].get(data[i]["data"][j]["x"], 0)
+
+    return data
+
+
+def stats_delta(request, slug):
+    package = get_object_or_404(Package, name=slug)
+
+    try:
+        cached = DownloadStatsCache.objects.get(package=package)
+    except DownloadStatsCache.DoesNotExist:
+        pass
+    else:
+        return HttpResponse(json.dumps(cached.data), mimetype="application/json")
+
+    data = fetch_stats(package)
 
     DownloadStatsCache.objects.create(package=package, data=data)
 
