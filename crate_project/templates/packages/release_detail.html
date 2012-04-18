@@ -306,13 +306,13 @@
                         {# Translators: This is used to display how many downloads a package has gotten, e.g. 12 for this version. #}
                         <div class="version">{% blocktrans with count=release.downloads|intcomma %}<span class="count">{{ count }}</span> for this version{% endblocktrans %}</div>
                     </div>
-
+                    {% comment %}
                     <div id="download-chart">
                         <div class="chart loading"></div>
                         <div class="timeline"></div>
                         <div class="slider"></div>
                     </div>
-
+                    {% endcomment %}
                     <h3>{% trans "Evaluation" %} <small>{% trans "mouse over for details" %}</small></h3>
                     <div id="release-evaluation">
                         {% evaluate release %}
@@ -365,6 +365,7 @@
         });
     </script>
 
+    {% comment %}
     <script>
         var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'});
 
@@ -403,4 +404,5 @@
             }
         });
     </script>
+    {% endcomment %}
 {% endblock %}
