@@ -373,7 +373,7 @@
             element: $("#download-chart .chart")[0],
             renderer: 'area',
             stroke: true,
-            dataURL: 'http://localhost:8000/stats/requests/delta.json',
+            dataURL: '{% url package_stats_delta slug=release.package.name %}',
             onData: function(d){
                 // Hide the Spinner
                 $("#download-chart .loading").removeClass("loading");
