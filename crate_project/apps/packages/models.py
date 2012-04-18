@@ -463,6 +463,12 @@ class DownloadDelta(models.Model):
         unique_together = ("file", "date")
 
 
+class DownloadStatsCache(models.Model):
+
+    package = models.OneToOneField(Package)
+    data = JSONField()
+
+
 class ChangeLog(models.Model):
 
     TYPES = Choices(
