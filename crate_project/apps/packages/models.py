@@ -453,7 +453,7 @@ class ReleaseObsolete(models.Model):
 class DownloadDelta(models.Model):
 
     file = models.ForeignKey(ReleaseFile, related_name="download_deltas")
-    date = models.DateField(default=datetime.date.today)
+    date = models.DateField(default=datetime.date.today, db_index=True)
     delta = models.IntegerField(default=0)
 
     class Meta:
