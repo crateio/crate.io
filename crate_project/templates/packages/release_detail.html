@@ -9,6 +9,7 @@
 {% load favorite %}
 
 {% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/rickshaw.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/prettify.css' %}">
 {% endblock %}
 
@@ -306,6 +307,12 @@
                         <div class="version">{% blocktrans with count=release.downloads|intcomma %}<span class="count">{{ count }}</span> for this version{% endblocktrans %}</div>
                     </div>
 
+                    <div id="download-chart">
+                        <div class="chart"></div>
+                        <div class="timeline"></div>
+                        <div class="slider"></div>
+                    </div>
+
                     <h3>{% trans "Evaluation" %} <small>{% trans "mouse over for details" %}</small></h3>
                     <div id="release-evaluation">
                         {% evaluate release %}
@@ -333,7 +340,10 @@
 {% endblock %}
 
 {% block extra_body %}
-    <script src="{% static "js/prettify/prettify.js" %}"></script>
+    <script src="{% static 'js/lib/date.js' %}"></script>
+    <script src="{% static 'js/lib/d3.v2.min.js' %}"></script>
+    <script src="{% static 'js/lib/rickshaw.min.js' %}"></script>
+    <script src="{% static 'js/prettify/prettify.js' %}"></script>
     <script>
         $(function(){
             var History = window.History;
@@ -352,6 +362,42 @@
             prettyPrint();
 
             $("[rel='popover']").popover();
+        });
+    </script>
+
+    <script>
+        var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'});
+
+        var graph = new Rickshaw.Graph.Ajax({
+            element: $("#download-chart .chart")[0],
+            renderer: 'area',
+            stroke: true,
+            dataURL: 'http://localhost:8000/stats/requests/delta.json',
+            onData: function(d){ return $.map(d, function(i){ i["color"] = palette.color(); return i; }); },
+            onComplete: function(s){
+                var hoverDetail = new Rickshaw.Graph.HoverDetail({
+                    graph: s.graph,
+                    xFormatter: function(x) { var d = new Date(x*1000); return "Week of " + d.toString("MMM d"); },
+                    yFormatter: function(y) { return parseInt(y) + " downloads"; }
+                });
+
+                var ticksTreatment = 'glow';
+
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: s.graph,
+                    timeUnit: 'week',
+                    ticksTreatment: ticksTreatment
+                });
+
+                var yAxis = new Rickshaw.Graph.Axis.Y({
+                    graph: s.graph,
+                    tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+                    ticksTreatment: ticksTreatment
+                });
+
+                xAxis.render();
+                yAxis.render();
+            }
         });
     </script>
 {% endblock %}
