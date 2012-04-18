@@ -17,7 +17,7 @@ from django.db import transaction
 from django.utils.timezone import now
 
 from crate.utils.lock import Lock
-from packages.models import Package, ReleaseFile, TroveClassifier
+from packages.models import Package, ReleaseFile, TroveClassifier, DownloadDelta
 from pypi.models import PyPIIndexPage, PyPIDownloadChange
 from pypi.processor import PyPIPackage
 
@@ -205,3 +205,24 @@ def fetch_server_key(package):
 def refresh_pypi_package_index_cache():
     r = requests.get("http://pypi.python.org/simple/", prefetch=True)
     PyPIIndexPage.objects.create(content=r.content)
+
+
+@task
+def integrate_download_deltas():
+    with Lock("pypi-integrate-downloads", expires=60 * 5, timeout=30):
+        count = 0
+
+        for d in PyPIDownloadChange.objects.filter(integrated=False)[:1000]:
+            with transaction.commit_on_success():
+                dd, c = DownloadDelta.objects.get_or_create(file=d.file, date=d.created.date(), defaults={"delta": d.change})
+
+                if not c:
+                    DownloadDelta.objects.filter(pk=dd.pk).select_for_update()
+
+                    dd.delta += d.change
+                    dd.save()
+
+                PyPIDownloadChange.objects.filter(pk=d.pk).update(integrated=True)
+            count += 1
+
+        return count

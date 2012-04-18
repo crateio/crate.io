@@ -1,3 +1,4 @@
+import datetime
 import os
 import posixpath
 import re
@@ -449,6 +450,25 @@ class ReleaseObsolete(models.Model):
         return self.name
 
 
+class DownloadDelta(models.Model):
+
+    file = models.ForeignKey(ReleaseFile, related_name="download_deltas")
+    date = models.DateField(default=datetime.date.today, db_index=True)
+    delta = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = "Download Delta"
+        verbose_name_plural = "Download Deltas"
+
+        unique_together = ("file", "date")
+
+
+class DownloadStatsCache(models.Model):
+
+    package = models.OneToOneField(Package)
+    data = JSONField()
+
+
 class ChangeLog(models.Model):
 
     TYPES = Choices(
@@ -470,6 +490,14 @@ class ReadTheDocsPackageSlug(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.slug
+
+
+# @receiver(post_save, sender=DownloadDelta)
+# def refresh_stats_cache(sender, **kwargs):
+#     instance = kwargs.get("instance")
+#     if instance is not None:
+#         from packages.tasks import refresh_stats_cache
+#         refresh_stats_cache.delay(instance.file.release.package.pk)
 
 
 @receiver(post_save, sender=Release)

@@ -51,6 +51,7 @@ class PyPIDownloadChange(TimeStampedModel):
 
     file = models.ForeignKey("packages.ReleaseFile")
     change = models.IntegerField(default=0)
+    integrated = models.BooleanField(default=False)
 
 
 @receiver(post_save, sender=PyPIMirrorPage)

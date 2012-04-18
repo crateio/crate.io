@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from packages.models import Package, Release, ReleaseFile, TroveClassifier, PackageURI
 from packages.models import ReleaseRequire, ReleaseProvide, ReleaseObsolete, ReleaseURI, ChangeLog
-from packages.models import ReadTheDocsPackageSlug
+from packages.models import DownloadDelta, ReadTheDocsPackageSlug
 
 
 class PackageURIAdmin(admin.TabularInline):
@@ -62,6 +62,13 @@ class ReleaseFileAdmin(admin.ModelAdmin):
     raw_id_fields = ["release"]
 
 
+class DownloadDeltaAdmin(admin.ModelAdmin):
+    list_display = ["file", "date", "delta"]
+    list_filter = ["date"]
+    search_fields = ["file__release__package__name", "file__filename"]
+    raw_id_fields = ["file"]
+
+
 class ChangeLogAdmin(admin.ModelAdmin):
     list_display = ["package", "release", "type", "created", "modified"]
     list_filter = ["type", "created", "modified"]
@@ -79,5 +86,6 @@ admin.site.register(Package, PackageAdmin)
 admin.site.register(Release, ReleaseAdmin)
 admin.site.register(ReleaseFile, ReleaseFileAdmin)
 admin.site.register(TroveClassifier, TroveClassifierAdmin)
+admin.site.register(DownloadDelta, DownloadDeltaAdmin)
 admin.site.register(ChangeLog, ChangeLogAdmin)
 admin.site.register(ReadTheDocsPackageSlug, ReadTheDocsPackageSlugAdmin)
