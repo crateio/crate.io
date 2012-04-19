@@ -5,6 +5,7 @@ import time
 import isoweek
 
 from django.http import HttpResponse
+from django.views.decorators.cache import cache_page, cache_control
 from django.shortcuts import get_object_or_404
 
 from packages.models import Package, Release, DownloadDelta
@@ -46,6 +47,8 @@ def fetch_stats(package):
     return data
 
 
+@cache_page(86400)
+@cache_control(public=True, max_age=86400)
 def stats_delta(request, slug):
     package = get_object_or_404(Package, name=slug)
 
