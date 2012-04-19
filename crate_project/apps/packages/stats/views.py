@@ -16,7 +16,7 @@ def fetch_stats(package):
 
     specific_releases = set([x.version for x in releases[-8:]])
 
-    deltas = list(DownloadDelta.objects.filter(file__release__in=releases).order_by("date"))
+    deltas = list(DownloadDelta.objects.filter(file__release__in=releases).order_by("date").select_related("file", "file__release"))
 
     # @@@ Sanity Checks
     if not deltas:
