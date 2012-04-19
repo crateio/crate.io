@@ -11,9 +11,7 @@ from packages.models import Package, Release, DownloadDelta
 
 
 def fetch_stats(package):
-    releases = Release.objects.filter(package=package)
-    releases = sorted(releases, key=lambda x: x.downloads)
-
+    releases = list(Release.objects.filter(package=package).order_by("order"))
     specific_releases = set([x.version for x in releases[-8:]])
 
     deltas = list(DownloadDelta.objects.filter(file__release__in=releases).order_by("date").select_related("file", "file__release"))
