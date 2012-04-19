@@ -7,7 +7,7 @@ import isoweek
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 
-from packages.models import Package, Release, DownloadDelta, DownloadStatsCache
+from packages.models import Package, Release, DownloadDelta
 
 
 def fetch_stats(package):
@@ -51,15 +51,6 @@ def fetch_stats(package):
 def stats_delta(request, slug):
     package = get_object_or_404(Package, name=slug)
 
-    try:
-        cached = DownloadStatsCache.objects.get(package=package)
-    except DownloadStatsCache.DoesNotExist:
-        pass
-    else:
-        return HttpResponse(json.dumps(cached.data), mimetype="application/json")
-
     data = fetch_stats(package)
-
-    DownloadStatsCache.objects.create(package=package, data=data)
 
     return HttpResponse(json.dumps(data), mimetype="application/json")

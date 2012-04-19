@@ -463,12 +463,6 @@ class DownloadDelta(models.Model):
         unique_together = ("file", "date")
 
 
-class DownloadStatsCache(models.Model):
-
-    package = models.OneToOneField(Package)
-    data = JSONField()
-
-
 class ChangeLog(models.Model):
 
     TYPES = Choices(
@@ -490,14 +484,6 @@ class ReadTheDocsPackageSlug(models.Model):
 
     def __unicode__(self):
         return u"%s" % self.slug
-
-
-@receiver(post_save, sender=DownloadDelta)
-def refresh_stats_cache(sender, **kwargs):
-    instance = kwargs.get("instance")
-    if instance is not None:
-        from packages.tasks import refresh_stats_cache
-        refresh_stats_cache.delay(instance.file.release.package.pk)
 
 
 @receiver(post_save, sender=Release)
