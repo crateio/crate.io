@@ -12,10 +12,10 @@ from packages.models import Package, Release, DownloadDelta
 
 
 def fetch_stats(package):
-    releases = list(Release.objects.filter(package=package).order_by("order"))
+    releases = list(Release.objects.filter(package=package).only("version", "order").order_by("order"))
     specific_releases = set([x.version for x in releases[-8:]])
 
-    deltas = list(DownloadDelta.objects.filter(file__release__in=releases).order_by("date").select_related("file", "file__release"))
+    deltas = list(DownloadDelta.objects.filter(file__release__in=releases).only("delta", "file__release__version").order_by("date").select_related("file", "file__release"))
 
     # @@@ Sanity Checks
     if not deltas:
