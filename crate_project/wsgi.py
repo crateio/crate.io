@@ -1,3 +1,7 @@
+import newrelic.agent
+
+newrelic.agent.initialize()
+
 import pinax.env
 
 from django.core.wsgi import get_wsgi_application
