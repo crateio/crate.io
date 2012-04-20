@@ -1,5 +1,11 @@
 #!/usr/bin/env python
+import os
 import sys
+
+if "USE_NEWRELIC" in os.environ and "celeryd" in sys.argv:
+    import newrelic.agent
+
+    newrelic.agent.initialize()
 
 try:
     import pinax
