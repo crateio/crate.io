@@ -78,6 +78,7 @@ STATICFILES_FINDERS = [
 COMPRESS_OUTPUT_DIR = "cache"
 
 TEMPLATE_LOADERS = [
+    "jingo.Loader",
     "django.template.loaders.filesystem.Loader",
     "django.template.loaders.app_directories.Loader",
 ]
@@ -151,9 +152,6 @@ INSTALLED_APPS = [
 
     "pinax.templatetags",
 
-    # theme
-    "pinax_theme_bootstrap",
-
     # external (Pinax)
     # "notification",  # must be first
     "staticfiles",
@@ -180,6 +178,7 @@ INSTALLED_APPS = [
     "celery_haystack",
     "tastypie",
     "djangosecure",
+    "jingo",
 
     # project
     "about",
