@@ -190,7 +190,10 @@ INSTALLED_APPS = [
     "celery_haystack",
     "tastypie",
     "djangosecure",
+
+    # Templating
     "jingo",
+    "jhumanize",
 
     # project
     "core",
