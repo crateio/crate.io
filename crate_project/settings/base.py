@@ -88,6 +88,13 @@ JINGO_EXCLUDE_APPS = [
     "admin",
 ]
 
+JINJA_CONFIG = {
+    "extensions": [
+        "jinja2.ext.i18n",
+        "jinja2.ext.autoescape",
+    ],
+}
+
 MIDDLEWARE_CLASSES = [
     "django_hosts.middleware.HostsMiddleware",
     "djangosecure.middleware.SecurityMiddleware",
@@ -186,6 +193,7 @@ INSTALLED_APPS = [
     "jingo",
 
     # project
+    "core",
     "about",
     "aws_stats",
     "profiles",
