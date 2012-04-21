@@ -1,0 +1,22 @@
+{% extends "theme_base.html" %}
+
+{% block head_title_base -%}
+{% block head_title %}{% endblock %} &mdash; {{ SITE_NAME }}
+{%- endblock %}
+
+{% block site_brand -%}
+<a class="brand" href="{{ url("search") }}">{{ SITE_NAME }} <span class="label label-info">{{ gettext("Beta") }}</span></a>
+{%- endblock %}
+
+{% block nav %}
+  {% if request.user.is_authenticated %}
+    <ul class="nav">
+      <li id="tab_favorites"><a href="{{ url("user_favorites") }}">{{ gettext("My Favorites") }}</a></li>
+    </ul>
+  {% endif %}
+
+  <form class="navbar-search pull-right" action="{{ url("search") }}">
+    <input type="text" class="search-query" placeholder="{{ gettext("Search") }}" name="q">
+    <input type="hidden" name="has_releases" value="on">
+  </form>
+{% endblock %}

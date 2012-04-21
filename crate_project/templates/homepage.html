@@ -1,0 +1,32 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Welcome") }}{% endblock %}
+
+{% block body_id %}search{% endblock %}
+
+{% block body %}
+  <div class="hero-unit">
+    <h1>Crate.io</h1>
+    <p>{{ gettext("Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.") }}</p>
+
+    <div class="row">
+      <div id="main-search" class="span5">
+        <form class="form-search" method="GET" action="{{ url("search") }}">
+          <input type="hidden" name="has_releases" value="on">
+
+          {{ form.non_field_errors() }}
+
+          <div class="control-group{% if form.q.errors %} error{% endif %}">
+            <label class="control-label visuallyhidden" for="id_q">{{ form.q.label }}</label>
+            <div class="controls">
+              {{ form.q.errors }}
+
+              <input id="id_q" type="text" placeholder="{{ gettext("Search") }}" class="span4" name="q">
+              <input type="submit" class="btn btn-primary" value="{{ gettext("Search") }}">
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

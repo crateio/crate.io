@@ -22,7 +22,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
     def get_template_names(self):
         if "q" in self.request.GET:
             return ["search/results.html"]
-        return ["search/search.html"]
+        return ["homepage.html"]
 
     def get_searchqueryset(self):
         return self.searchqueryset

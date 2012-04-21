@@ -83,6 +83,11 @@ TEMPLATE_LOADERS = [
     "django.template.loaders.app_directories.Loader",
 ]
 
+JINGO_EXCLUDE_APPS = [
+    "debug_toolbar",
+    "admin",
+]
+
 MIDDLEWARE_CLASSES = [
     "django_hosts.middleware.HostsMiddleware",
     "djangosecure.middleware.SecurityMiddleware",

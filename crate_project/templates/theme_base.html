@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+  <head>
+    <meta charset="utf-8">
+
+    <title>{% block head_title_base %}{% endblock head_title_base %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <link rel="stylesheet" href="/site_media/static/css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" href="/site_media/static/css/bootstrap/bootstrap-responsive.css">
+
+    {% if not debug %}
+    <link rel="stylesheet" href="/site_media/static/css/crate.css">
+    {%- else -%}
+    <link rel="stylesheet/less" href="/site_media/static/less/crate.less">
+
+    <script src="/site_media/static/js/lib/less-1.3.0.min.js"></script>
+    {% endif %}
+
+    <!--[if lt IE 9]>
+      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    {#
+    <link rel="shortcut icon" href="../assets/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+    #}
+  </head>
+  <body class="{% block body_class %}body{% endblock %}" id="{% block body_id %}body{% endblock %}">
+    {% block topbar_base %}
+      <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %}">
+        <div class="navbar-inner">
+          <div class="container">
+            {% block topbar %}
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
+
+              {% block site_brand %}<a class="brand" href="{{ url("home") }}">{{ SITE_NAME }}</a>{% endblock %}
+
+              <div class="nav-collapse">
+                {% block nav %}
+                {% endblock %}
+
+                {% block account_bar %}
+                  {% include "_account_bar.html" %}
+                {% endblock %}
+              </div>
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+    {% endblock %}
+
+    {% block body_base %}
+      <div id="body-inner">
+        <div class="container">
+          {% include "_messages.html" %}
+
+          {% block body %}
+          {% endblock %}
+        </div>
+      </div>
+    {% endblock %}
+  </body>
+</html>
