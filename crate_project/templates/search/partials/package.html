@@ -1,0 +1,20 @@
+<div class="result row">
+  <div class="span9 package-name"><a href="{{ result.url }}">{{ result.name }}</a></div>
+    <div class="span3">
+      {% if result.author %}
+        <div class="author"><em>{{ gettext("by %(name)s")|format(name=result.author) }}</em></div>
+      {% elif result.maintainer %}
+        <div class="maintainer"><em>{{ gettext("by %(name)s")|format(name=result.maintainer) }}</em></div>
+      {% else %}
+        &nbsp;
+      {% endif %}
+    </div>
+
+    <div class="span2">
+      <div class="downloads">{% trans downloads=result.downloads %}<span class="count">{{ downloads }}</span> downloads{% endtrans %}</div>
+    </div>
+    <div class="span2">{# @@@ Link to Source #}</div>
+    <div class="span2">{# @@@ Link to Documentation #}</div>
+
+    <div class="span9 summary">{{ result.summary }}</div>
+</div>

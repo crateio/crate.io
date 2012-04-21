@@ -14,10 +14,41 @@
 }
 /* --- Utility Classes */
 
+body, p, label, input, button, select, textarea, .navbar-search .search-query {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 #body-inner {
   padding-top: 60px;
 }
 
-body, p, label, input, button, select, textarea, .navbar-search .search-query {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+#search-results {
+  .results {
+    .result {
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      .package-name {
+        font-weight: bold;
+        line-height: 27px;
+        font-size: 18px;
+      }
+
+      .author { padding-left: 10px; }
+
+      .summary { margin-top: 15px; }
+    }
+  }
+
+  .results:nth-child(odd) {
+    .result {
+      background-color: #f9f9f9;
+    }
+  }
+
+  .results:hover {
+    .result {
+      background-color: #f5f5f5;
+    }
+  }
 }
