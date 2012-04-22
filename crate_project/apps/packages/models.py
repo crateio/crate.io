@@ -335,12 +335,6 @@ class Release(models.Model, ReleaseEvaluator):
 
         return self._changelog_html
 
-    @property
-    def history(self):
-        from history.models import Event
-
-        return Event.objects.filter(package=self.package.name).order_by("-created")
-
 
 @track_data("hidden")
 class ReleaseFile(models.Model):
