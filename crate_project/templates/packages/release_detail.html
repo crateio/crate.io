@@ -1,0 +1,150 @@
+{% extends "site_base.html" %}
+
+{% block extra_style %}
+  <link rel="stylesheet" href="{{ static("css/rickshaw.min.css") }}">
+{% endblock %}
+
+{% block head_title %}{{ release.package.name }} {{ release.version }}{% endblock %}
+
+{% block body_id %}release-detail{% endblock %}
+
+{% block body %}
+  <div class="content">
+    <div class="page-header">
+      <h1 class="package-title">{{ release.package.name }} <small> {{ release.version }}</small></h1>
+    </div>
+
+    <div class="row">
+      <div class="span9">
+        {% if release.hidden %}
+          {% include "packages/partials/yanked.html" %}
+        {% else %}
+          <div class="summary{% if not release.show_install_command %} no-install-summary{% endif %}">
+            {{ release.summary }}
+          </div>
+
+          {% if release.show_install_command %}
+            <div id="install-cmd">
+              <h4>{{ gettext("Install") }}</h4>
+
+              {% if version_specific %}{{ release.install_command }}{% else %}{{ release.package.install_command }}{% endif %}
+            </div>
+          {% endif %}
+
+          <ul id="package-tabs" class="nav nav-tabs">
+            <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">{{ gettext("Description") }}</a></li>
+            {% if release.changelog_html %}<li><a href="#changelog" data-toggle="tab">{{ gettext("Changelog") }}</a></li>{% endif %}
+            {% if release.license %}<li><a href="#license" data-toggle="tab">{{ gettext("License") }}</a></li>{% endif %}
+            <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">{{ gettext("Info") }}</a></li>
+            <li><a href="#files" data-toggle="tab">{{ gettext("Files") }}</a></li>
+            <li><a href="#all-versions" data-toggle="tab">{{ gettext("All Versions (%(version_count)s)")|format(version_count=versions|length()) }}</a></li>
+            <li><a href="#history" data-toggle="tab">{{ "History" }}</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="description" class="tab-pane fade in{% if release.description %} active{% endif %}">
+              {% include "packages/partials/description.html" %}
+            </div>
+
+            {% if release.changelog_html %}
+              <div id="changelog" class="tab-pane fade in">
+                {{ release.changelog_html }}
+              </div>
+            {% endif %}
+
+            {% if release.license %}
+              <div id="license" class="tab-pane fade in">
+                <pre>{{ release.license }}</pre>
+               </div>
+            {% endif %}
+
+            <div id="info" class="tab-pane fade in{% if not release.description %} active{% endif %}">
+              {% include "packages/partials/meta.html" %}
+            </div>
+
+            <div id="files" class="tab-pane fade in">
+              {% include "packages/partials/files.html" %}
+            </div>
+
+            <div id="all-versions" class="tab-pane fade in">
+              {% include "packages/partials/versions.html" %}
+            </div>
+
+            <div id="history" class="tab-pane fade in">
+              {% include "packages/partials/history.html" %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <div id="sidebar" class="span3">
+        {% include "packages/partials/sidebar.html" %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+  <script src="{{ static("js/lib/jquery.history.js") }}"></script>
+  <script>
+    $(function(){
+      $("[rel='popover']").popover();
+
+      var History = window.History;
+
+      $(window).bind("anchorchange", function(){
+        $("#package-tabs a[href='" + location.hash + "']").click();
+      });
+
+      $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+        if (History.enabled) {
+          History.pushState(null, null, $(e.target).attr("href"));
+        }
+      });
+    });
+  </script>
+
+  <script src="{{ static("js/lib/date.js") }}"></script>
+  <script src="{{ static("js/lib/d3.v2.min.js") }}"></script>
+  <script src="{{ static("js/lib/rickshaw.min.js") }}"></script>
+  <script>
+    var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'});
+
+    var graph = new Rickshaw.Graph.Ajax({
+      element: $("#download-chart .chart")[0],
+      renderer: 'area',
+      stroke: true,
+      dataURL: '{{ url("package_stats_delta", slug=release.package.name) }}',
+      onData: function(d){
+        // Hide the Spinner
+        $("#download-chart .loading").removeClass("loading");
+
+        return $.map(d, function(i){ i["color"] = palette.color(); return i; });
+      },
+      onComplete: function(s){
+        var hoverDetail = new Rickshaw.Graph.HoverDetail({
+          graph: s.graph,
+          xFormatter: function(x) { var d = new Date(x*1000); return "Week of " + d.toString("MMM d"); },
+          yFormatter: function(y) { return parseInt(y) + " downloads"; }
+        });
+
+        var ticksTreatment = 'glow';
+
+        var xAxis = new Rickshaw.Graph.Axis.Time({
+          graph: s.graph,
+          timeUnit: 'week',
+          ticksTreatment: ticksTreatment
+        });
+
+        var yAxis = new Rickshaw.Graph.Axis.Y({
+          graph: s.graph,
+          tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+          ticksTreatment: ticksTreatment
+        });
+
+        xAxis.render();
+        yAxis.render();
+      }
+    });
+  </script>
+{% endblock %}

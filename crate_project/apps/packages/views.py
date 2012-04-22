@@ -23,6 +23,7 @@ class ReleaseDetail(DetailView):
         ctx.update({
             "release_files": [x for x in self.object.files.all() if not x.hidden],
             "version_specific": self.kwargs.get("version", None),
+            "versions": Release.objects.filter(package=self.object.package).select_related("package").order_by("-order"),
         })
         return ctx
 
