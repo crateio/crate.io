@@ -86,6 +86,7 @@ TEMPLATE_LOADERS = [
 JINGO_EXCLUDE_APPS = [
     "debug_toolbar",
     "admin",
+    "admin_tools",
 ]
 
 JINJA_CONFIG = {
@@ -106,8 +107,6 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
-    "pagination.middleware.PaginationMiddleware",
-
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
 ]
@@ -123,10 +122,6 @@ TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
 ]
 
-JINJA_TEMPLATE_DIRS = [
-    os.path.join(PROJECT_ROOT, "templates", "_jinja2"),
-]
-
 TEMPLATE_CONTEXT_PROCESSORS = [
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
@@ -140,9 +135,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "pinax.core.context_processors.pinax_settings",
 
     "pinax.apps.account.context_processors.account",
-
-    # "notification.context_processors.notification",
-    "announcements.context_processors.site_wide_announcements",
 ]
 
 INSTALLED_APPS = [
@@ -165,20 +157,16 @@ INSTALLED_APPS = [
     "pinax.templatetags",
 
     # external (Pinax)
-    # "notification",  # must be first
     "staticfiles",
-    "pagination",
     "compressor",
     "django_openid",
     "timezones",
     "emailconfirmation",
     "announcements",
-    "idios",
     "metron",
 
     # Pinax
     "pinax.apps.account",
-    "pinax.apps.signup_codes",
 
     # external (Project)
     "south",
@@ -215,13 +203,6 @@ FIXTURE_DIRS = [
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-ABSOLUTE_URL_OVERRIDES = {
-    "auth.user": lambda o: "/profiles/profile/%s/" % o.username,
-}
-
-AUTH_PROFILE_MODULE = "profiles.Profile"
-NOTIFICATION_LANGUAGE_MODULE = "account.Account"
 
 CONTACT_EMAIL = "support@crate.io"
 
@@ -276,7 +257,6 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
 
 AWS_HEADERS = {
-    "Expires": lambda: http_date(time.mktime((datetime.datetime.now() + datetime.timedelta(days=365)).timetuple())),
     "Cache-Control": "max-age=31556926",
 }
 
