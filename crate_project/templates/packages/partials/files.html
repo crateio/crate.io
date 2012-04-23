@@ -22,7 +22,7 @@
     {% else %}
       <tr>
         {% if release.download_uri %}
-          <td colspan="6">{{ gettext("There are No Files for This Package's Release, but try the <a href=\"%(uri)s\">author's downloads</a> for this release.")|format(uri=release.download_uri) }}</td>
+          <td colspan="6">{% trans uri=release.download_uri %}There are No Files for This Package's Release, but try the <a href="{{ uri }}">author's downloads</a> for this release.{% endtrans %}</td>
         {% else %}
           <td colspan="6">{{ gettext("There are No Files for This Package's Release.") }}</td>
         {% endif %}

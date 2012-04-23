@@ -16,7 +16,7 @@
         {% set user_display = user_display(request.user) %}
 
         <div class="alert alert-info">
-          <strong>{{ gettext("Note") }}</strong>: {{ gettext("you are already logged in as %(user_display)s.")|format(user_display=user_display) }}
+          <strong>{{ gettext("Note") }}</strong>: {{ gettext("you are already logged in as %(user_display)s.", user_display=user_display) }}
         </div>
       {% else %}
         {% set signup_url = url("acct_signup") %}

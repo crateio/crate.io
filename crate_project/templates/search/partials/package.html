@@ -2,9 +2,9 @@
   <div class="span9 package-name"><a href="{{ result.url }}">{{ result.name }}</a></div>
     <div class="span3">
       {% if result.author %}
-        <div class="author"><em>{{ gettext("by %(name)s")|format(name=result.author) }}</em></div>
+        <div class="author"><em>{{ gettext("by %(name)s", name=result.author) }}</em></div>
       {% elif result.maintainer %}
-        <div class="maintainer"><em>{{ gettext("by %(name)s")|format(name=result.maintainer) }}</em></div>
+        <div class="maintainer"><em>{{ gettext("by %(name)s", name=result.maintainer) }}</em></div>
       {% else %}
         &nbsp;
       {% endif %}

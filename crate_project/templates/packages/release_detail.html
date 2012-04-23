@@ -41,7 +41,7 @@
             {% if release.license %}<li><a href="#license" data-toggle="tab">{{ gettext("License") }}</a></li>{% endif %}
             <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">{{ gettext("Info") }}</a></li>
             <li><a href="#files" data-toggle="tab">{{ gettext("Files") }}</a></li>
-            <li><a href="#all-versions" data-toggle="tab">{{ gettext("All Versions (%(version_count)s)")|format(version_count=versions|length()) }}</a></li>
+            <li><a href="#all-versions" data-toggle="tab">{{ gettext("All Versions (%(version_count)s)", version_count=versions|length()) }}</a></li>
             <li><a href="#history" data-toggle="tab">{{ "History" }}</a></li>
           </ul>
 
