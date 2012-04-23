@@ -5,7 +5,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 import evaluator
-evaluator.autodiscover()
+evaluator.autodiscover
+
+import ji18n.translate
+ji18n.translate.patch()
 
 from pinax.apps.account.openid_consumer import PinaxConsumer
 
@@ -22,9 +25,6 @@ urlpatterns = patterns("",
     url(r"^about/", include("about.urls")),
     url(r"^account/", include("pinax.apps.account.urls")),
     url(r"^openid/", include(PinaxConsumer().urls)),
-    url(r"^profiles/", include("idios.urls")),
-    # url(r"^notices/", include("notification.urls")),
-    url(r"^announcements/", include("announcements.urls")),
     url(r"^admin_tools/", include("admin_tools.urls")),
 
     url(r"^packages/", include("packages.urls")),

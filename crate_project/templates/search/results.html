@@ -1,148 +1,78 @@
 {% extends "site_base.html" %}
 
-{% load i18n %}
-{% load humanize %}
-{% load ifsetting_tag %}
-{% load bootstrap_tags %}
-{% load package_tags %}
-{% load pagination_utils %}
-{% load search_utils %}
-
-{% block head_title %}{% endblock %}
+{% block head_title %}{{ query }}{% endblock %}
 
 {% block body_id %}search-results{% endblock %}
 
-{% block body_base %}
-    {% include "_announcements.html" %}
-
-    <div class="container">
-
-        {% include "_messages.html" %}
-
-        <div class="row">
-            <div class="span12">
-                <div class="well">
-                    <form class="form-inline" method="GET" action=".">
-                        {{ form.non_field_errors }}
-
-                        <div class="control-group{% if form.q.errors %} error{% endif %}">
-                            <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
-                            <div class="controls">
-                                {{ form.q.errors }}
-                                {{ form.q }}
-
-                                <input type="submit" class="btn btn-primary" value="{% trans "Search" %}">
-                            </div>
-                        </div>
-
-                        <div class="control-group{% if form.has_releases.errors %} error{% endif %}">
-                            <div class="controls">
-                                {{ form.has_releases.errors }}
-                                <label class="checkbox inline">
-                                    {{ form.has_releases }}
-                                    {{ form.has_releases.label }}
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="span3">
-                <div class="well">
-                    <h3>{% trans "Refine Results" %}</h3>
-
-                    <ul class="nav nav-list">
-                        {% if facets.fields and facets.fields.python_versions %}
-                            <li class="nav-header">{% trans "By Python Version" %}</li>
-                            {% if faceted_by.python %}
-                                {% for ver in facets.fields.python_versions %}
-                                    {% if ver.0 == faceted_by.python %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_python }}"><i class="icon icon-remove"></i> {% trans ver.0 %} ({{ ver.1 }})</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for ver in facets.fields.python_versions %}
-                                    <li><a href="{{ request.get_full_path|facet_python:ver.0 }}">{% trans ver.0 %} ({{ ver.1 }})</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-
-                        {% if facets.fields and facets.fields.operating_systems %}
-                            <li class="nav-header">{% trans "By Operating System" %}</li>
-                            {% if faceted_by.os %}
-                                {% for os in facets.fields.operating_systems %}
-                                    {% if os.0 == faceted_by.os %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_os }}"><i class="icon icon-remove"></i> {% trans os.0 %} ({{ os.1 }})</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for os in facets.fields.operating_systems %}
-                                    <li><a href="{{ request.get_full_path|facet_os:os.0 }}">{% trans os.0 %} ({{ os.1 }})</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-
-                        {% if facets.fields and facets.fields.licenses %}
-                            <li class="nav-header">{% trans "By License" %}</li>
-                            {% if faceted_by.license %}
-                                {% for lice in facets.fields.licenses %}
-                                    {% if lice.0 == faceted_by.license %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_license }}"><i class="icon icon-remove"></i> {% trans lice.0 %} ({{ lice.1 }})</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for lice in facets.fields.licenses %}
-                                    <li><a href="{{ request.get_full_path|facet_license:lice.0 }}">{% trans lice.0 %} ({{ lice.1 }})</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-
-                        {% if facets.fields and facets.fields.implementations %}
-                            <li class="nav-header">{% trans "By Implementation" %}</li>
-                            {% if faceted_by.implementation %}
-                                {% for impl in facets.fields.implementations %}
-                                    {% if impl.0 == faceted_by.implementation %}
-                                        <li class="active"><a href="{{ request.get_full_path|facet_implementation }}"><i class="icon icon-remove"></i> {% trans impl.0 %} ({{ impl.1 }})</a></li>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% for impl in facets.fields.implementations %}
-                                    <li><a href="{{ request.get_full_path|facet_implementation:impl.0 }}">{% trans impl.0 %} ({{ impl.1 }})</a></li>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-
-            <div class="span9">
-                <div class="results-wrapper">
-                    {% for result in results %}
-                        <div class="results">
-                            {% include "search/partials/package.html" with result=result %}
-                        </div>
-                    {% empty %}
-                        <p>{% trans "No results found." %}</p>
-                    {% endfor %}
-                </div>
-
-                {% if is_paginated %}
-                    <div class="pagination">
-                        <ul>
-                            <li class="prev{% if not page.has_previous %} disabled{% endif %}"><a href="{% if page.has_previous %}{{ request.get_full_path|repage:page.previous_page_number }}{% else %}#{% endif %}">&larr; {% trans "Previous" %}</a></li>
-
-                            {% for page_num in paginator.page_range|paginate_numbers:page.number %}
-                                <li{% if page_num == page.number %} class="active"{% endif %}><a href="{{ request.get_full_path|repage:page_num }}">{{ page_num }}</a></li>
-                            {% endfor %}
-
-                            <li class="next{% if not page.has_next %} disabled{% endif %}"><a href="{% if page.has_next %}{{ request.get_full_path|repage:page.next_page_number }}{% else %}#{% endif %}">{% trans "Next" %} &rarr;</a></li>
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
+{% block body %}
+  <div class="row">
+    <div class="span12">
+      <div class="well">
+         {% include "search/_results.form.html" %}
+      </div>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="span3">
+      {% if facets.fields %}
+        <div class="well">
+          <h3>{{ gettext("Refine Results") }}</h3>
+
+          <ul class="nav nav-list">
+            {% for field, values in facets.fields.iteritems() %}
+              {% if values %}
+                <li class="nav-header">
+                  {%- if field == "python_versions" -%}
+                    {{ gettext("By Python Version") }}
+                  {%- elif field == "operating_systems" -%}
+                    {{ gettext("By Operating System") }}
+                  {%- elif field == "licenses" -%}
+                    {{ gettext("By License") }}
+                  {%- elif field == "implementations" -%}
+                    {{ gettext("By Implementation") }}
+                  {%- else -%}
+                    {{ gettext("By Other") }}
+                  {%- endif -%}
+                </li>
+
+                {% for item in values %}
+                  {% if item.0 == faceted_by[facet2short(field)] %}
+                    <li class="active"><a href="{{ request.get_full_path()|reqarg(facet2short(field)) }}"><i class="icon icon-remove"></i> {{ gettext(item.0) }} ({{ item.1 }})</a></li>
+                  {% else %}
+                    <li><a href="{{ request.get_full_path()|reqarg(facet2short(field), item.0) }}">{{ gettext(item.0) }} ({{ item.1 }})</a></li>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="span9">
+      <div class="results-wrapper">
+        {% for result in results %}
+          <div class="results">
+            {% include "search/partials/package.html" %}
+          </div>
+        {% else %}
+          <p>{{ gettext("No results found.") }}</p>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+        <div class="pagination">
+          <ul>
+            <li class="prev{% if not page.has_previous() %} disabled{% endif %}"><a href="{% if page.has_previous() %}{{ request.get_full_path()|reqarg("page", page.previous_page_number()) }}{% else %}#{% endif %}">&larr; {{ gettext("Previous") }}</a></li>
+
+            {% for page_num in pagination_numbers(paginator.page_range, page.number) %}
+              <li {{ page.number|ifeq(page_num, 'class="active"') }}><a href="{{ request.get_full_path()|reqarg("page", page_num) }}">{{ page_num }}</a></li>
+            {% endfor %}
+
+            <li class="next{% if not page.has_next() %} disabled{% endif %}"><a href="{% if page.has_next() %}{{ request.get_full_path()|reqarg("page", page.next_page_number()) }}{% else %}#{% endif %}">{{ gettext("Next") }} &rarr;</a></li>
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}

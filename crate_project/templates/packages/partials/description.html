@@ -1,0 +1,9 @@
+{% if release.description %}
+  {% if release.description_html %}
+    <div class="html-description">{{ release.description_html }}</div>
+  {% else %}
+    <pre>{{ release.description }}</pre>
+  {% endif %}
+{% else %}
+  <p>{{ gettext("No Description Provided.") }}</p>
+{% endif %}

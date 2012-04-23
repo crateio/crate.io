@@ -1,0 +1,28 @@
+<form class="form-inline" method="GET" action="{{ url("search") }}">
+  {{ form.non_field_errors() }}
+
+  <div class="control-group{% if form.q.errors %} error{% endif %}">
+    <label class="control-label visuallyhidden" for="id_search">{{ form.q.label }}</label>
+    <div class="controls">
+      {% autoescape false %}
+        {{ form.q.errors }}
+        {{ form.q }}
+      {% endautoescape %}
+
+      <input type="submit" class="btn btn-primary" value="{{ gettext("Search") }}">
+    </div>
+  </div>
+
+  <div class="control-group{% if form.has_releases.errors %} error{% endif %}">
+    <div class="controls">
+      {{ form.has_releases.errors }}
+
+      <label class="checkbox inline">
+        {% autoescape false %}
+          {{ form.has_releases }}
+          {{ form.has_releases.label }}
+        {% endautoescape %}
+      </label>
+    </div>
+  </div>
+</form>

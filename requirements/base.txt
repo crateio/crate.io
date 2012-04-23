@@ -20,12 +20,4 @@ django-timezones==0.2
 pytz==2012b
 django-openid==0.3a1
 python-openid==2.2.5
-
-django-pagination==1.0.7
-django-announcements==0.1.2
-django-notification==0.2
-idios==0.2a1
 metron==0.1
-
-#pinax-theme-bootstrap==2.0.2.post1
--e git+git://github.com/crateio/pinax-theme-bootstrap.git@i18n#egg=pinax-theme-bootstrap

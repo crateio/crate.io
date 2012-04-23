@@ -49,10 +49,6 @@ LOGGING = {
 
 SITE_ID = 3
 
-TEMPLATE_LOADERS = [
-    ("django.template.loaders.cached.Loader", TEMPLATE_LOADERS),
-]
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 SERVER_EMAIL = "server@crate.io"

@@ -45,7 +45,7 @@ docutils==0.8.1
 
 # Storage
 boto==2.3.0
--e hg+https://bitbucket.org/dstufft/django-storages@7f9fd318450fa86110944a9890fd0e4ac10e6bde#egg=django-storages
+django-storages==1.1.4
 
 # Dev Tools
 WebOb==1.2b2
@@ -81,6 +81,7 @@ django-admin-tools==0.4.1
 # Templating
 MarkupSafe==0.15
 Jinja2==2.6
+jingo==0.4
 
 # Security
 -e git+https://github.com/carljm/django-secure.git@690b100aefc1f1410a960753a562be693f80b2e3#egg=django-secure

@@ -1,38 +1,76 @@
-{% extends "banner_base.html" %}
+{% extends "site_base.html" %}
 
-{% load ifsetting_tag %}
+{% block head_title %}{{ gettext("Welcome") }}{% endblock %}
 
-{% block head_title %}{% trans "Welcome" %}{% endblock %}
+{% block body_id %}search{% endblock %}
 
-{% block body_class %}home{% endblock %}
+{% block body %}
+  <div class="row">
+    <div id="main-title" class="span4">
+      <h1>Crate.io</h1>
+    </div>
+  </div>
 
-{% block banner %}
-    <h1>Welcome to Pinax</h1>
-    <p>
-        <b>Pinax</b> is a <a href="http://djangoproject.com/">Django</a>
-        project intended to provide a starting point for websites. By
-        integrating numerous reusable Django apps to take care of the
-        things that many sites have in common, it lets you focus on what
-        makes your site different.
-    </p>
+  <div class="row">
+    <div class="span12">
+      <div id="search-area">
+        <form class="form-search" method="GET" action="{{ url("search") }}">
+          <input type="hidden" name="has_releases" value="on">
 
-    <h2>About Basic Project</h2>
-    <p>
-        This project takes the account_project and adds profiles and notifications.
-        It is a foundation suitable for many sites that have user accounts with
-        profiles.
-    </p>
+          {{ form.non_field_errors() }}
 
-    {% if user.is_authenticated %}
-        {% url what_next as what_next_url %}
-        <p class="what_next">Wondering <a href="{{ what_next_url }}" class="btn btn-primary large">What Next</a>?</p>
-    {% else %}
-        {% url acct_login as login_url %}
-        {% ifsetting ACCOUNT_OPEN_SIGNUP %}
-            {% url acct_signup as signup_url %}
-            <p>You can <a href="{{ login_url }}" class="btn">Log In</a> or <a href="{{ signup_url }}" class="btn btn-primary">Sign Up</a> to try out the site.</p>
-        {% else %}
-            <p>You can <a href="{{ login_url }}" class="btn btn-primary large">Log In</a> to try out the site.</p>
-        {% endifsetting %}
-    {% endif %}
+          <div class="control-group{% if form.q.errors %} error{% endif %}">
+            <label class="control-label visuallyhidden" for="id_q">{{ form.q.label }}</label>
+            <div class="controls">
+              {{ form.q.errors }}
+
+              <div id="search-box" class="input-append">
+                <input id="id_q" name="q" type="text" placeholder="{{ gettext("Search") }}" class="span11"><button class="btn" type="submit"><i class="icon-big-search"></i><span class="visuallyhidden">{{ gettext("Search") }}</span></button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% set pkginfo = package_information() %}
+
+  <div class="row">
+    <div class="span12">
+      <div id="tagline">
+        <p>{{ gettext("Crate is a new kind of Python package index.") }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span4">
+      <div class="info-box">
+        {% set number = pkginfo.packages|intcomma %}
+        {% trans %}{{ number }} <span class="info-label">packages</span>{% endtrans %}
+      </div>
+    </div>
+
+    <div class="span4">
+      <div class="info-box">
+        {% set number = pkginfo.downloads|intcomma %}
+        {% trans %}{{ number }} <span class="info-label">downloads</span>{% endtrans %}
+      </div>
+    </div>
+
+    <div class="span4">
+      <div class="info-box">
+        {# <a href="">{{ gettext("Why Crate?") }}</a> #}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_script %}
+  <script>
+    $(function() {
+      $("#id_q").focus();
+    });
+  </script>
 {% endblock %}

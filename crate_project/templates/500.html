@@ -1,0 +1,10 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Server Error") }}{% endblock %}
+
+{% block body %}
+  <header class="jumbotron subhead" id="overview">
+    <h1>{{ gettext("Something went wrong") }}</h1>
+    <p class="lead">{{ gettext("We're sorry but a server error has occurred. We've been notified and will look into it as soon as possible.") }}</p>
+  </header>
+{% endblock %}

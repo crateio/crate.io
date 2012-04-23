@@ -8,6 +8,7 @@ import cStringIO
 import sys
 
 import bleach
+import jinja2
 import lxml.html
 
 from docutils.core import publish_string, publish_parts
@@ -23,7 +24,6 @@ from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.encoding import smart_str, force_unicode
 from django.utils.importlib import import_module
-from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
@@ -33,6 +33,7 @@ from model_utils.models import TimeStampedModel
 
 from crate.fields import JSONField
 from crate.utils.datatools import track_data
+from packages.evaluators import ReleaseEvaluator
 from packages.utils import verlib
 
 ALLOWED_TAGS = bleach.ALLOWED_TAGS + [
@@ -153,7 +154,7 @@ class PackageURI(models.Model):
 
 
 @track_data("hidden")
-class Release(models.Model):
+class Release(models.Model, ReleaseEvaluator):
 
     created = AutoCreatedField("created", db_index=True)
     modified = AutoLastModifiedField("modified")
@@ -284,7 +285,7 @@ class Release(models.Model):
                     cnt = bleach.clean(cnt, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
                     cnt = bleach.linkify(cnt, skip_pre=True, parse_email=True)
 
-                    msg = mark_safe(cnt)
+                    msg = jinja2.Markup(cnt)
 
             sys.stderr = old_stderr
             self._description_html = msg
@@ -327,18 +328,12 @@ class Release(models.Model):
                     cnt = bleach.clean(cnt, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES)
                     cnt = bleach.linkify(cnt, skip_pre=True, parse_email=True)
 
-                    msg = mark_safe(cnt)
+                    msg = jinja2.Markup(cnt)
 
             sys.stderr = old_stderr
             self._changelog_html = msg
 
         return self._changelog_html
-
-    @property
-    def history(self):
-        from history.models import Event
-
-        return Event.objects.filter(package=self.package.name).order_by("-created")
 
 
 @track_data("hidden")

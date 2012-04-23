@@ -1,0 +1,47 @@
+<h3 class="visuallyhidden">{{ gettext("Downloads") }}</h3>
+
+<div class="downloads">
+  <div class="package">{% trans count=release.package.downloads|intcomma() %}<span class="count">{{ count }}</span> total downloads{% endtrans %}</div>
+  <div class="version">{% trans count=release.downloads|intcomma() %}<span class="count">{{ count }}</span> for this version{% endtrans %}</div>
+</div>
+
+<div id="download-chart">
+  <div class="chart loading"></div>
+  <div class="timeline"></div>
+  <div class="slider"></div>
+</div>
+
+<h3>{{ gettext("Evaluation") }} <small>{{ gettext("mouse over for details") }}</small></h3>
+
+<div id="release-evaluation">
+  {% for result in release.evaluate() %}
+    {% if not result.hide %}
+      <div class="alert{% if result.level %} alert-{{ result.level }}{% endif %}">
+        <div rel="popover" data-placement="left" data-title="{{ result.evaluator.title }}" data-content="{{ result.evaluator.message }}">
+          {% if result.level == "success" %}
+            <i class="icon icon-ok"></i> {{ result.message }}
+          {% elif result.level == "error" %}
+            <i class="icon icon-remove"></i> {{ result.message }}
+          {% elif result.level == "unknown" %}
+            <i class="icon icon-remove"></i> {{ result.message }}
+          {% else %}
+            <i class="icon icon-asterisk"></i> {{ result.message }}
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<h3>{{ gettext("Latest Versions") }}</h3>
+
+<div class="versions">
+  <ul class="unstyled">
+    {% for version in versions[:5] %}
+      <li{% if version.hidden %} class="yanked"{% endif %}>
+        <a href="{{ version.get_absolute_url() }}" title="{{ version.package.name }} {{ version.verison }}">{{ version.version }}</a>
+        <span class="date">{{ version.created|date("DATE_FORMAT") }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>

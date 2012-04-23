@@ -3,6 +3,7 @@ from django.http import Http404
 from django.utils.translation import ugettext as _
 from django.views.generic.detail import DetailView
 
+from history.models import Event
 from packages.models import Release
 
 
@@ -23,6 +24,8 @@ class ReleaseDetail(DetailView):
         ctx.update({
             "release_files": [x for x in self.object.files.all() if not x.hidden],
             "version_specific": self.kwargs.get("version", None),
+            "versions": Release.objects.filter(package=self.object.package).select_related("package").order_by("-order"),
+            "history": Event.objects.filter(package=self.object.package.name).order_by("-created"),
         })
         return ctx
 

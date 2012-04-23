@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-import datetime
 import posixpath
-import time
-
-from django.utils.http import http_date
 
 import djcelery
 
@@ -78,9 +74,23 @@ STATICFILES_FINDERS = [
 COMPRESS_OUTPUT_DIR = "cache"
 
 TEMPLATE_LOADERS = [
+    "jingo.Loader",
     "django.template.loaders.filesystem.Loader",
     "django.template.loaders.app_directories.Loader",
 ]
+
+JINGO_EXCLUDE_APPS = [
+    "debug_toolbar",
+    "admin",
+    "admin_tools",
+]
+
+JINJA_CONFIG = {
+    "extensions": [
+        "jinja2.ext.i18n",
+        "jinja2.ext.autoescape",
+    ],
+}
 
 MIDDLEWARE_CLASSES = [
     "django_hosts.middleware.HostsMiddleware",
@@ -92,8 +102,6 @@ MIDDLEWARE_CLASSES = [
     "django_openid.consumer.SessionConsumer",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
-    "pagination.middleware.PaginationMiddleware",
 
     "pinax.apps.account.middleware.LocaleMiddleware",
     "pinax.middleware.security.HideSensistiveFieldsMiddleware",
@@ -108,10 +116,7 @@ WSGI_APPLICATION = "crate_project.wsgi.application"
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
-]
-
-JINJA_TEMPLATE_DIRS = [
-    os.path.join(PROJECT_ROOT, "templates", "_jinja2"),
+    os.path.join(PROJECT_ROOT, "templates", "_dtl"),
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
@@ -127,9 +132,6 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "pinax.core.context_processors.pinax_settings",
 
     "pinax.apps.account.context_processors.account",
-
-    # "notification.context_processors.notification",
-    "announcements.context_processors.site_wide_announcements",
 ]
 
 INSTALLED_APPS = [
@@ -151,24 +153,16 @@ INSTALLED_APPS = [
 
     "pinax.templatetags",
 
-    # theme
-    "pinax_theme_bootstrap",
-
     # external (Pinax)
-    # "notification",  # must be first
     "staticfiles",
-    "pagination",
     "compressor",
     "django_openid",
     "timezones",
     "emailconfirmation",
-    "announcements",
-    "idios",
     "metron",
 
     # Pinax
     "pinax.apps.account",
-    "pinax.apps.signup_codes",
 
     # external (Project)
     "south",
@@ -181,10 +175,14 @@ INSTALLED_APPS = [
     "tastypie",
     "djangosecure",
 
+    # Templating
+    "jingo",
+    "jhumanize",
+
     # project
+    "core",
     "about",
     "aws_stats",
-    "profiles",
     "packages",
     "pypi",
     "search",
@@ -200,13 +198,6 @@ FIXTURE_DIRS = [
 ]
 
 MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
-
-ABSOLUTE_URL_OVERRIDES = {
-    "auth.user": lambda o: "/profiles/profile/%s/" % o.username,
-}
-
-AUTH_PROFILE_MODULE = "profiles.Profile"
-NOTIFICATION_LANGUAGE_MODULE = "account.Account"
 
 CONTACT_EMAIL = "support@crate.io"
 
@@ -231,7 +222,7 @@ PASSWORD_HASHERS = (
 )
 
 LOGIN_URL = "/account/login/"
-LOGIN_REDIRECT_URLNAME = "what_next"
+LOGIN_REDIRECT_URLNAME = "search"
 LOGOUT_REDIRECT_URLNAME = "search"
 
 EMAIL_CONFIRMATION_DAYS = 2
@@ -261,7 +252,6 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_SECURE_URLS = False
 
 AWS_HEADERS = {
-    "Expires": lambda: http_date(time.mktime((datetime.datetime.now() + datetime.timedelta(days=365)).timetuple())),
     "Cache-Control": "max-age=31556926",
 }
 

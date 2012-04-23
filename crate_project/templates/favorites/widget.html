@@ -1,18 +1,16 @@
-{% load url from future %}
-
-{% load i18n %}
-{% load staticfiles %}
-
-{% if request.user.is_authenticated %}
-    <a href="{% url 'toggle_favorite' package=object.name %}" class="favoriter" rel="tooltip" title="{% trans "Favorite this package" %}">
-        <img
-             {% if followed %}src="{% static 'img/followed.png' %}"{% else %}src="{% static 'img/follow.png' %}"{% endif %}
-             height="20px" width="20px"
-             data-favorite-img="{% static 'img/followed.png' %}"
-             data-unfavorite-img="{% static 'img/follow.png' %}" />
+{% macro widget(user, object) -%}
+  {% if user.is_authenticated() %}
+    {% set followed = favorite_info(user, object).followed %}
+    <a href="{{ url("toggle_favorite", package=object.name) }}" class="favoriter" rel="tooltip" title="{{ gettext("Favorite this package") }}">
+      <img
+        {% if followed %}src="{{ static("img/followed.png") }}"{% else %}src="{{ static("img/follow.png") }}"{% endif %}
+                         height="20px" width="20px"
+                         data-favorite-img="{{ static("img/followed.png") }}"
+                         data-unfavorite-img="{{ static("img/follow.png") }}" />
     </a>
-{% else %}
-    <a href="" class="disable-link" rel="tooltip" title="{% trans "Log in to Favorite this package" %}">
-        <img src="{% static 'img/follow.png' %}" height="20px" width="20px" />
+  {% else %}
+    <a href="" class="disable-link" rel="tooltip" title="{{ gettext("Log in to Favorite this package") }}">
+      <img src="{{ static("img/follow.png") }}" height="20px" width="20px" />
     </a>
-{% endif %}
+  {% endif %}
+{% endmacro -%}

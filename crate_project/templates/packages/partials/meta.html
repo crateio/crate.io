@@ -1,0 +1,75 @@
+<div class="author">
+  {% if release.author %}
+    <h4>{{ gettext("Author") }}</h4>
+
+    {{ release.author }}
+  {% endif %}
+</div>
+
+<div class="links">
+  {% if release.uris.all %}
+    <h4>{{ gettext("Links") }}</h4>
+
+    <ul class="unstyled">
+      {% for uri in release.uris.all() %}
+        <li><a href="{{ uri.uri }}" title="{{ uri.label }}">{{ uri.label }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+<div class="requirements">
+  <h4>Pip</h4>
+
+  {{ object.requirement_line }}
+</div>
+
+<div id="classifiers">
+  {% if release.classifiers.all() %}
+    <h4>{{ gettext("Classifiers") }}</h4>
+
+    <ul class="unstyled">
+      {% for classifier in release.classifiers.all() %}
+        <li>{{ classifier.trove }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="span3">
+    {% if release.requires.all() %}
+      <h4>{{ gettext("Requirements") }}</h4>
+
+      <ul>
+        {% for requirement in release.requires.all() %}
+          <li class="kind-{{ requirement.kind }}"><a href="">{{ requirement.name }}{{ requirement.version }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <div class="span3">
+    {% if release.provides.all() %}
+      <h4>{{ gettext("Provides") }}</h4>
+
+      <ul>
+        {% for provides in release.provides.all() %}
+          <li class="kind-{{ provides.kind }}"><a href="">{{ provides.name }}{{ provides.version }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+
+  <div class="span3">
+    {% if release.obsoletes.all() %}
+      <h4>{{ gettext("Obsoletes") }}</h4>
+
+      <ul>
+        {% for obsolete in release.obsoletes.all() %}
+          <li class="kind-{{ obsolete.kind }}"><a href="">{{ obsolete.name }}{{ obsolete.version }}</a></li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</div>
