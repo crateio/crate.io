@@ -34,6 +34,8 @@
     </div>
   </div>
 
+  {% set pkginfo = package_information() %}
+
   <div class="row">
     <div class="span12">
       <div id="tagline">
@@ -45,14 +47,14 @@
   <div class="row">
     <div class="span4">
       <div class="info-box">
-        {% set number = "20,476" %}
+        {% set number = pkginfo.packages|intcomma %}
         {% trans %}{{ number }} <span class="info-label">packages</span>{% endtrans %}
       </div>
     </div>
 
     <div class="span4">
       <div class="info-box">
-        {% set number = "149,177,372" %}
+        {% set number = pkginfo.downloads|intcomma %}
         {% trans %}{{ number }} <span class="info-label">downloads</span>{% endtrans %}
       </div>
     </div>
