@@ -1,0 +1,34 @@
+.visuallyhidden{height:1px;width:1px;margin:-1px;padding:0;border:0;clip:rect(0 0 0 0);position:absolute;overflow:hidden;}
+body,p,label,input,button,select,textarea,.navbar-search .search-query{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;}
+html,body{height:100%;}
+#body-inner{min-height:100%;height:auto !important;height:100%;margin:0 auto -160px;}#body-inner .push{height:160px;}
+i.icon-big-search{background-image:url("../img/search.png");background-position:0 0;height:24px;width:24px;}
+.versions .yanked{text-decoration:line-through;font-style:italic;color:#999;}.versions .yanked a,.versions .yanked a:hover,.versions .yanked a:link,.versions .yanked a:active,.versions .yanked a:visited{color:#999;}
+#content-wrapper{padding-top:60px;padding-bottom:60px;}
+footer{min-height:158px;border-top:1px solid #E0E0E0;border-bottom:1px solid #E0E0E0;box-shadow:inset 0 -1px 0 #ffffff;background-color:#F8F8F8;}footer .footer-inner{padding-top:20px;}
+footer .navlinks li{margin-left:5px;}footer .navlinks li a{color:#999;}footer .navlinks li a :link,footer .navlinks li a :visited,footer .navlinks li a :active{color:#999;}
+footer .navlinks li a :hover{color:#CCCs;}
+footer .sponsor-logo{margin-top:10px;}
+#search #main-title{margin-top:60px;}#search #main-title h1{font-weight:300;font-size:100px;height:100px;line-height:1;}
+#search #search-area{margin-top:2em;}#search #search-area :-moz-placeholder{color:#dddddd;}
+#search #search-area::-webkit-input-placeholder{color:#dddddd;}
+#search #search-area #search-box input{height:48px;line-height:1.5;font-size:36px;}
+#search #search-area #search-box button{height:58px;width:58px;}
+#search #tagline{margin-top:1em;}#search #tagline p{color:#999;font-size:1.3em;line-height:1;}
+#search .info-box{margin-top:1em;font-size:24px;}#search .info-box .info-label{color:#999;font-size:20px;}
+#search-results .results .result{padding-top:10px;padding-bottom:10px;}#search-results .results .result .package-name{font-weight:bold;line-height:27px;font-size:18px;}
+#search-results .results .result .author{padding-left:10px;}
+#search-results .results .result .summary{margin-top:15px;}
+#search-results .results:nth-child(odd) .result{background-color:#f9f9f9;}
+#search-results .results:hover .result{background-color:#f5f5f5;}
+#release-detail{}#release-detail .content{background-color:#fff;padding:20px;margin:0 -20px;-webkit-border-radius:6px 6px 6px 6px;-moz-border-radius:6px 6px 6px 6px;border-radius:6px 6px 6px 6px;-webkit-box-shadow:0 1px 2px rgba(0, 0, 0, 0.15);-moz-box-shadow:0 1px 2px rgba(0, 0, 0, 0.15);box-shadow:0 1px 2px rgba(0, 0, 0, 0.15);}
+#release-detail .page-header{background-color:#f5f5f5;padding:20px 20px 10px;margin:-20px -20px 20px;}#release-detail .page-header .follow{display:inline-block;margin-right:10px;position:relative;top:-5px;}
+#release-detail .page-header .package-title{display:inline-block;}
+#release-detail .yank-explanation{padding-top:120px;padding-right:2em;}
+#release-detail .no-install-summary{margin-bottom:30px;}
+#release-detail #install-cmd,#release-detail #install-cmd h4{font-size:28px;font-weight:normal;font-family:Monaco, Andale Mono, Courier New, monospace;}
+#release-detail #install-cmd{margin-top:1em;margin-bottom:1em;text-align:center;}#release-detail #install-cmd h4{display:inline;text-transform:uppercase;font-size:18px;}
+#release-detail #install-cmd h4:after{content:" >";}
+#release-detail #sidebar{margin-left:0;padding-left:19px;border-left:1px solid #eee;}#release-detail #sidebar .downloads .count{display:block;color:#404040;font-weight:bold;font-size:24px;}
+#release-detail #sidebar .downloads .package,#release-detail #sidebar .downloads .version{margin-bottom:1em;}
+#release-detail #sidebar #download-chart .loading{min-height:200px;min-width:270px;background:url(../img/ajax-loader.gif);background-repeat:no-repeat;background-position:center;}
