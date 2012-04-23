@@ -1,5 +1,5 @@
 {% if field.is_hidden %}
-  {{ field }}
+  {{ field|safe }}
 {% else %}
   <div id="div_{{ field.auto_id }}" class="control-group {% if field.errors %}error{% endif %} {% if field.css_classes %} {{ field.css_classes }}{% endif %}">
     {% if field.label and not field|is_checkbox %}
