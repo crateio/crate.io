@@ -1,0 +1,10 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Not Found") }}{% endblock %}
+
+{% block body %}
+  <header class="jumbotron subhead" id="overview">
+    <h1>{{ gettext("Page not found") }}</h1>
+    <p class="lead">{{ gettext("We're sorry but that page could not be found.") }}</p>
+  </header>
+{% endblock %}
