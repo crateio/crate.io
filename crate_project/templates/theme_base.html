@@ -66,15 +66,24 @@
     {% endblock %}
 
     <div id="body-inner">
-      {% block body_base %}
-        <div class="container">
-          {% include "_messages.html" %}
+      <div id="content-wrapper">
+        {% block body_base %}
+          <div class="container">
+            {% include "_messages.html" %}
 
-          {% block body %}
-          {% endblock %}
-        </div>
-      {% endblock %}
+            {% block body %}
+            {% endblock %}
+          </div>
+        {% endblock %}
+      </div>
+      <div class="push"><!--//--></div>
     </div>
+
+    <footer>
+      <div class="container">
+        {% include "_footer.html" %}
+      </div>
+    </footer>
 
     {% block script_base %}
       <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
