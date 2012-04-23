@@ -9,6 +9,7 @@ from django.utils import formats
 import jinja2
 
 from jingo import register
+from pinax.apps.account.utils import user_display as pinax_user_display
 from staticfiles.storage import staticfiles_storage
 
 
@@ -98,3 +99,8 @@ def is_checkbox(field):
 @register.filter
 def css_class(field):
     return field.field.widget.__class__.__name__.lower()
+
+
+@register.function
+def user_display(user):
+    return pinax_user_display(user)
