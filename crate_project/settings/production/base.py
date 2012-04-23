@@ -49,6 +49,10 @@ LOGGING = {
 
 SITE_ID = 3
 
+JINJA_CONFIG.update({
+    "auto_reload": False,
+})
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 SERVER_EMAIL = "server@crate.io"
