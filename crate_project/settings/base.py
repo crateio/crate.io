@@ -159,7 +159,6 @@ INSTALLED_APPS = [
     "django_openid",
     "timezones",
     "emailconfirmation",
-    "announcements",
     "metron",
 
     # Pinax
@@ -184,7 +183,6 @@ INSTALLED_APPS = [
     "core",
     "about",
     "aws_stats",
-    "profiles",
     "packages",
     "pypi",
     "search",
