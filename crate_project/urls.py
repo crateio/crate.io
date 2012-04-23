@@ -5,7 +5,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 import evaluator
-evaluator.autodiscover()
+evaluator.autodiscover
+
+import ji18n.translate
+ji18n.translate.patch()
 
 from pinax.apps.account.openid_consumer import PinaxConsumer
 
