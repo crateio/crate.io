@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os.path
-import datetime
 import posixpath
-import time
-
-from django.utils.http import http_date
 
 import djcelery
 
@@ -120,6 +116,7 @@ WSGI_APPLICATION = "crate_project.wsgi.application"
 
 TEMPLATE_DIRS = [
     os.path.join(PROJECT_ROOT, "templates"),
+    os.path.join(PROJECT_ROOT, "templates", "_dtl"),
 ]
 
 TEMPLATE_CONTEXT_PROCESSORS = [
