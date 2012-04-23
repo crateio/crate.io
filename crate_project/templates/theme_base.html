@@ -65,16 +65,16 @@
       </div>
     {% endblock %}
 
-    {% block body_base %}
-      <div id="body-inner">
+    <div id="body-inner">
+      {% block body_base %}
         <div class="container">
           {% include "_messages.html" %}
 
           {% block body %}
           {% endblock %}
         </div>
-      </div>
-    {% endblock %}
+      {% endblock %}
+    </div>
 
     {% block script_base %}
       <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
