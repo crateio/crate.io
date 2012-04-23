@@ -1,4 +1,16 @@
 /* Utility Classes --- */
+
+// Placeholder text
+// -------------------------
+.placeholder(@color: @placeholderText) {
+  :-moz-placeholder {
+    color: @color;
+  }
+  ::-webkit-input-placeholder {
+    color: @color;
+  }
+}
+
 .visuallyhidden {
   height: 1px;
   width: 1px;
@@ -18,6 +30,13 @@ body, p, label, input, button, select, textarea, .navbar-search .search-query {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+i.icon-big-search {
+  background-image: url("../img/search.png");
+  background-position: 0 0;
+  height: 24px;
+  width: 24px;
+}
+
 .versions {
   .yanked {
     text-decoration: line-through;
@@ -32,6 +51,45 @@ body, p, label, input, button, select, textarea, .navbar-search .search-query {
 
 #body-inner {
   padding-top: 60px;
+}
+
+#search {
+  #main-title {
+    margin-top: 60px;
+
+    h1 {
+      font-weight: 300;
+      font-size: 120px;
+      height: 120px;
+      line-height: 1;
+    }
+  }
+
+  #search-area {
+    margin-top: 2em;
+
+    .placeholder(#CCC);
+
+    #search-box {
+      input {
+        height: 48px;
+        line-height: 1.5;
+        font-size: 36px;
+
+      }
+
+      button {
+        height: 58px;
+        width: 58px;
+      }
+    }
+  }
+
+  #tagline p {
+    color: #999;
+    font-size: 1.3em;
+    line-height: 1;
+  }
 }
 
 #search-results {

@@ -5,12 +5,15 @@
 {% block body_id %}search{% endblock %}
 
 {% block body %}
-  <div class="hero-unit">
-    <h1>Crate.io</h1>
-    <p>{{ gettext("Crate.io is a Python Package Index with a heavy focus on making it easy to find the packages you want, and reliably hosting them for easy installation.") }}</p>
+  <div class="row">
+    <div id="main-title" class="span4">
+      <h1>Crate.io</h1>
+    </div>
+  </div>
 
-    <div class="row">
-      <div id="main-search" class="span5">
+  <div class="row">
+    <div class="span12">
+      <div id="search-area">
         <form class="form-search" method="GET" action="{{ url("search") }}">
           <input type="hidden" name="has_releases" value="on">
 
@@ -21,11 +24,20 @@
             <div class="controls">
               {{ form.q.errors }}
 
-              <input id="id_q" type="text" placeholder="{{ gettext("Search") }}" class="span4" name="q">
-              <input type="submit" class="btn btn-primary" value="{{ gettext("Search") }}">
+              <div id="search-box" class="input-append">
+                <input id="id_q" name="q" type="text" placeholder="{{ gettext("Search") }}" class="span11"><button class="btn" type="submit"><i class="icon-big-search"></i><span class="visuallyhidden">{{ gettext("Search") }}</span></button>
+              </div>
             </div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="span12">
+      <div id="tagline">
+        <p>{{ gettext("Crate is a better Python package index.") }}</p>
       </div>
     </div>
   </div>
