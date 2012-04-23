@@ -41,4 +41,26 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="span4">
+      <div class="info-box">
+        {% set number = "20,476" %}
+        {% trans %}{{ number }} <span class="info-label">packages</span>{% endtrans %}
+      </div>
+    </div>
+
+    <div class="span4">
+      <div class="info-box">
+        {% set number = "149,177,372" %}
+        {% trans %}{{ number }} <span class="info-label">downloads</span>{% endtrans %}
+      </div>
+    </div>
+
+    <div class="span4">
+      <div class="info-box">
+        <a href="">{{ gettext("Why Crate?") }}</a>
+      </div>
+    </div>
+  </div>
 {% endblock %}
