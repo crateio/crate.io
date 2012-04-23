@@ -1,5 +1,7 @@
 {% extends "site_base.html" %}
 
+{% import "bootstrap/forms.html" as bootstrap %}
+
 {% block head_title %}{{ gettext("Choose a Username") }}{% endblock %}
 
 {% block body %}
@@ -15,7 +17,7 @@
     <fieldset>
       {{ csrf() }}
 
-      {{ form|as_bootstrap }}
+      {{ bootstrap.render_form(form) }}
 
       <div class="form-actions">
         <button type="submit" class="btn-primary btn">{{ gettext("Sign up") }}</button>
