@@ -41,6 +41,7 @@ ALLOWED_TAGS = bleach.ALLOWED_TAGS + [
                     "dl", "dd", "dt", "tt", "cite",
                     "h1", "h2", "h3", "h4", "h5", "h6",
                     "table", "col", "tr", "td", "th", "tbody", "thead",
+                    "colgroup",
                 ]
 
 ALLOWED_ATTRIBUTES = dict(bleach.ALLOWED_ATTRIBUTES.items())
