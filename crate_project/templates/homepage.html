@@ -64,3 +64,11 @@
     </div>
   </div>
 {% endblock %}
+
+{% block extra_script %}
+  <script>
+    $(function() {
+      $("#id_q").focus();
+    });
+  </script>
+{% endblock %}
