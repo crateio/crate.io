@@ -1,5 +1,7 @@
 {% extends "site_base.html" %}
 
+{% import "favorites/widget.html" as favorites %}
+
 {% block extra_style %}
   <link rel="stylesheet" href="{{ static("css/rickshaw.min.css") }}">
 {% endblock %}
@@ -11,6 +13,8 @@
 {% block body %}
   <div class="content">
     <div class="page-header">
+      <div class="follow">{{ favorites.widget(request.user, release.package) }}</div>
+
       <h1 class="package-title">{{ release.package.name }} <small> {{ release.version }}</small></h1>
     </div>
 
