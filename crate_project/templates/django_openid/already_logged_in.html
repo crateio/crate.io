@@ -1,0 +1,9 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Already logged in") }}{% endblock %}
+
+{% block body %}
+  {% set url_acct_logout = url("acct_logout") %}
+  <h1>{{ gettext("Already logged in") }}</h1>
+  <p>{% trans %}You are already logged into the site. To login with a different OpenID please <a href="/openid/logout/?next={{ url_acct_logout }}">logout</a> first.{% endtrans %}
+{% endblock %}

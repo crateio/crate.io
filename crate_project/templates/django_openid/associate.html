@@ -1,0 +1,21 @@
+{% extends "account/base.html" %}
+
+{% block head_title %}{{ gettext("Verify this Association") }}{% endblock %}
+
+{% block body %}
+  <h1>{{ gettext("Verify this Association") }}</h1>
+  <p>{% trans %}You have begun to associate <strong>{{ specific_openid }}</strong> with your existing account.  This will allow you to sign in as <strong>{% user_display user %}</strong> using that OpenID.  Click below to verify that association.{% endtrans %}</p>
+
+  <form id="openid-verify-association" action="{{ action }}" method="POST">
+    {{ csrf() }}
+
+    <input type="hidden" name="openid_token" value="{{ openid_token }}" />
+
+    {% if next %}
+      <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+
+    <input class="btn btn-primary" type="submit" value="{{ gettext("Verify Association") }}" />
+    <a class="btn" href="/openid/associations/">{{ gettext("Decline") }}</a>
+  </form>
+{% endblock %}

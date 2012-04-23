@@ -1,0 +1,54 @@
+{% extends "account/base.html" %}
+
+{% block head_title %}{{ gettext("OpenID Associations") }}{% endblock %}
+
+{% block body %}
+  {% set acct_passwd_set_url = url("acct_passwd_set") %}
+
+  <h1>{{ gettext("Manage OpenID Associations") }}</h1>
+
+  {% if not request.user.password %}
+    <strong>{% trans %}You have not set a password for this user account. You are unable to remove OpenID associations until you <a href="{{ acct_passwd_set_url }}">set a password</a>.{% endtrans %}</strong>
+  {% endif %}
+
+  {% if openids %}
+    <p>{{ gettext("Your account is currently associated with the following OpenID(s)") }}:</p>
+    <table class="table table-striped">
+      {% for openid in openids %}
+        <tr>
+          <td>{{ openid.openid }}</td>
+          <td>
+            <form style="display: none;" id="remove_{{ loop.index }}" method="post" action="{{ action }}">
+              {{ csrf() }}
+
+              <input type="hidden" name="todelete" value="{{ openid.button }}" />
+            </form>
+            <a class="remove" href="#" onclick="$('#remove_{{ loop.index }}').submit()">{{ gettext("remove") }}</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+  {% endif %}
+
+  <p>{{ gettext("To associate a new OpenID with this account, sign in with it here:") }}</p>
+
+  <form action="{{ action_new }}" method="POST">
+    <fieldset>
+      {{ csrf() }}
+
+      <input type="hidden" name="next" value="{{ associate_next }}">
+
+      <div class="control-group">
+        <label class="control-label" for="openid_url">{{ gettext("OpenID Identifier") }}</label>
+
+        <div class="controls">
+          <input type="text" name="openid_url" value="" />
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <input class="btn btn-primary" type="submit" value="{{ gettext("Authenticate and associate with this account") }}" />
+      </div>
+    </fieldset>
+  </form>
+{% endblock %}
