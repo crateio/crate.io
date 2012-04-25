@@ -1,7 +1,5 @@
 {% macro intercom_js(user) -%}
   {% set idata = intercom_data(user) %}
-  blah
-  {{ idata }}
   {% if idata %}
     <script>
       var intercomSettings = {
