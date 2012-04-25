@@ -169,7 +169,6 @@ INSTALLED_APPS = [
     "django_hosts",
     "haystack",
     "storages",
-    "intercom",
     "celery_haystack",
     "tastypie",
     "djangosecure",
@@ -178,6 +177,7 @@ INSTALLED_APPS = [
     "jingo",
     "jhumanize",
     "jmetron",
+    "jintercom",
 
     # project
     "core",

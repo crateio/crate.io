@@ -13,4 +13,3 @@ def analytics():
             analytic_codes[kind] = code
 
     return analytic_codes
-

@@ -1,6 +1,7 @@
 {% extends "theme_base.html" %}
 
 {% import "metron/widget.html" as metron %}
+{% import "intercom.html" as intercom %}
 
 {% block head_title_base -%}
 {% block head_title %}{% endblock %} &mdash; {{ SITE_NAME }}
@@ -28,4 +29,5 @@
   {{ super() }}
 
   {{ metron.metron() }}
+  {{ intercom.intercom_js(request.user) }}
 {% endblock %}
