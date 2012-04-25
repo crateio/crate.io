@@ -1,0 +1,5 @@
+{% macro metron() -%}
+  {% for kind, code in analytics().items() %}
+    {% include "metron/%s.html"|format(kind) %}
+  {% endfor %}
+{% endmacro -%}

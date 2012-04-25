@@ -1,5 +1,7 @@
 {% extends "theme_base.html" %}
 
+{% import "metron/widget.html" as metron %}
+
 {% block head_title_base -%}
 {% block head_title %}{% endblock %} &mdash; {{ SITE_NAME }}
 {%- endblock %}
@@ -19,4 +21,11 @@
     <input type="text" class="search-query" placeholder="{{ gettext("Search") }}" name="q">
     <input type="hidden" name="has_releases" value="on">
   </form>
+{% endblock %}
+
+
+{% block script_base %}
+  {{ super() }}
+
+  {{ metron.metron() }}
 {% endblock %}
