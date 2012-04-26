@@ -9,6 +9,7 @@ footer{min-height:158px;border-top:1px solid #E0E0E0;border-bottom:1px solid #E0
 footer .navlinks li{margin-left:5px;}footer .navlinks li a{color:#999;}footer .navlinks li a :link,footer .navlinks li a :visited,footer .navlinks li a :active{color:#999;}
 footer .navlinks li a :hover{color:#CCCs;}
 footer .sponsor-logo{margin-top:10px;}
+footer img{max-width:100%;}
 #search #main-title{margin-top:60px;}#search #main-title h1{font-weight:300;font-size:100px;height:100px;line-height:1;}
 #search #search-area{margin-top:2em;}#search #search-area :-moz-placeholder{color:#dddddd;}
 #search #search-area::-webkit-input-placeholder{color:#dddddd;}
