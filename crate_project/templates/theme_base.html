@@ -10,17 +10,17 @@
     <meta name="author" content="">
 
     {% block style_base %}
-      <link rel="stylesheet" href="/site_media/static/css/bootstrap.css">
-      <link rel="stylesheet" href="/site_media/static/css/bootstrap-responsive.css">
+      <link rel="stylesheet" href="{{ static("css/bootstrap.min.css") }}">
+      <link rel="stylesheet" href="{{ static("css/bootstrap-responsive.min.css") }}">
 
       <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
 
       {% if not debug %}
-      <link rel="stylesheet" href="/site_media/static/css/crate.css">
+      <link rel="stylesheet" href="{{ static("css/crate.css") }}">
       {%- else -%}
-      <link rel="stylesheet/less" href="/site_media/static/less/crate.less">
+      <link rel="stylesheet/less" href="{{ static("less/crate.less") }}">
 
-      <script src="/site_media/static/js/lib/less-1.3.0.min.js"></script>
+      <script src="{{ static("js/lib/less-1.3.0.min.js") }}"></script>
       {% endif %}
 
       {% block extra_style %}{% endblock %}
@@ -89,9 +89,8 @@
 
     {% block script_base %}
       <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.0.2/bootstrap.min.js"></script>
+      <script src="{{ static("js/bootstrap.min.js") }}"></script>
       <script src="{{ static("js/lib/fayer.js") }}"></script>
-
       <script src="{{ static("js/ajaxCSRF.js") }}"></script>
       <script src="{{ static("js/crate.js") }}"></script>
 
