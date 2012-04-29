@@ -87,3 +87,68 @@
     </div>
   </div>
 {% endblock %}
+
+{% block extra_script %}
+  <script src="{{ static("js/lib/jquery.history.js") }}"></script>
+  <script>
+    $(function(){
+      $("[rel='popover']").popover();
+
+      var History = window.History;
+
+      $(window).bind("anchorchange", function(){
+        $("#package-tabs a[href='" + location.hash + "']").click();
+      });
+
+      $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+        if (History.enabled) {
+          History.pushState(null, null, $(e.target).attr("href"));
+        }
+      });
+    });
+  </script>
+
+  <script src="{{ static("js/lib/date.js") }}"></script>
+  <script src="{{ static("js/lib/d3.v2.min.js") }}"></script>
+  <script src="{{ static("js/lib/rickshaw.min.js") }}"></script>
+  <script>
+    var palette = new Rickshaw.Color.Palette({scheme: 'spectrum2000'});
+
+    var graph = new Rickshaw.Graph.Ajax({
+      element: $("#download-chart .chart")[0],
+      renderer: 'area',
+      stroke: true,
+      dataURL: '{{ url("package_stats_delta", slug=release.package.name) }}',
+      onData: function(d){
+        // Hide the Spinner
+        $("#download-chart .loading").removeClass("loading");
+
+        return $.map(d, function(i){ i["color"] = palette.color(); return i; });
+      },
+      onComplete: function(s){
+        var hoverDetail = new Rickshaw.Graph.HoverDetail({
+          graph: s.graph,
+          xFormatter: function(x) { var d = new Date(x*1000); return "Week of " + d.toString("MMM d"); },
+          yFormatter: function(y) { return parseInt(y) + " downloads"; }
+        });
+
+        var ticksTreatment = 'glow';
+
+        var xAxis = new Rickshaw.Graph.Axis.Time({
+          graph: s.graph,
+          timeUnit: 'week',
+          ticksTreatment: ticksTreatment
+        });
+
+        var yAxis = new Rickshaw.Graph.Axis.Y({
+          graph: s.graph,
+          tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+          ticksTreatment: ticksTreatment
+        });
+
+        xAxis.render();
+        yAxis.render();
+      }
+    });
+  </script>
+{% endblock %}
