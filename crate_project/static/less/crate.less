@@ -227,6 +227,32 @@ footer {
 
     padding: 1em;
   }
+
+  #sidebar {
+    padding-top: 1em;
+
+    .downloads {
+      .count {
+        display: block;
+        color: #404040;
+        font-weight: bold;
+        font-size: 24px;
+      }
+
+      .package, .version {
+        margin-bottom: 1em;
+      }
+    }
+
+    #download-chart .loading {
+      min-height: 200px;
+      min-width: 200px;
+
+      background: url(../img/ajax-loader.gif);
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
 }
 
 /* Subnav */
