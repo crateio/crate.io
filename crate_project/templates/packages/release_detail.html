@@ -112,10 +112,10 @@
       var History = window.History;
 
       $(window).bind("anchorchange", function(){
-        $("#package-tabs a[href='" + location.hash + "']").click();
+        $(".subnav a[href='" + location.hash + "']").click();
       });
 
-      $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+      $('#.subnav a[data-toggle="tab"]').on('shown', function (e) {
         if (History.enabled) {
           History.pushState(null, null, $(e.target).attr("href"));
         }
