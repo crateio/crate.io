@@ -196,7 +196,12 @@ footer {
 #release-detail-new {
   header {
     .action-buttons {
-      text-align: right;
+      float: right;
+      > a, > div {
+        float: left;
+        display: inline-block;
+        margin-left: 1em;
+      }
     }
   }
 
