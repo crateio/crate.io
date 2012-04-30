@@ -190,6 +190,7 @@ INSTALLED_APPS = [
     "evaluator",
     "favorites",
     "history",
+    "lists",
     "helpdocs",
 ]
 
