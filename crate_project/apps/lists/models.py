@@ -8,7 +8,7 @@ class List(TimeStampedModel):
     user = models.ForeignKey("auth.User")
     # Translators: This is used to allow naming a specific list of packages.
     name = models.CharField(_("Name"), max_length=50, db_index=True)
-    private = models.BooleanField(_("Private"), default=False)
+    private = models.BooleanField(_("Private List"), default=False)
 
     packages = models.ManyToManyField("packages.Package", verbose_name=_("Packages"))
 
