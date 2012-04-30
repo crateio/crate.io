@@ -14,3 +14,6 @@ class List(TimeStampedModel):
 
     class Meta:
         unique_together = ("user", "name")
+
+    def __unicode__(self):
+        return u"%(username)s / %(listname)s" % {"username": self.user.username, "listname": self.name}

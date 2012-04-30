@@ -14,7 +14,6 @@
 {% block nav %}
   {% if request.user.is_authenticated %}
     <ul class="nav">
-      <li id="tab_favorites"><a href="{{ url("user_favorites") }}">{{ gettext("My Favorites") }}</a></li>
     </ul>
   {% endif %}
 
