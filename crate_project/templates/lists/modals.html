@@ -10,7 +10,7 @@
         <h3>{{ gettext("Remove %(package)s from %(list)s", package=release.package.name, list=list.name) }}</h3>
       </div>
 
-      <form method="POST" action="{{ url("remove_package_from_list", list=list.name, package=release.package.name) }}" autocapitalize="off" class="form-horizontal">
+      <form method="POST" action="{{ url("remove_package_from_list", list=list.name, package=release.package.name) }}" autocapitalize="off" class="form-horizontal json-form">
         {{ csrf() }}
 
         <div class="modal-body">
