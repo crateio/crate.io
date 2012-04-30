@@ -1,9 +1,9 @@
+{% set user_lists = lists_for_user(request.user) %}
+
 <div class="btn-group">
   <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
     <i class="icon-list"></i> {{ gettext("Lists") }} <span class="caret"></span>
   </a>
-
-  {% set user_lists = lists_for_user(request.user) %}
 
   <ul class="dropdown-menu">
     {% if request.user.is_authenticated() %}
@@ -19,7 +19,7 @@
         <li class="divider"></li>
       {% endif %}
 
-      <li><a href="#add-to-new-list" data-toggle="modal"><i class="icon-edit" data-toggle="modal"></i> {{ gettext("Add to a New List") }}</a></li>
+      <li><a href="#add-to-new-list" data-toggle="modal"><i class="icon-edit" data-toggle="modal"></i> {{ gettext("Add to a new List") }}</a></li>
     {% else %}
       <li><a href="{{ url("acct_login") }}?next={{ request.path }}">{{ gettext("Sign in to use Lists") }}</a></li>
     {% endif %}
