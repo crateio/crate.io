@@ -10,14 +10,18 @@
         <h3>{{ gettext("Remove %(package)s from %(list)s", package=release.package.name, list=list.name) }}</h3>
       </div>
 
-      <div class="modal-body">
-        <p>{% trans package=release.package.name, list=list.name %}Are you sure you want to remove <strong>{{ package }}</strong> from <strong>{{ list }}</strong>{% endtrans %}</p>
-      </div>
+      <form method="POST" action="{{ url("remove_package_from_list", list=list.name, package=release.package.name) }}" autocapitalize="off" class="form-horizontal">
+        {{ csrf() }}
 
-      <div class="modal-footer">
-        <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
-        <a href="#" class="btn btn-danger">{{ gettext("Yes, Remove It") }}</a>
-      </div>
+        <div class="modal-body">
+          <p>{% trans package=release.package.name, list=list.name %}Are you sure you want to remove <strong>{{ package }}</strong> from <strong>{{ list }}</strong>{% endtrans %}</p>
+        </div>
+
+        <div class="modal-footer">
+          <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
+          <button type="submit" class="btn btn-danger">{{ gettext("Yes, Remove It") }}</button>
+        </div>
+      </form>
     </div>
   {% else %}
     <div class="modal fade" id="add-to-list-{{ list.pk }}">
