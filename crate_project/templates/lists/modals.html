@@ -1,0 +1,57 @@
+{% import "bootstrap/forms.html" as bootstrap %}
+
+{% set user_lists = lists_for_user(request.user) %}
+
+{% for list in user_lists %}
+  {% if release.package in list.packages.all() %}
+    <div class="modal fade" id="remove-from-list-{{ list.pk }}">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{{ gettext("Remove %(package)s from %(list)s", package=release.package.name, list=list.name) }}</h3>
+      </div>
+
+      <div class="modal-body">
+        <p>{% trans package=release.package.name, list=list.name %}Are you sure you want to remove <strong>{{ package }}</strong> from <strong>{{ list }}</strong>{% endtrans %}</p>
+      </div>
+
+      <div class="modal-footer">
+        <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
+        <a href="#" class="btn btn-danger">{{ gettext("Yes, Remove It") }}</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="modal fade" id="add-to-list-{{ list.pk }}">
+      <div class="modal-header">
+        <button class="close" data-dismiss="modal">×</button>
+        <h3>{{ gettext("Add %(package)s to %(list)s", package=release.package.name, list=list.name) }}</h3>
+      </div>
+
+      <div class="modal-body">
+        <p>{% trans package=release.package.name, list=list.name %}Are you sure you want to add <strong>{{ package }}</strong> to <strong>{{ list }}</strong>{% endtrans %}</p>
+      </div>
+
+      <div class="modal-footer">
+        <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
+        <a href="#" class="btn btn-primary">{{ gettext("Yes, Add It") }}</a>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+<div class="modal fade" id="add-to-new-list">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h3>{{ gettext("Add %(package)s to a new List", package=release.package.name) }}</h3>
+  </div>
+
+  <form method="POST" action="{{ url("acct_login") }}" autocapitalize="off" class="form-horizontal">
+    <div class="modal-body">
+      {{ bootstrap.render_form(new_list_with_package_form()) }}
+    </div>
+
+    <div class="modal-footer">
+      <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
+      <button type="submit" class="btn btn-primary">{{ gettext("Create List") }}</button>
+    </div>
+  </form>
+</div>
