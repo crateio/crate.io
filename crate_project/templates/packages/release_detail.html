@@ -21,18 +21,8 @@
         <a class="btn" href=""><i class="icon-wrench"></i> {{ gettext("Admin") }}</a>
         <a class="btn" href=""><i class="icon-eye-open"></i> {{ gettext("Watch") }}</a>
 
-        <div class="btn-group">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-           <i class="icon-list"></i> {{ gettext("Lists") }}
-            <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <a href="">Add to favorites</a>
-            <a href="">Add to web/Django</a>
-            <li class="divider"></li>
-            <a href="">Add to a New List</a>
-          </ul>
-        </div>
+        {% include "lists/button.html" %}
+
       </div>
     </div>
   </header>
