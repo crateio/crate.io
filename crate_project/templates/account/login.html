@@ -42,6 +42,9 @@
       </form>
 
       <form action="/openid/register/" method="POST" autocapitalize="off" class="form-horizontal">
+
+        {{ csrf() }}
+
         <fieldset>
           <legend>{{ gettext("Or sign in with your OpenID") }}</legend>
 
