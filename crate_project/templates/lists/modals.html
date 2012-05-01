@@ -27,22 +27,6 @@
         </div>
       </form>
     </div>
-  {% else %}
-    <div class="modal fade" id="add-to-list-{{ list.pk }}">
-      <div class="modal-header">
-        <button class="close" data-dismiss="modal">×</button>
-        <h3>{{ gettext("Add %(package)s to %(list)s", package=release.package.name, list=list.name) }}</h3>
-      </div>
-
-      <div class="modal-body">
-        <p>{% trans package=release.package.name, list=list.name %}Are you sure you want to add <strong>{{ package }}</strong> to <strong>{{ list }}</strong>{% endtrans %}</p>
-      </div>
-
-      <div class="modal-footer">
-        <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
-        <a href="#" class="btn btn-primary">{{ gettext("Yes, Add It") }}</a>
-      </div>
-    </div>
   {% endif %}
 {% endfor %}
 
