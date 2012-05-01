@@ -17,6 +17,9 @@ $(function() {
         }
     );
 
+    $(this).addClass("disabled");
+    form.find(".progress").show();
+
     return false;
   });
 
