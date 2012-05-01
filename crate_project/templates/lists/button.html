@@ -11,7 +11,13 @@
         {% if release.package in list.packages.all() %}
           <li><a href="#remove-from-list-{{ list.pk }}" data-toggle="modal"><i class="icon-remove"></i> {{ gettext("Remove from %(listname)s", listname=list.name) }}</a></li>
         {% else %}
-          <li><a href="#add-to-list-{{ list.pk }}" data-toggle="modal"><i class="icon-plus"></i> {{ gettext("Add to %(listname)s", listname=list.name) }}</a></li>
+          <li>
+            <form method="POST" action="{{ url("add_package_to_list", list=list.name, package=release.package.name) }}" class="form-inline json-form">
+              {{ csrf() }}
+
+              <a href="#" data-onclick="submit"><i class="icon-plus"></i> {{ gettext("Add to %(listname)s", listname=list.name) }}</a>
+            </form>
+          </li>
         {% endif %}
       {% endfor %}
 

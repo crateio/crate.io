@@ -19,6 +19,25 @@ $(function() {
 
     return false;
   });
+
+  $("*[data-onclick=submit]").click(function() {
+      var form = $(this).closest("form");
+
+      $.post(
+        form.attr("action"),
+        form.serialize(),
+        function(data){
+            // @@@ Consider Passing a Callback in, instead of hardcoded
+            if (data.success) {
+                window.location.reload(true);
+            }
+            else {
+                // @@@ Do Something Smarter Here; What?
+                alert(data.message);
+            }
+        }
+    );
+  });
 });
 
 $("a[rel='tooltip']").tooltip();
