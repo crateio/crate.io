@@ -26,7 +26,11 @@ class AddToList(View):
     def get_list(self, list, user):
         return next(iter(List.objects.filter(name=list, user=user)[:1]), None)
 
+    def get_message(self):
+        return _("Successfully added %(package)s to %(list)s.") % self.kwargs
+
     def post(self, request, *args, **kwargs):
+        self.request = request
         self.args = args
         self.kwargs = kwargs
 
@@ -40,7 +44,7 @@ class AddToList(View):
                         message=_("Package does not exist")
                     )
 
-        user_list = self.get_list(self.kwargs.get("list"), user=request.user)
+        user_list = self.get_list(self.kwargs.get("list", None), user=request.user)
 
         if user_list is None:
             return self.render_json(
@@ -56,8 +60,30 @@ class AddToList(View):
                     package=self.kwargs.get("package"),
                     list=self.kwargs.get("list"),
                     success=True,
-                    message=_("Successfully removed %(package)s from %(list)s.") % self.kwargs
+                    message=self.get_message()
                 )
+
+
+class AddToNewList(AddToList):
+
+    def get_message(self):
+        kw = self.kwargs.copy()
+        kw.update({
+            "list": self.request.POST.get("name"),
+            })
+        return _("Successfully added %(package)s to %(list)s.") % kw
+
+    def get_list(self, list, user):
+        if list is None:
+            list = self.request.POST.get("name")
+
+        user_list, c = List.objects.get_or_create(user=user, name=list, defaults={"private": self.request.POST.get("private", True)})
+
+        if not c and user_list.private != self.request.POST.get("private", True):
+            user_list.private = self.request.POST.get("private", True)
+            user_list.save()
+
+        return user_list
 
 
 class RemoveFromList(View):

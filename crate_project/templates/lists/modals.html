@@ -10,7 +10,7 @@
         <h3>{{ gettext("Remove %(package)s from %(list)s", package=release.package.name, list=list.name) }}</h3>
       </div>
 
-      <form method="POST" action="{{ url("remove_package_from_list", list=list.name, package=release.package.name) }}" autocapitalize="off" class="form-horizontal json-form">
+      <form method="POST" action="{{ url("remove_package_from_list", list=list.name, package=release.package.name) }}" class="form-horizontal json-form">
         {{ csrf() }}
 
         <div class="modal-body">
@@ -36,12 +36,16 @@
     <h3>{{ gettext("Add %(package)s to a new List", package=release.package.name) }}</h3>
   </div>
 
-  <form method="POST" action="{{ url("acct_login") }}" autocapitalize="off" class="form-horizontal">
+  <form method="POST" action="{{ url("add_package_to_new_list", package=release.package.name) }}" class="form-horizontal json-form">
     <div class="modal-body">
       {{ bootstrap.render_form(new_list_with_package_form()) }}
     </div>
 
     <div class="modal-footer">
+      <div class="hide progress progress-striped active">
+        <div class="bar" style="width: 100%;"></div>
+      </div>
+
       <a href="#" class="btn">{{ gettext("Nevermind") }}</a>
       <button type="submit" class="btn btn-primary">{{ gettext("Create List") }}</button>
     </div>
