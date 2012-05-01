@@ -21,22 +21,26 @@ $(function() {
   });
 
   $("*[data-onclick=submit]").click(function() {
-      var form = $(this).closest("form");
+    var form = $(this).closest("form");
 
-      $.post(
-        form.attr("action"),
-        form.serialize(),
-        function(data){
-            // @@@ Consider Passing a Callback in, instead of hardcoded
-            if (data.success) {
-                window.location.reload(true);
-            }
-            else {
-                // @@@ Do Something Smarter Here; What?
-                alert(data.message);
-            }
+    $.post(
+      form.attr("action"),
+      form.serialize(),
+      function(data) {
+        // @@@ Consider Passing a Callback in, instead of hardcoded
+        if (data.success) {
+          window.location.reload(true);
         }
+        else {
+          // @@@ Do Something Smarter Here; What?
+          alert(data.message);
+        }
+      }
     );
+
+    $(this).replaceWith('<a><div class="progress progress-striped active"><div class="bar" style="width: 100%;"></div></div></a>');
+
+    return false;
   });
 });
 
