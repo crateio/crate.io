@@ -1,0 +1,22 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("%(username)s's lists", username=object_list.0.user.username) }}{% endblock %}
+
+{% block body_id %}lists-list{% endblock %}
+
+{% block body %}
+  <div class="page-header">
+    <h1>{{ gettext("%(username)s's lists", username=object_list.0.user.username) }}</h1>
+  </div>
+
+  {% for object in object_list %}
+    <div>
+      <h3{% if not object.private %} class="public"{% endif %}>{% if object.private %}<i class="icon-lock"></i>{% else %}{% endif %} <a href="{{ object.get_absolute_url() }}">{{ object.name }}</a></h3>
+      <blockquote>
+        {{ object.description }}
+      </blockquote>
+    </div>
+  {% else %}
+    <div>{{ gettext("This user has no lists.") }}</div>
+  {% endfor %}
+{% endblock %}

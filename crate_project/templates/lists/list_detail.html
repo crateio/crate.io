@@ -1,0 +1,23 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ list.name }}{% endblock %}
+
+{% block body_id %}lists-detail{% endblock %}
+
+{% block body %}
+  <div class="page-header">
+    <h1{% if list.private %} class="private"{% endif %}>{{ list.name }}</h1>
+  </div>
+
+  {% for package in packages %}
+    <div>
+      <h3><a href="{{ package.get_absolute_url() }}">{{ package.name }}</a> {% if package.latest %}<small>{{ package.latest.version }}{% endif %}</small></h3>
+
+      <blockquote>
+        {{ package.latest.summary }}
+      </blockquote>
+    </div>
+  {% else %}
+    <div>{{ gettext("This List is Empty") }}</div>
+  {% endfor %}
+{% endblock %}

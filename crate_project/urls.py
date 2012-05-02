@@ -27,8 +27,9 @@ urlpatterns = patterns("",
     url(r"^openid/", include(PinaxConsumer().urls)),
     url(r"^admin_tools/", include("admin_tools.urls")),
 
+    url(r"^users/", include("lists.urls")),
+
     url(r"^packages/", include("packages.urls")),
-    url(r"^lists/", include("lists.urls")),
 
     url(r"^stats/", include("packages.stats.urls")),
     url(r"^help/", include("helpdocs.urls")),
