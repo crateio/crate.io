@@ -27,14 +27,14 @@
     </div>
   </header>
 
-  {% if release.show_install_command %}
+  {# {% if release.show_install_command %}
     <div class="row12">
       <div class="install-cmd">
         <h4>{{ gettext("Install") }}</h4>
         {% if version_specific %}{{ release.install_command }}{% else %}{{ release.package.install_command }}{% endif %}
       </div>
     </div>
-  {% endif %}
+  {% endif %} #}
 
   <div class="subnav">
     <ul class="nav nav-pills">
