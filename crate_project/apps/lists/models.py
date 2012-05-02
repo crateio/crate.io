@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -35,3 +36,6 @@ class List(TimeStampedModel):
 
     def __unicode__(self):
         return u"%(username)s / %(listname)s" % {"username": self.user.username, "listname": self.name}
+
+    def get_absolute_url(self):
+        return reverse("lists_detail", kwargs={"username": self.user.username, "slug": self.slug})

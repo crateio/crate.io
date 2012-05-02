@@ -1,8 +1,9 @@
 from django.conf.urls import patterns, url
 
-from lists.views import AddToList, AddToNewList, RemoveFromList, ListDetail
+from lists.views import AddToList, AddToNewList, RemoveFromList, ListsList, ListDetail
 
 urlpatterns = patterns("",
+    url(r"^(?P<username>[^/]+)/lists/$", ListsList.as_view(), name="lists_list"),
     url(r"^(?P<username>[^/]+)/lists/(?P<slug>[^/]+)/$", ListDetail.as_view(), name="lists_detail"),
 
     url(r"^(?P<list>[^/]+)/(?P<package>[^/]+)/add/$", AddToList.as_view(), name="add_package_to_list"),

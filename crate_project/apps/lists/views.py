@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.views.generic.base import View
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 
@@ -121,6 +122,22 @@ class RemoveFromList(View):
         messages.success(request, self.get_message())
 
         return self.render_json(package=kwargs.get("package"), list=kwargs.get("list"), success=True, message=self.get_message())
+
+
+class ListsList(ListView):
+
+    queryset = List.objects.all().order_by("name")
+
+    def get_queryset(self):
+        qs = super(ListsList, self).get_queryset()
+        qs = qs.filter(user__username=self.kwargs.get("username"))
+
+        if self.request.user.is_authenticated():
+            qs = qs.filter(Q(private=False) | Q(private=True, user=self.request.user))
+        else:
+            qs = qs.filter(private=False)
+
+        return qs
 
 
 class ListDetail(DetailView):
