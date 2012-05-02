@@ -5,6 +5,7 @@ from django.views.generic.base import View
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 from lists.models import List
@@ -56,6 +57,8 @@ class AddToList(View):
 
         user_list.packages.add(package)
 
+        messages.success(request, self.get_message())
+
         return self.render_json(
                     package=self.kwargs.get("package"),
                     list=self.kwargs.get("list"),
@@ -95,7 +98,14 @@ class RemoveFromList(View):
     def render_json(self, **data):
         return HttpResponse(json.dumps(data), mimetype="application/json")
 
+    def get_message(self):
+        return _("Successfully removed %(package)s from %(list)s.") % self.kwargs
+
     def post(self, request, *args, **kwargs):
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+
         try:
             package = Package.objects.get(name=kwargs.get("package"))
             user_list = List.objects.get(name=kwargs.get("list"), user=request.user)
@@ -106,4 +116,6 @@ class RemoveFromList(View):
 
         user_list.packages.remove(package)
 
-        return self.render_json(package=kwargs.get("package"), list=kwargs.get("list"), success=True, message=_("Successfully removed %(package)s from %(list)s.") % kwargs)
+        messages.success(request, self.get_message())
+
+        return self.render_json(package=kwargs.get("package"), list=kwargs.get("list"), success=True, message=self.get_message())
