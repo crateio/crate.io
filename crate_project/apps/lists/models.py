@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.db import models
+from django.db import models, IntegrityError
 from django.template.defaultfilters import slugify
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,6 +25,9 @@ class List(TimeStampedModel):
         ]
 
     def save(self, *args, **kwargs):
+        if not self.name:
+            raise  IntegrityError("Name cannot be empty")
+
         if not self.slug:
             slug = slugify(self.name)
             i = 1
