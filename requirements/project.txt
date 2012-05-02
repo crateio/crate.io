@@ -87,3 +87,6 @@ py-bcrypt==0.2
 # Html Sanitation
 html5lib==0.95
 bleach==1.1.1
+
+# Translation
+Babel==0.9.6
