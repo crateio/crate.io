@@ -12,7 +12,7 @@
 {%- endblock %}
 
 {% block nav %}
-  {% if request.user.is_authenticated %}
+  {% if request.user.is_authenticated() %}
     <ul class="nav">
       <li><a href="{{ url("lists_list", username=request.user.username) }}">{{ gettext("My Lists") }}</a></li>
     </ul>
