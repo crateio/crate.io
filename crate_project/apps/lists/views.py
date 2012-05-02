@@ -147,6 +147,15 @@ class ListsList(ListView):
 
         return qs
 
+    def get_context_data(self, **kwargs):
+        ctx = super(ListsList, self).get_context_data(**kwargs)
+
+        ctx.update({
+            "username": self.kwargs.get("username"),
+        })
+
+        return ctx
+
 
 class ListDetail(DetailView):
 

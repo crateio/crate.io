@@ -1,12 +1,12 @@
 {% extends "site_base.html" %}
 
-{% block head_title %}{{ gettext("%(username)s's lists", username=object_list.0.user.username) }}{% endblock %}
+{% block head_title %}{{ gettext("%(username)s's lists", username=username) }}{% endblock %}
 
 {% block body_id %}lists-list{% endblock %}
 
 {% block body %}
   <div class="page-header">
-    <h1>{{ gettext("%(username)s's lists", username=object_list.0.user.username) }}</h1>
+    <h1>{{ gettext("%(username)s's lists", username=username) }}</h1>
   </div>
 
   {% for object in object_list %}
