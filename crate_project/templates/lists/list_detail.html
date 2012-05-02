@@ -2,9 +2,11 @@
 
 {% block head_title %}{{ list.name }}{% endblock %}
 
+{% block body_id %}lists-detail{% endblock %}
+
 {% block body %}
   <div class="page-header">
-    <h1>{{ list.name }}</h1>
+    <h1{% if list.private %} class="private"{% endif %}>{{ list.name }}</h1>
   </div>
 
   {% for package in packages %}
