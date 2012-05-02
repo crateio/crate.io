@@ -6,7 +6,10 @@
 
 {% block body %}
   <div class="page-header">
-    <h1{% if list.private %} class="private"{% endif %}>{{ list.name }}</h1>
+    <hgroup>
+      <h1{% if list.private %} class="private"{% endif %}>{{ list.name }}</h1>
+      {% if list.description %}<h6>{{ list.description }}</h6>{% endif %}
+    </hgroup>
   </div>
 
   {% for package in packages %}
