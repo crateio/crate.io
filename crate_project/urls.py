@@ -28,6 +28,8 @@ urlpatterns = patterns("",
     url(r"^admin_tools/", include("admin_tools.urls")),
 
     url(r"^packages/", include("packages.urls")),
+    url(r"^lists/", include("lists.urls")),
+
     url(r"^stats/", include("packages.stats.urls")),
     url(r"^help/", include("helpdocs.urls")),
     url(r"^api/", include("crate_project.api_urls")),

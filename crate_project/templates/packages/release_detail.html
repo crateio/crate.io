@@ -9,79 +9,96 @@
 {% block body_id %}release-detail{% endblock %}
 
 {% block body %}
-  <div class="content">
-    <div class="page-header">
-      <h1 class="package-title">{{ release.package.name }} <small> {{ release.version }}</small></h1>
+  <header class="row">
+    <div class="span6">
+      <hgroup class="package-title">
+        <h1>{{ release.package.name }} <small>{{ release.version }}</small></h1>
+        <h6>{{ release.summary }}</h6>
+      </hgroup>
     </div>
+    <div class="span6">
+      <div class="action-buttons">
+        {# <a class="btn" href=""><i class="icon-wrench"></i> {{ gettext("Admin") }}</a> #}
+        {# <a class="btn" href=""><i class="icon-eye-open"></i> {{ gettext("Watch") }}</a> #}
 
-    <div class="row">
-      <div class="span9">
+        {% include "lists/button.html" %}
+
+      </div>
+    </div>
+  </header>
+
+  {# {% if release.show_install_command %}
+    <div class="row12">
+      <div class="install-cmd">
+        <h4>{{ gettext("Install") }}</h4>
+        {% if version_specific %}{{ release.install_command }}{% else %}{{ release.package.install_command }}{% endif %}
+      </div>
+    </div>
+  {% endif %} #}
+
+  <div class="subnav">
+    <ul class="nav nav-pills">
+      <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">{{ gettext("Description") }}</a></li>
+      {% if release.changelog_html %}<li><a href="#changelog" data-toggle="tab">{{ gettext("Changelog") }}</a></li>{% endif %}
+      {% if release.license %}<li><a href="#license" data-toggle="tab">{{ gettext("License") }}</a></li>{% endif %}
+      <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">{{ gettext("Info") }}</a></li>
+      {% if not release.hidden %}<li><a href="#files" data-toggle="tab">{{ gettext("Files") }}</a></li>{% endif %}
+      <li><a href="#all-versions" data-toggle="tab">{{ gettext("All Versions (%(version_count)s)", version_count=versions|length()) }}</a></li>
+      <li><a href="#history" data-toggle="tab">{{ gettext("History") }}</a></li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="span9">
+      <div class="tab-content">
         {% if release.hidden %}
           {% include "packages/partials/yanked.html" %}
-        {% else %}
-          <div class="summary{% if not release.show_install_command %} no-install-summary{% endif %}">
-            {{ release.summary }}
-          </div>
+        {% endif %}
 
-          {% if release.show_install_command %}
-            <div id="install-cmd">
-              <h4>{{ gettext("Install") }}</h4>
+        <div id="description" class="tab-pane fade in{% if release.description %} active{% endif %}">
+          {% include "packages/partials/description.html" %}
+        </div>
 
-              {% if version_specific %}{{ release.install_command }}{% else %}{{ release.package.install_command }}{% endif %}
-            </div>
-          {% endif %}
-
-          <ul id="package-tabs" class="nav nav-tabs">
-            <li{% if release.description %} class="active"{% endif %}><a href="#description" data-toggle="tab">{{ gettext("Description") }}</a></li>
-            {% if release.changelog_html %}<li><a href="#changelog" data-toggle="tab">{{ gettext("Changelog") }}</a></li>{% endif %}
-            {% if release.license %}<li><a href="#license" data-toggle="tab">{{ gettext("License") }}</a></li>{% endif %}
-            <li{% if not release.description %} class="active"{% endif %}><a href="#info" data-toggle="tab">{{ gettext("Info") }}</a></li>
-            <li><a href="#files" data-toggle="tab">{{ gettext("Files") }}</a></li>
-            <li><a href="#all-versions" data-toggle="tab">{{ gettext("All Versions (%(version_count)s)", version_count=versions|length()) }}</a></li>
-            <li><a href="#history" data-toggle="tab">{{ "History" }}</a></li>
-          </ul>
-
-          <div class="tab-content">
-            <div id="description" class="tab-pane fade in{% if release.description %} active{% endif %}">
-              {% include "packages/partials/description.html" %}
-            </div>
-
-            {% if release.changelog_html %}
-              <div id="changelog" class="tab-pane fade in">
-                {{ release.changelog_html }}
-              </div>
-            {% endif %}
-
-            {% if release.license %}
-              <div id="license" class="tab-pane fade in">
-                <pre>{{ release.license }}</pre>
-               </div>
-            {% endif %}
-
-            <div id="info" class="tab-pane fade in{% if not release.description %} active{% endif %}">
-              {% include "packages/partials/meta.html" %}
-            </div>
-
-            <div id="files" class="tab-pane fade in">
-              {% include "packages/partials/files.html" %}
-            </div>
-
-            <div id="all-versions" class="tab-pane fade in">
-              {% include "packages/partials/versions.html" %}
-            </div>
-
-            <div id="history" class="tab-pane fade in">
-              {% include "packages/partials/history.html" %}
-            </div>
+        {% if release.changelog_html %}
+          <div id="changelog" class="tab-pane fade in">
+            {{ release.changelog_html }}
           </div>
         {% endif %}
-      </div>
 
-      <div id="sidebar" class="span3">
+        {% if release.license %}
+          <div id="license" class="tab-pane fade in">
+            <pre>{{ release.license }}</pre>
+          </div>
+        {% endif %}
+
+        <div id="info" class="tab-pane fade in{% if not release.description %} active{% endif %}">
+          {% include "packages/partials/meta.html" %}
+        </div>
+
+        {% if not release.hidden %}
+          <div id="files" class="tab-pane fade in">
+            {% include "packages/partials/files.html" %}
+          </div>
+        {% endif %}
+
+        <div id="all-versions" class="tab-pane fade in">
+          {% include "packages/partials/versions.html" %}
+        </div>
+
+        <div id="history" class="tab-pane fade in">
+          {% include "packages/partials/history.html" %}
+        </div>
+      </div>
+    </div>
+
+    <div class="span3">
+      <div id="sidebar">
         {% include "packages/partials/sidebar.html" %}
       </div>
     </div>
   </div>
+
+  {% include "lists/modals.html" %}
 {% endblock %}
 
 {% block extra_script %}
@@ -93,10 +110,10 @@
       var History = window.History;
 
       $(window).bind("anchorchange", function(){
-        $("#package-tabs a[href='" + location.hash + "']").click();
+        $(".subnav a[href='" + location.hash + "']").click();
       });
 
-      $('#package-tabs a[data-toggle="tab"]').on('shown', function (e) {
+      $('#.subnav a[data-toggle="tab"]').on('shown', function (e) {
         if (History.enabled) {
           History.pushState(null, null, $(e.target).attr("href"));
         }
