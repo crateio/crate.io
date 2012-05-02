@@ -83,10 +83,18 @@ class AddToNewList(AddToList):
         if list is None:
             list = self.request.POST.get("name")
 
-        user_list, c = List.objects.get_or_create(user=user, name=list, defaults={"private": self.request.POST.get("private", True)})
+        defaults = {
+            "private": self.request.POST.get("private", True),
+            "description": self.request.POST.get("description", ""),
+        }
+        user_list, c = List.objects.get_or_create(user=user, name=list, defaults=defaults)
 
         if not c and user_list.private != self.request.POST.get("private", True):
             user_list.private = self.request.POST.get("private", True)
+            user_list.save()
+
+        if not c and user_list.description != self.request.POST.get("description", ""):
+            user_list.description = self.request.POST.get("description", "")
             user_list.save()
 
         return user_list

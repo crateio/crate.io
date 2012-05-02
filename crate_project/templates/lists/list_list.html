@@ -12,6 +12,9 @@
   {% for object in object_list %}
     <div>
       <h3{% if not object.private %} class="public"{% endif %}>{% if object.private %}<i class="icon-lock"></i>{% else %}{% endif %} <a href="{{ object.get_absolute_url() }}">{{ object.name }}</a></h3>
+      <blockquote>
+        {{ object.description }}
+      </blockquote>
     </div>
   {% else %}
     <div>{{ gettext("This user has no lists.") }}</div>

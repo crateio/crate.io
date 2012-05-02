@@ -11,6 +11,9 @@ class List(TimeStampedModel):
     # Translators: This is used to allow naming a specific list of packages.
     name = models.CharField(_("Name"), max_length=50, db_index=True)
     slug = models.SlugField(max_length=50)
+
+    description = models.CharField(max_length=250, blank=True)
+
     private = models.BooleanField(_("Private List"), default=False, help_text=_("Private lists are visible only to you."))
 
     packages = models.ManyToManyField("packages.Package", verbose_name=_("Packages"))
