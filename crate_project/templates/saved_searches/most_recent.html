@@ -1,0 +1,38 @@
+{% extends "account/base.html" %}
+
+{% import "bootstrap/forms.html" as bootstrap %}
+
+{% block head_title %}{{ gettext("Search History") }}{% endblock %}
+
+{% block body %}
+  <header class="jumbotron subhead" id="overview">
+    <h1>{% if by_user %}{{ gettext("Your") }} {% endif %}{{ gettext("Search History") }}</h1>
+  </header>
+
+  <div>
+    <ul>
+    {% for result in page.object_list %}
+      <li>
+        <h2><a href="/?q={{ result.user_query }}&amp;has_releases=on">{{ result.user_query }}</a></h2>
+
+        <div>
+          {{ gettext("Searched on") }} {{ result.most_recent|date("DATE_FORMAT") }} &amp; {{ gettext("has been run") }} {{ result.times_seen|intcomma() }} {{ gettext("times") }}.
+        </div>
+      </li>
+    {% else %}
+      <li>No search history found. Go search for some packages!</li>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="pagination">
+    <ul>
+      <li class="prev{% if not page.has_previous() %} disabled{% endif %}"><a href="{% if page.has_previous() %}{{ request.get_full_path()|reqarg("page", page.previous_page_number()) }}{% else %}#{% endif %}">&larr; {{ gettext("Previous") }}</a></li>
+
+      {% for page_num in pagination_numbers(paginator.page_range, page.number) %}
+        <li {{ page.number|ifeq(page_num, 'class="active"') }}><a href="{{ request.get_full_path()|reqarg("page", page_num) }}">{{ page_num }}</a></li>
+      {% endfor %}
+
+      <li class="next{% if not page.has_next() %} disabled{% endif %}"><a href="{% if page.has_next() %}{{ request.get_full_path()|reqarg("page", page.next_page_number()) }}{% else %}#{% endif %}">{{ gettext("Next") }} &rarr;</a></li>
+  </div>
+{% endblock %}
