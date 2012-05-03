@@ -176,7 +176,7 @@ class ListDetail(DetailView):
         ctx = super(ListDetail, self).get_context_data(**kwargs)
 
         ctx.update({
-            "packages": self.object.packages.all().extra(select={"lower_name": "lower(name)"}).order_by("name"),
+            "packages": self.object.packages.all().extra(select={"lower_name": "lower(name)"}).order_by("lower_name"),
         })
 
         return ctx
