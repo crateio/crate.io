@@ -14,7 +14,7 @@
 
   {% for package in packages %}
     <div>
-      <h3><a href="{{ package.get_absolute_url() }}">{{ package.name }}</a> {% if package.latest %}<small>{{ package.latest.version }}{% endif %}</small></h3>
+      <h3><a href="{{ package.get_absolute_url() }}">{{ package.name }}</a></h3>
 
       <blockquote>
         {{ package.latest.summary }}

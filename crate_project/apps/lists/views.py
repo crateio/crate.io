@@ -176,7 +176,7 @@ class ListDetail(DetailView):
         ctx = super(ListDetail, self).get_context_data(**kwargs)
 
         ctx.update({
-            "packages": sorted(self.object.packages.all(), key=lambda x: x.latest.created, reverse=True)
+            "packages": self.object.packages.all().order_by("name"),
         })
 
         return ctx
