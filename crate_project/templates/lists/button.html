@@ -27,7 +27,7 @@
 
       <li><a href="#add-to-new-list" data-toggle="modal"><i class="icon-edit" data-toggle="modal"></i> {{ gettext("Add to a new List") }}</a></li>
     {% else %}
-      <li><a href="{{ url("acct_login") }}?next={{ request.path }}">{{ gettext("Sign in to use Lists") }}</a></li>
+      <li><a href="{{ url("account_login") }}?next={{ request.path }}">{{ gettext("Sign in to use Lists") }}</a></li>
     {% endif %}
   </ul>
 </div>

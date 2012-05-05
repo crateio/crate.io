@@ -19,13 +19,11 @@
           <strong>{{ gettext("Note") }}</strong>: {{ gettext("you are already logged in as %(user_display)s.", user_display=user_display) }}
         </div>
       {% else %}
-        {% set signup_url = url("acct_signup") %}
-
-        <p>{% trans signup_url=url("acct_signup") %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>!{% endtrans %}</p>
-        <p><a href="{{ url("acct_passwd_reset") }}">{{ gettext("Forgot password?") }}</a></p>
+        <p>{% trans signup_url=url("account_signup") %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>!{% endtrans %}</p>
+        <p><a href="{{ url("account_password_reset") }}">{{ gettext("Forgot password?") }}</a></p>
       {% endif %}
 
-      <form method="POST" action="{{ url("acct_login") }}" autocapitalize="off" class="form-horizontal">
+      <form method="POST" action="{{ url("account_login") }}" autocapitalize="off" class="form-horizontal">
         <legend>{{ gettext("Log in with an existing account") }}</legend>
 
         {{ csrf() }}

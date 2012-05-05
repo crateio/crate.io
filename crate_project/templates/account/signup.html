@@ -15,12 +15,12 @@
       {% if user.is_authenticated() %}
         <p>{{ gettext("You are already logged in.") }}</p>
       {% else %}
-        <p>{{ gettext("Already have an account?") }} <a href="{{ url("acct_login") }}">{{ gettext("Log in") }}</a>!</p>
+        <p>{{ gettext("Already have an account?") }} <a href="{{ url("account_login") }}">{{ gettext("Log in") }}</a>!</p>
 
         {% if form.is_multipart %}
-          <form id="signup_form" method="post" action="{{ url("acct_signup") }}" enctype="multipart/form-data" autocapitalize="off" class="form-horizontal">
+          <form id="signup_form" method="post" action="{{ url("account_signup") }}" enctype="multipart/form-data" autocapitalize="off" class="form-horizontal">
         {% else %}
-          <form id="signup_form" method="post" action="{{ url("acct_signup") }}" autocapitalize="off" class="form-horizontal">
+          <form id="signup_form" method="post" action="{{ url("account_signup") }}" autocapitalize="off" class="form-horizontal">
         {% endif %}
 
           {{ csrf() }}
