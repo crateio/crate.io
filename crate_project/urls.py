@@ -38,6 +38,7 @@ urlpatterns = patterns("",
     url(r"^s/(?P<path>.+)?", "crate.views.simple_redirect", name="simple_redirect"),
 
     url(r"^", include("search.urls")),
+    url(r"^search/", include("saved_searches.urls")),
 )
 
 

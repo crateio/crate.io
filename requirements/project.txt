@@ -39,6 +39,7 @@ django-hosts==0.4.2
 -e git+https://github.com/toastdriven/django-haystack.git@ec1f917588b3be1ce89f077a6c3c72be1551f84d#egg=django-haystack
 -e git+https://github.com/toastdriven/pyelasticsearch.git@0c7824695f32ea8efa4fb14c3a0db52cb55e3217#egg=pyelasticsearch
 celery-haystack==0.4
+-e git+https://github.com/toastdriven/saved_searches.git@master#egg=saved_searches
 
 # Markup
 docutils==0.8.1

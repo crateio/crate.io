@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import TemplateResponseMixin, View
 from django.views.generic.edit import FormMixin
 
+from saved_searches.models import SavedSearch
 from search.forms import SearchForm
 
 
@@ -18,6 +19,7 @@ class Search(TemplateResponseMixin, FormMixin, View):
     allow_empty = True
     form_class = SearchForm
     paginator_class = Paginator
+    search_key = 'general_search'
 
     def get_template_names(self):
         if "q" in self.request.GET:
@@ -125,6 +127,9 @@ class Search(TemplateResponseMixin, FormMixin, View):
             facets = results.facet("python_versions").facet("operating_systems").facet("licenses").facet("implementations").facet_counts()
             paginator, page, results, is_paginated = self.paginate_results(results, page_size)
 
+            # Save it!
+            self.save_search(page, query, results)
+
             # Grumble.
             duped = self.request.GET.copy()
             try:
@@ -152,6 +157,32 @@ class Search(TemplateResponseMixin, FormMixin, View):
         }
 
         return self.render_to_response(self.get_context_data(**ctx))
+
+    # Copy-pasta from saved_searches with light modification...
+    def save_search(self, page, query, results):
+        """
+        Only save the search if we're on the first page.
+        This will prevent an excessive number of duplicates for what is
+        essentially the same search.
+        """
+        if query and page.number == 1:
+            # Save the search.
+            saved_search = SavedSearch(
+                search_key=self.search_key,
+                user_query=query,
+                result_count=len(results)
+            )
+
+            if hasattr(results, 'query'):
+                query_seen = results.query.build_query()
+
+                if isinstance(query_seen, basestring):
+                    saved_search.full_query = query_seen
+
+            if self.request.user.is_authenticated():
+                saved_search.user = self.request.user
+
+            saved_search.save()
 
     def get(self, request, *args, **kwargs):
         self.request = request

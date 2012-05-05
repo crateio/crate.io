@@ -172,6 +172,7 @@ INSTALLED_APPS = [
     "celery_haystack",
     "tastypie",
     "djangosecure",
+    'saved_searches',
 
     # Templating
     "jingo",
