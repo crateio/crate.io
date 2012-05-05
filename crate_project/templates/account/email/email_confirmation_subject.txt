@@ -1,0 +1,1 @@
+{{ gettext("Confirm email address for %(site_name)s", site_name=current_site.name) }}
