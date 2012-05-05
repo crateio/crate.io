@@ -102,9 +102,7 @@ MIDDLEWARE_CLASSES = [
     "django_openid.consumer.SessionConsumer",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
-    "pinax.apps.account.middleware.LocaleMiddleware",
-    "pinax.middleware.security.HideSensistiveFieldsMiddleware",
+    "account.middleware.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "crate_project.urls"
@@ -126,12 +124,9 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "django.core.context_processors.media",
     "django.core.context_processors.request",
     "django.contrib.messages.context_processors.messages",
-
     "staticfiles.context_processors.static",
-
-    "pinax.core.context_processors.pinax_settings",
-
-    "pinax.apps.account.context_processors.account",
+    "pinax_utils.context_processors.settings",
+    "account.context_processors.account",
 ]
 
 INSTALLED_APPS = [
@@ -151,19 +146,12 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.markup",
 
-    "pinax.templatetags",
-
-    # external (Pinax)
+    # external
+    "account",
     "staticfiles",
     "compressor",
     "django_openid",
     "timezones",
-    "emailconfirmation",
-
-    # Pinax
-    "pinax.apps.account",
-
-    # external (Project)
     "south",
     "djcelery",
     "django_hosts",
@@ -210,9 +198,6 @@ ACCOUNT_EMAIL_VERIFICATION = True
 ACCOUNT_EMAIL_AUTHENTICATION = False
 ACCOUNT_UNIQUE_EMAIL = EMAIL_CONFIRMATION_UNIQUE_EMAIL = True
 
-AUTHENTICATION_BACKENDS = [
-    "pinax.apps.account.auth_backends.AuthenticationBackend",
-]
 
 PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.BCryptPasswordHasher",

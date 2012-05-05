@@ -9,7 +9,7 @@ from django.utils import formats
 import jinja2
 
 from jingo import register
-from pinax.apps.account.utils import user_display as pinax_user_display
+from account.utils import user_display as pinax_user_display
 from staticfiles.storage import staticfiles_storage
 
 

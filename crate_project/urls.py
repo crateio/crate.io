@@ -10,7 +10,7 @@ evaluator.autodiscover
 import ji18n.translate
 ji18n.translate.patch()
 
-from pinax.apps.account.openid_consumer import PinaxConsumer
+#from pinax.apps.account.openid_consumer import PinaxConsumer
 
 from search.views import Search
 
@@ -20,11 +20,10 @@ handler500 = "pinax.views.server_error"
 
 urlpatterns = patterns("",
     url(r"^$", Search.as_view(), name="home"),
-    url(r"^admin/invite_user/$", "pinax.apps.signup_codes.views.admin_invite_user", name="admin_invite_user"),
     url(r"^admin/", include(admin.site.urls)),
     url(r"^about/", include("about.urls")),
-    url(r"^account/", include("pinax.apps.account.urls")),
-    url(r"^openid/", include(PinaxConsumer().urls)),
+    url(r"^account/", include("account.urls")),
+    #url(r"^openid/", include(PinaxConsumer().urls)),
     url(r"^admin_tools/", include("admin_tools.urls")),
 
     url(r"^users/", include("lists.urls")),

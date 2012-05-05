@@ -8,14 +8,11 @@
 --extra-index-url=http://dist.pinaxproject.com/fresh-start/
 
 Django==1.4
--e git+https://github.com/dstufft/pinax.git@#egg=Pinax
-
-
+pinax-utils==1.0b1.dev3
+-e git+git://github.com/pinax/django-user-accounts.git@67f3c4f4e9553f7dc1ec099fc2b39cbd8fbeb311#egg=django-user-accounts
 django-debug-toolbar==0.9.4
 django-staticfiles==1.2.1
 django_compressor==1.1.2
-
--e git+https://github.com/dstufft/django-email-confirmation.git@9a502d30f13b21c67cc943d464dc665e8921c518#egg=django-email-confirmation
 django-timezones==0.2
 pytz==2012b
 django-openid==0.3a1
