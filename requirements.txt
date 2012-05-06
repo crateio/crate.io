@@ -10,8 +10,12 @@ django-staticfiles==1.2.1
 django_compressor==1.1.2
 django-timezones==0.2
 pytz==2012b
-django-openid==0.3a1
+
+# Social Auth
 python-openid==2.2.5
+oauth2==1.5.211
+httplib2==0.7.4
+django-social-auth==0.6.9
 
 # Database
 psycopg2==2.4.1
@@ -27,6 +31,7 @@ django-appconf==0.5
 isoweek==1.2.0
 
 # Celery
+hiredis==0.1.1
 redis==2.4.11
 anyjson==0.3.1
 amqplib==1.0.2
