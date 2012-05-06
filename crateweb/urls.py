@@ -10,8 +10,6 @@ evaluator.autodiscover
 import ji18n.translate
 ji18n.translate.patch()
 
-from core.openid_consumer import PinaxConsumer
-
 from search.views import Search
 
 
@@ -23,8 +21,13 @@ urlpatterns = patterns("",
     url(r"^admin/", include(admin.site.urls)),
     url(r"^about/", include("about.urls")),
     url(r"^account/", include("account.urls")),
-    url(r"^openid/", include(PinaxConsumer().urls)),
+    url(r"^account/", include("core.social_auth.urls")),
     url(r"^admin_tools/", include("admin_tools.urls")),
+    url(
+        r"^social-auth/disconnect/(?P<backend>[^/]+)/(?P<association_id>[^/]+)/$",
+        "core.social_auth.views.disconnect",
+    ),
+    url(r"^social-auth/", include("social_auth.urls")),
 
     url(r"^users/", include("lists.urls")),
 

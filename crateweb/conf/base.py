@@ -98,7 +98,6 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django_openid.consumer.SessionConsumer",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "account.middleware.LocaleMiddleware",
@@ -126,6 +125,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     "staticfiles.context_processors.static",
     "pinax_utils.context_processors.settings",
     "account.context_processors.account",
+    "social_auth.context_processors.social_auth_by_type_backends",
 ]
 
 INSTALLED_APPS = [
@@ -149,7 +149,6 @@ INSTALLED_APPS = [
     "account",
     "staticfiles",
     "compressor",
-    "django_openid",
     "timezones",
     "south",
     "djcelery",
@@ -159,7 +158,8 @@ INSTALLED_APPS = [
     "celery_haystack",
     "tastypie",
     "djangosecure",
-    'saved_searches',
+    "saved_searches",
+    "social_auth",
 
     # Templating
     "jingo",
@@ -194,6 +194,22 @@ ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EMAIL = True
 ACCOUNT_CONTACT_EMAIL = "support@crate.io"
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "core.social_auth.backends.OpenIDBackend",
+    "social_auth.backends.contrib.github.GithubBackend",
+]
+
+SOCIAL_AUTH_PIPELINE = [
+    "social_auth.backends.pipeline.social.social_auth_user",
+    "core.social_auth.pipeline.associate.associate_by_email",
+    "social_auth.backends.pipeline.user.get_username",
+    "core.social_auth.pipeline.user.create_user",
+    "social_auth.backends.pipeline.social.associate_user",
+    "social_auth.backends.pipeline.social.load_extra_data",
+    "social_auth.backends.pipeline.user.update_user_details",
+]
+
 PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.BCryptPasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -203,7 +219,13 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.CryptPasswordHasher",
 )
 
+GITHUB_EXTRA_DATA = [
+    ("login", "display"),
+]
+
 LOGIN_URL = "/account/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_ERROR_URL = "/"
 LOGIN_REDIRECT_URLNAME = "search"
 LOGOUT_REDIRECT_URLNAME = "search"
 
