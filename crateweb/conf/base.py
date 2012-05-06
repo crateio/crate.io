@@ -196,7 +196,7 @@ ACCOUNT_CONTACT_EMAIL = "support@crate.io"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "social_auth.backends.OpenIDBackend",
+    "core.social_auth.backends.OpenIDBackend",
 ]
 
 SOCIAL_AUTH_PIPELINE = [
