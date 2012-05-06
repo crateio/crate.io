@@ -22,6 +22,7 @@ urlpatterns = patterns("",
     url(r"^about/", include("about.urls")),
     url(r"^account/", include("account.urls")),
     url(r"^admin_tools/", include("admin_tools.urls")),
+    url(r"^social-auth/", include("social_auth.urls")),
 
     url(r"^users/", include("lists.urls")),
 

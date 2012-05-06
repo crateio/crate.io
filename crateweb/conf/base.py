@@ -157,7 +157,8 @@ INSTALLED_APPS = [
     "celery_haystack",
     "tastypie",
     "djangosecure",
-    'saved_searches',
+    "saved_searches",
+    "social_auth",
 
     # Templating
     "jingo",
@@ -192,6 +193,11 @@ ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EMAIL = True
 ACCOUNT_CONTACT_EMAIL = "support@crate.io"
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "social_auth.backends.OpenIDBackend",
+]
+
 PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.BCryptPasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
@@ -202,6 +208,8 @@ PASSWORD_HASHERS = (
 )
 
 LOGIN_URL = "/account/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_ERROR_URL = "/"
 LOGIN_REDIRECT_URLNAME = "search"
 LOGOUT_REDIRECT_URLNAME = "search"
 
