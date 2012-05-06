@@ -1,9 +1,0 @@
-{% extends "packages/simple/base.html" %}
-
-{% block head_title %}Simple Index{% endblock %}
-
-{% block body %}
-    {% for object in object_list %}
-        <a href="{{ object.get_simple_url() }}" title="{{ object.name }}">{{ object.name}}</a>
-    {% endfor %}
-{% endblock %}

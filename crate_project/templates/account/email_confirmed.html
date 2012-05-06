@@ -1,8 +1,0 @@
-{% extends "site_base.html" %}
-
-{% block head_title %}{{ gettext("Email Confirmed") }}{% endblock %}
-
-{% block body %}
-  <h1>{{ gettext("Email Confirmed") }}</h1>
-  <p>{% trans email=confirmation.email_address.email %}You have confirmed <b>{{ email }}</b>{% endtrans %}</p>
-{% endblock %}
