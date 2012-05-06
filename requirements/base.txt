@@ -9,7 +9,7 @@
 
 Django==1.4
 pinax-utils==1.0b1.dev3
--e git+git://github.com/pinax/django-user-accounts.git@67f3c4f4e9553f7dc1ec099fc2b39cbd8fbeb311#egg=django-user-accounts
+-e git+git://github.com/dstufft/django-user-accounts.git@ff374374cc43f8bfdc047842c10e5e19e8af114e#egg=django-user-accounts
 django-debug-toolbar==0.9.4
 django-staticfiles==1.2.1
 django_compressor==1.1.2
