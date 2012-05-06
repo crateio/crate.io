@@ -5,37 +5,32 @@
 {% block head_title %}{{ gettext("Sign Up") }}{% endblock %}
 
 {% block body %}
-  <header class="jumbotron subhead" id="overview">
-    <h1>{{ gettext("Sign Up") }}</h1>
-    <p class="lead">{{ gettext("To sign up with a new account, use the form below.") }}</p>
-  </header>
-
   <div class="row">
     <div class="span8">
-      {% if user.is_authenticated() %}
-        <p>{{ gettext("You are already logged in.") }}</p>
-      {% else %}
-        <p>{{ gettext("Already have an account?") }} <a href="{{ url("acct_login") }}">{{ gettext("Log in") }}</a>!</p>
+      <header class="jumbotron subhead" id="overview">
+        <h1>{{ gettext("Sign Up") }}</h1>
+        <p class="lead">{{ gettext("To sign up with a new account, use the form below.") }}</p>
+      </header>
 
-        {% if form.is_multipart %}
-          <form id="signup_form" method="post" action="{{ url("acct_signup") }}" enctype="multipart/form-data" autocapitalize="off" class="form-horizontal">
-        {% else %}
-          <form id="signup_form" method="post" action="{{ url("acct_signup") }}" autocapitalize="off" class="form-horizontal">
+      <form id="signup_form" method="post" action="{{ url("account_signup") }}" autocapitalize="off" class="form-horizontal"{% if form.is_multipart() %} enctype="multipart/form-data"{% endif %}>
+        {{ csrf() }}
+
+        {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
 
-          {{ csrf() }}
+        <fieldset>
           {{ bootstrap.render_form(form) }}
 
-          {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-          {% endif %}
+          {% include "account/_terms.html" %}
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary">{{ gettext("Sign up") }}</button>
           </div>
-        </form>
+        </fieldset>
+      </form>
 
-        <form action="/openid/register/" method="POST" autocapitalize="off" class="form-horizontal">
+      <form action="/openid/register/" method="POST" autocapitalize="off" class="form-horizontal">
           <legend>{{ gettext("Or sign in with your OpenID") }}</legend>
 
           {{ csrf() }}
@@ -51,23 +46,10 @@
             <input type="submit" value="{{ gettext("Sign in with OpenID") }}" class="btn btn-primary" />
           </div>
         </form>
-
-        {% include "account/_terms.html" %}
-
-        <p>{% trans %}If you have any trouble creating your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endtrans %}</p>
-      {% endif %}
     </div>
 
     <div class="span4">
       {% include "account/_signup_sidebar.html" %}
     </div>
   </div>
-{% endblock %}
-
-{% block extra_script %}
-  <script type="text/javascript">
-    $(function(){
-      $("#id_username").focus();
-    });
-  </script>
 {% endblock %}

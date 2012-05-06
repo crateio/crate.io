@@ -3,16 +3,15 @@
 {% block head_title %}{{ gettext("OpenID Associations") }}{% endblock %}
 
 {% block body %}
-  {% set acct_passwd_set_url = url("acct_passwd_set") %}
+{#   {% set acct_passwd_set_url = url("account_passwd_set") %} #}
 
-  <h1>{{ gettext("Manage OpenID Associations") }}</h1>
+  <h1 class="account-heading">{{ gettext("Manage OpenID Associations") }}</h1>
 
-  {% if not request.user.password %}
+  {# {% if not request.user.password %}
     <strong>{% trans %}You have not set a password for this user account. You are unable to remove OpenID associations until you <a href="{{ acct_passwd_set_url }}">set a password</a>.{% endtrans %}</strong>
-  {% endif %}
+  {% endif %} #}
 
   {% if openids %}
-    <p>{{ gettext("Your account is currently associated with the following OpenID(s)") }}:</p>
     <table class="table table-striped">
       {% for openid in openids %}
         <tr>

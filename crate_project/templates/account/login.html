@@ -12,31 +12,19 @@
 
   <div class="row">
     <div class="span8">
-      {% if user.is_authenticated() %}
-        {% set user_display = user_display(request.user) %}
-
-        <div class="alert alert-info">
-          <strong>{{ gettext("Note") }}</strong>: {{ gettext("you are already logged in as %(user_display)s.", user_display=user_display) }}
-        </div>
-      {% else %}
-        {% set signup_url = url("acct_signup") %}
-
-        <p>{% trans signup_url=url("acct_signup") %}Don't have an account? <a href="{{ signup_url }}">Sign up</a>!{% endtrans %}</p>
-        <p><a href="{{ url("acct_passwd_reset") }}">{{ gettext("Forgot password?") }}</a></p>
-      {% endif %}
-
-      <form method="POST" action="{{ url("acct_login") }}" autocapitalize="off" class="form-horizontal">
-        <legend>{{ gettext("Log in with an existing account") }}</legend>
-
+      <form method="POST" action="{{ url("account_login") }}" autocapitalize="off" class="form-horizontal"{% if form.is_multipart() %} enctype="multipart/form-data"{% endif %}>
         {{ csrf() }}
-
-        {{ bootstrap.render_form(form) }}
 
         {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
 
+        <legend>{{ gettext("Log in with an existing account") }}</legend>
+
+        {{ bootstrap.render_form(form) }}
+
         <div class="form-actions">
+          <a href="{{ url("account_password_reset") }}" class="btn">{{ gettext("Forgot your password?") }}</a>
           <button type="submit" class="btn btn-primary">{{ gettext("Log in") }}</button>
         </div>
       </form>
@@ -61,22 +49,10 @@
           </div>
         </fieldset>
       </form>
-
-      {% if not user.is_authenticated() %}
-        <p>{% trans %}If you have any trouble logging in to your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endtrans %}</p>
-      {% endif %}
     </div>
 
     <div class="span4">
       {% include "account/_login_sidebar.html" %}
     </div>
   </div>
-{% endblock %}
-
-{% block extra_script %}
-  <script>
-    $(document).ready(function(){
-      $("#id_username").focus();
-     });
-  </script>
 {% endblock %}

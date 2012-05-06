@@ -1,0 +1,22 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Log Out") }}{% endblock %}
+
+{% block body %}
+  <div class="row">
+    <div class="span12">
+      <form method="POST" action="{{ url("account_logout") }}" class="form-horizontal">
+        {{ csrf() }}
+
+        <legend>{{ gettext("Log out") }}</legend>
+        <fieldset>
+          <p>{{ gettext("Are you sure you want to log out?") }}</p>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{{ gettext("Log out") }}</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+{% endblock %}

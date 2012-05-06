@@ -20,7 +20,7 @@
   </form>
 
   {% if request.user.is_authenticated() %}
-    <div><a href="{{ url("acct_logout") }}?next={{ request.path }}">{{ gettext("Log out") }}</a></div>
+    <div><a href="{{ url("account_logout") }}?next={{ request.path }}">{{ gettext("Log out") }}</a></div>
   {% endif %}
 
   <p>{% trans %}If you have any trouble logging in to your account, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endtrans %}</p>

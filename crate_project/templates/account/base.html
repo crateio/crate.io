@@ -5,21 +5,9 @@
 {% block subnav %}
   <ul class="nav nav-list">
     <li class="nav-header">{{ gettext("Account") }}</li>
-    <li><a href="{{ url("acct_email") }}">{{ gettext("Email Addresses") }}</a></li>
+    <li><a href="{{ url("account_settings") }}">{{ gettext("Settings") }}</a></li>
+    <li><a href="{{ url("account_password") }}">{{ gettext("Change Password") }}</a></li>
     <li><a href="/openid/associations/">{{ gettext("OpenID Associations") }}</a></li>
     <li><a href="{{ url("saved_searches_most_recent_by_user", username=user.username) }}">{{ gettext("Search History") }}</a></li>
-
-    {% if request.user.password %}
-      <li><a href="{{ url("acct_passwd") }}">{{ gettext("Change Password") }}</a></li>
-    {% else %}
-      <li><a href="{{ url("acct_passwd_set") }}">{{ gettext("Set Password") }}</a></li>
-    {% endif %}
-
-    {% if request.user.password and request.openids %}
-      <li><a href="{{ url("acct_passwd_delete") }}">{{ gettext("Delete Password") }}</a></li>
-    {% endif %}
-
-    <li><a href="{{ url("acct_language_change") }}">{{ gettext("Language") }}</a></li>
-    <li><a href="{{ url("acct_timezone_change") }}">{{ gettext("Timezone") }}</a></li>
   </ul>
 {% endblock %}
