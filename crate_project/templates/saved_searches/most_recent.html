@@ -14,13 +14,12 @@
     {% for result in page.object_list %}
       <li>
         <h2><a href="/?q={{ result.user_query }}&amp;has_releases=on">{{ result.user_query }}</a></h2>
-
         <div>
-          {{ gettext("Searched on") }} {{ result.most_recent|date("DATE_FORMAT") }} &amp; {{ gettext("has been run") }} {{ result.times_seen|intcomma() }} {{ gettext("times") }}.
+          {{ gettext("Searched on %(on)s & has been run %(num)s times.", on=result.most_recent|date("DATE_FORMAT"), num=result.times_seen|intcomma()) }}
         </div>
       </li>
     {% else %}
-      <li>No search history found. Go search for some packages!</li>
+      <li>{{ gettext("No search history found. Go search for some packages!") }}</li>
     {% endfor %}
     </ul>
   </div>
