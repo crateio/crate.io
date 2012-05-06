@@ -199,6 +199,16 @@ AUTHENTICATION_BACKENDS = [
     "social_auth.backends.OpenIDBackend",
 ]
 
+SOCIAL_AUTH_PIPELINE = [
+    "social_auth.backends.pipeline.social.social_auth_user",
+    "core.pipeline.associate.associate_by_email",
+    "social_auth.backends.pipeline.user.get_username",
+    "core.pipeline.user.create_user",
+    "social_auth.backends.pipeline.social.associate_user",
+    "social_auth.backends.pipeline.social.load_extra_data",
+    "social_auth.backends.pipeline.user.update_user_details",
+]
+
 PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.BCryptPasswordHasher",
     "django.contrib.auth.hashers.PBKDF2PasswordHasher",
