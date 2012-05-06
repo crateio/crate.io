@@ -8,6 +8,6 @@
     <li><a href="{{ url("account_settings") }}">{{ gettext("Settings") }}</a></li>
     <li><a href="{{ url("account_password") }}">{{ gettext("Change Password") }}</a></li>
     <li><a href="/openid/associations/">{{ gettext("OpenID Associations") }}</a></li>
-    <li><a href="{{ url("saved_searches_most_recent_by_user", username=user.username) }}">{{ gettext("Search History") }}</a></li>
+    {# <li><a href="{{ url("saved_searches_most_recent_by_user", username=user.username) }}">{{ gettext("Search History") }}</a></li> #}
   </ul>
 {% endblock %}
