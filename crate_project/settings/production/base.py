@@ -49,15 +49,10 @@ LOGGING = {
 
 SITE_ID = 3
 
-JINJA_CONFIG.update({
-    "auto_reload": False,
-})
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 SERVER_EMAIL = "server@crate.io"
 DEFAULT_FROM_EMAIL = "support@crate.io"
-CONTACT_EMAIL = "support@crate.io"
 
 PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 PACKAGE_FILE_STORAGE_OPTIONS = {
@@ -88,3 +83,24 @@ SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+
+SECRET_KEY = os.environ["SECRET_KEY"]
+
+EMAIL_HOST = os.environ["EMAIL_HOST"]
+EMAIL_PORT = int(os.environ["EMAIL_PORT"])
+EMAIL_HOST_USER = os.environ["EMAIL_HOST_USER"]
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_HOST_PASSWORD"]
+EMAIL_USE_TLS = True
+
+AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
+AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
+
+HAYSTACK_CONNECTIONS = {
+    "default": {
+        "ENGINE": os.environ["HAYSTACK_DEFAULT_ENGINE"],
+        "URL": os.environ["HAYSTACK_DEFAULT_URL"],
+        "INDEX_NAME": os.environ["HAYSTACK_DEFAULT_INDEX_NAME"],
+    },
+}
+
+INTERCOM_USER_HASH_KEY = os.environ["INTERCOM_USER_HASH_KEY"]
