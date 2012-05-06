@@ -1,0 +1,15 @@
+{% extends "site_base.html" %}
+
+{% block head_title %}{{ gettext("Verification email sent") }}{% endblock %}
+
+{% block body %}
+  <header class="jumbotron subhead" id="overview">
+    <h1>{{ gettext("Verification email sent") }}</h1>
+    <p class="lead">
+      {% trans %}We have sent you an email to <b>{{ email }}</b> for verification. Follow the link provided to finalize the signup process.{% endtrans %}
+    </p>
+  </header>
+
+  <p>{% trans %}If you do not receive it within a few minutes, contact us at <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.{% endtrans %}</p>
+  <p><a href="{{ success_url }}">{{ gettext("Go back") }}</a></p>
+{% endblock %}

@@ -28,6 +28,27 @@
           <button type="submit" class="btn btn-primary">{{ gettext("Log in") }}</button>
         </div>
       </form>
+
+      <form action="/openid/register/" method="POST" autocapitalize="off" class="form-horizontal">
+
+        {{ csrf() }}
+
+        <fieldset>
+          <legend>{{ gettext("Or sign in with your OpenID") }}</legend>
+
+          <div class="control-group">
+            <label class="control-label" for="id_username">{{ gettext("OpenID Identifier") }}</label>
+
+            <div class="controls">
+              <input class="openid" type="text" name="openid_url" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <input type="submit" value="{{ gettext("Log in") }}" class="btn btn-primary" />
+          </div>
+        </fieldset>
+      </form>
     </div>
 
     <div class="span4">
