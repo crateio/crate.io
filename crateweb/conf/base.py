@@ -201,9 +201,9 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIAL_AUTH_PIPELINE = [
     "social_auth.backends.pipeline.social.social_auth_user",
-    "core.pipeline.associate.associate_by_email",
+    "core.social_auth.pipeline.associate.associate_by_email",
     "social_auth.backends.pipeline.user.get_username",
-    "core.pipeline.user.create_user",
+    "core.social_auth.pipeline.user.create_user",
     "social_auth.backends.pipeline.social.associate_user",
     "social_auth.backends.pipeline.social.load_extra_data",
     "social_auth.backends.pipeline.user.update_user_details",
