@@ -1,13 +1,10 @@
-import newrelic.agent
+import os
+import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "apps")))
+
+import newrelic.agent
 newrelic.agent.initialize()
 
-import pinax.env
-
 from django.core.wsgi import get_wsgi_application
-
-# setup the environment for Django and Pinax
-pinax.env.setup_environ(__file__)
-
-# set application for WSGI processing
 application = get_wsgi_application()
