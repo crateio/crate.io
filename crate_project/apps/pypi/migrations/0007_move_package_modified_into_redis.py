@@ -9,7 +9,7 @@ from south.v2 import DataMigration
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+        datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
 
         for package_modified in orm["pypi.PackageModified"].objects.all():
             datastore_key = "crate:pypi:download:%(url)s" % {"url": package_modified.url}
@@ -22,7 +22,7 @@ class Migration(DataMigration):
             datastore.expire(datastore_key, 31556926)
 
     def backwards(self, orm):
-        datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+        datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
 
         for key in datastore.keys("crate:pypi:download:*"):
             url = key.rsplit(":", 1)[1]

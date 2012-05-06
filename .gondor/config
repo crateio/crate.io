@@ -7,4 +7,4 @@ wsgi_entry_point = crate_project.wsgi:application
 migrations = south
 staticfiles = on
 site_media_url = /site_media
-settings_module = crate_project.settings.production.gondor
+local_settings = off

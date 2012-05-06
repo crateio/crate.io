@@ -71,7 +71,7 @@ def bulk_synchronize():
 @task
 def synchronize(since=None):
     with Lock("synchronize", expires=60 * 5, timeout=30):
-        datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+        datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
 
         if since is None:
             s = datastore.get(PYPI_SINCE_KEY)
@@ -184,7 +184,7 @@ def update_download_counts(package_name, version, files, index=None):
 
 @task
 def pypi_key_rollover():
-    datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+    datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
 
     sig = requests.get(SERVERKEY_URL, prefetch=True)
     sig.raise_for_status()

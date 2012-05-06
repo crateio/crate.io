@@ -149,7 +149,7 @@ def package_index(request, force_uncached=False):
 
 
 def last_modified(request):
-    datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+    datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
     ts = datastore.get(PYPI_SINCE_KEY)
     if ts is not None:
         dt = datetime.datetime.utcfromtimestamp(int(float(ts)))

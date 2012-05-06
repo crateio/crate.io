@@ -32,7 +32,7 @@ class Lock(object):
         self.timeout = timeout
         self.expires = expires
 
-        self.datastore = redis.StrictRedis(**getattr(settings, "LOCK_DATASTORE_CONFIG", {}))
+        self.datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.LOCK_DATASTORE].items()]))
 
     def __enter__(self):
         timeout = self.timeout

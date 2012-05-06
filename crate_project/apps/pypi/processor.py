@@ -63,7 +63,7 @@ class PyPIPackage(object):
         self.stored = False
 
         self.pypi = xmlrpclib.ServerProxy(INDEX_URL, use_datetime=True)
-        self.datastore = redis.StrictRedis(**getattr(settings, "PYPI_DATASTORE_CONFIG", {}))
+        self.datastore = redis.StrictRedis(**dict([(x.lower(), y) for x, y in settings.REDIS[settings.PYPI_DATASTORE].items()]))
 
     def process(self, bulk=False, download=True, skip_modified=True):
         self.bulk = bulk
