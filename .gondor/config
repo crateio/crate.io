@@ -2,7 +2,7 @@
 vcs = git
 
 [app]
-requirements_file = requirements/project.txt
+requirements_file = requirements.txt
 wsgi_entry_point = crate_project.wsgi:application
 migrations = south
 staticfiles = on
