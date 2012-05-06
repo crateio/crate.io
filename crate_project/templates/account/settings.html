@@ -5,15 +5,15 @@
 {% block head_title %}{{ gettext("Account") }}{% endblock %}
 
 {% block body %}
-    <form method="POST" action="{{ url("account_settings") }}">
-        {{ csrf() }}
+  <form method="POST" action="{{ url("account_settings") }}">
+    {{ csrf() }}
 
-        <legend>{{ gettext("Account") }}</legend>
+    <legend>{{ gettext("Account") }}</legend>
 
-        {{ bootstrap.render_form(form) }}
+    {{ bootstrap.render_form(form) }}
 
-        <div class="form-actions">
-            <button class="btn btn-primary" type="submit">{{ gettext("Save") }}</button>
-        </div>
-    </form>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">{{ gettext("Save") }}</button>
+    </div>
+  </form>
 {% endblock %}
