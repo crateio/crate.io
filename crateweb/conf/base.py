@@ -219,6 +219,10 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.CryptPasswordHasher",
 )
 
+GITHUB_EXTRA_DATA = [
+    ("login", "display"),
+]
+
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_ERROR_URL = "/"
