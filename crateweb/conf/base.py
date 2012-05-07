@@ -145,21 +145,33 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django.contrib.markup",
 
-    # external
+    # Authentication / Accounts
     "account",
+    "social_auth",
+    "timezones",
+
+    # Static Files
     "staticfiles",
     "compressor",
-    "timezones",
-    "south",
+
+    # Backend Tasks
     "djcelery",
-    "django_hosts",
+
+    # Search
     "haystack",
-    "storages",
     "celery_haystack",
-    "tastypie",
-    "djangosecure",
     "saved_searches",
-    "social_auth",
+
+    # Database
+    "south",
+
+    # API
+    "tastypie",
+
+    # Utility
+    "django_hosts",
+    "storages",
+    "djangosecure",
 
     # Templating
     "jingo",
