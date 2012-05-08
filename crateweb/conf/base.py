@@ -210,6 +210,7 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "core.social_auth.backends.OpenIDBackend",
     "social_auth.backends.contrib.github.GithubBackend",
+    "social_auth.backends.contrib.bitbucket.BitbucketBackend",
 ]
 
 SOCIAL_AUTH_PIPELINE = [
