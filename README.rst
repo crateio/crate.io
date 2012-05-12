@@ -12,7 +12,7 @@ Discussion
 ==========
 
 Discussion about crate can take place either in #crate on freenode or on 
-[GitHub Issues](https://github.com/crateio/crate-site/issues).
+`GitHub Issues <https://github.com/crateio/crate-site/issues>`_.
 
 
 Technology Stack
