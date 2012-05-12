@@ -1,7 +1,7 @@
 Crate
 =====
 
-Crate is a PyPI Mirror/Python Package Index that was written to make it easy to discover
+Crate is a PyPI_ Mirror/Python Package Index that was written to make it easy to discover
 packages, evaluate them for usefulness, and then install them. Additionally it also focuses
 on presenting an extremely stable interface to PyPI compatible applications (e.g. pip).
 
@@ -18,17 +18,17 @@ Discussion about crate can take place either in #crate on freenode or on
 Technology Stack
 ================
 
-Crate.io is built on top of Python using the Django framework. It uses Celery
+Crate.io_ is built on top of Python using the Django framework. It uses Celery
 to process its shared tasks, PostgreSQL to store its data, and Redis as its
 caching layer.
 
 Relation to PyPI
 ================
 
-The software that powers Crate.io defaults to PyPI, but can technically be used
+The software that powers Crate.io_ defaults to PyPI_, but can technically be used
 with any index that presents the same XMLRPC API.
 
-Crate.io the website currently only mirrors PyPI. All Packages and their associated
+Crate.io_ the website currently only mirrors PyPI_. All Packages and their associated
 data come from PyPI. Crate.io provides a reliable place for those packages to be stored
 and accessed and tries to present a cleaner and more user-friendly interface to
 that data.
@@ -106,3 +106,6 @@ Say yes to blowing away the index since you don't have one yet anyway. Indexing
 1073 packages took a few seconds for me.
 
 @@@ Todo Write More Development Docs?
+
+.. _PyPI: http://pypi.python.org/pypi
+.. _Crate.io: https://crate.io/
