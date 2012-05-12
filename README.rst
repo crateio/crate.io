@@ -26,9 +26,10 @@ Relation to PyPI
 ================
 
 The software that powers Crate.io_ defaults to PyPI_, but can technically be used
-with any index that presents the same XMLRPC API.
+with any index that presents the same 
+`XML-RPC API <http://wiki.python.org/moin/PyPiXmlRpc>`_.
 
-Crate.io_ the website currently only mirrors PyPI_. All Packages and their associated
+Crate.io_ the website currently only mirrors PyPI_. All packages and their associated
 data come from PyPI. Crate.io provides a reliable place for those packages to be stored
 and accessed and tries to present a cleaner and more user-friendly interface to
 that data.
