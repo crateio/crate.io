@@ -25,7 +25,7 @@ caching layer.
 Relation to PyPI
 ================
 
-The software that powers Crate.io defaults to PyPI, but can techincally be used
+The software that powers Crate.io defaults to PyPI, but can technically be used
 with any index that presents the same XMLRPC API.
 
 Crate.io the website currently only mirrors PyPI. All Packages and their associated
