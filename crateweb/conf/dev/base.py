@@ -13,6 +13,16 @@ CACHES = {
     }
 }
 
+REDIS = {
+    "default": {
+        "HOST": 'localhost',
+        "PORT": 6379,
+        "PASSWORD": '',
+    }
+}
+
+PYPI_DATASTORE = "default"
+
 MIDDLEWARE_CLASSES += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]

@@ -36,4 +36,73 @@ that data.
 Development
 ===========
 
-@@@ Todo Write Development Docs
+Install PostgreSQL
+------------------
+
+On OS X one possible way is to use `Homebrew
+<http://mxcl.github.com/homebrew/>`_::
+
+    brew install postgresql9
+    initdb /usr/local/var/postgres9
+    mkdir -p ~/Library/LaunchAgents
+    cp /usr/local/Cellar/postgresql9/9.0.7/org.postgresql.postgres.plist ~/Library/LaunchAgents/
+    launchctl load -w ~/Library/LaunchAgents/org.postgresql.postgres.plist
+
+There are some alternatives to Homebrew for installing PostgreSQL at http://www.postgresql.org/download/
+
+And create the PostgreSQL database::
+
+    createdb crate
+
+For searching packages to work, you will need `elasticsearch
+<http://www.elasticsearch.org/>`_. I installed it via Homebrew::
+
+    brew install elasticsearch
+
+Then create and activate a `virtualenv
+<https://crate.io/packages/virtualenv/>`_ -- everybody has their favorite way;
+here's what I did (``mkvirtualenv`` comes from `virtualenvwrapper
+<https://crate.io/packages/virtualenvwrapper/>`_), inspired by `dstufft's gist
+<https://gist.github.com/6869afeec3a5ec5ad116>`_::
+
+    mkvirtualenv --no-site-packages --distribute crate-site
+    echo "export DJANGO_SETTINGS_MODULE=crateweb.conf.dev.base" >> $VIRTUAL_ENV/bin/postactivate
+    echo "unset DJANGO_SETTINGS_MODULE" >> $VIRTUAL_ENV/bin/postdeactivate
+    workon crate-site   # virtualenv is already activated by mkvirtualenv but have to refresh postactivate
+
+Install dependencies::
+
+    pip install -r requirements.txt
+
+Do the Django dance::
+
+    export LC_ALL="en.UTF-8"  # Otherwise I get "TypeError: decode() argument 1 must be string, not None" in django.contrib.auth.management
+    python manage.py syncdb
+    python manage.py migrate
+    python manage.py runserver
+
+Admire the results of your work at http://localhost:8000/::
+
+    open http://localhost:8000/
+
+You won't have any packages in your database which makes testing harder. A full
+sync from PyPI takes some time, like 2 days or so the first time but you can
+start a full sync and just stop it after 15 minutes or so and you'll have some
+packages.
+
+To start downloading packages from `PyPI <http://pypi.python.org/pypi>`_ into
+the local database::
+
+    python manage.py celeryd
+    python manage.py trigger_bulk_sync
+
+Once you have some packages, then you can build the search index so that you
+can search them::
+
+    elasticsearch
+    python manage.py rebuild_index
+
+Say yes to blowing away the index since you don't have one yet anyway. Indexing
+1073 packages took a few seconds for me.
+
+@@@ Todo Write More Development Docs?
