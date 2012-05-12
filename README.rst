@@ -11,8 +11,8 @@ with no worries about if something is going to be down or not.
 Discussion
 ==========
 
-Discussion about crate can take place either in #crate on freenode, on Github Issues,
-or on the Trello board located at: https://trello.com/board/crate-site/4f1ce86e2309d79e2a0141c3
+Discussion about crate can take place either in #crate on freenode or on 
+[GitHub Issues](https://github.com/crateio/crate-site/issues).
 
 
 Technology Stack
