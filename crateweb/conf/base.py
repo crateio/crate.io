@@ -264,4 +264,4 @@ METRON_SETTINGS = {
     "gauges": {3: "4f1e4cd0613f5d7003000002"}
 }
 
-ADMIN_TOOLS_INDEX_DASHBOARD = "crate.dashboard.CrateIndexDashboard"
+ADMIN_TOOLS_INDEX_DASHBOARD = "crate.web.dashboard.CrateIndexDashboard"
