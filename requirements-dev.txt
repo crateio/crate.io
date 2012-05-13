@@ -1,0 +1,8 @@
+Dozer==0.1
+PIL==1.1.7
+Paste==1.7.5.1
+WebOb==1.2b3
+django-debug-toolbar==0.9.4
+django-devserver==0.3.2
+line-profiler==1.0b3
+sqlparse==0.1.4
