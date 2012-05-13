@@ -13,10 +13,6 @@ TEMPLATE_DEBUG = True
 
 SERVE_MEDIA = DEBUG
 
-# django-compressor is turned off by default due to deployment overhead for
-# most users. See <URL> for more information
-COMPRESS = False
-
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
@@ -67,10 +63,7 @@ STATICFILES_FINDERS = [
     "staticfiles.finders.FileSystemFinder",
     "staticfiles.finders.AppDirectoriesFinder",
     "staticfiles.finders.LegacyAppDirectoriesFinder",
-    "compressor.finders.CompressorFinder",
 ]
-
-COMPRESS_OUTPUT_DIR = "cache"
 
 TEMPLATE_LOADERS = [
     "jingo.Loader",
@@ -148,11 +141,9 @@ INSTALLED_APPS = [
     # Authentication / Accounts
     "account",
     "social_auth",
-    "timezones",
 
     # Static Files
     "staticfiles",
-    "compressor",
 
     # Backend Tasks
     "djcelery",
@@ -175,23 +166,18 @@ INSTALLED_APPS = [
 
     # Templating
     "jingo",
-    "jhumanize",
-    "jmetron",
-    "jintercom",
+
+    "jutils.jhumanize",
+    "jutils.jmetron",
+    "jutils.jintercom",
 
     # project
-    "core",
-    "about",
-    "aws_stats",
-    "packages",
-    "pypi",
-    "search",
-    "crate",
-    "evaluator",
-    "favorites",
-    "history",
-    "lists",
-    "helpdocs",
+    "crate.web.theme",
+    "crate.web.packages",
+    "crate.web.search",
+    "crate.web.history",
+    "crate.web.lists",
+    "crate.web.utils",
 ]
 
 FIXTURE_DIRS = [
@@ -208,16 +194,16 @@ ACCOUNT_CONTACT_EMAIL = "support@crate.io"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "core.social_auth.backends.OpenIDBackend",
+    "crate.web.social_auth.backends.OpenIDBackend",
     "social_auth.backends.contrib.github.GithubBackend",
     "social_auth.backends.contrib.bitbucket.BitbucketBackend",
 ]
 
 SOCIAL_AUTH_PIPELINE = [
     "social_auth.backends.pipeline.social.social_auth_user",
-    "core.social_auth.pipeline.associate.associate_by_email",
+    "crate.web.social_auth.pipeline.associate.associate_by_email",
     "social_auth.backends.pipeline.user.get_username",
-    "core.social_auth.pipeline.user.create_user",
+    "crate.web.social_auth.pipeline.user.create_user",
     "social_auth.backends.pipeline.social.associate_user",
     "social_auth.backends.pipeline.social.load_extra_data",
     "social_auth.backends.pipeline.user.update_user_details",
