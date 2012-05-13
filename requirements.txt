@@ -52,3 +52,4 @@ slumber==0.4.2
 simplejson==2.5.2
 raven==1.7.6
 boto==2.3.0
+MarkupSafe==0.15
