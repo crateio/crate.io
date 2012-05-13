@@ -28,3 +28,6 @@ pip-log.txt
 
 # site_media
 crateweb/site_media/
+
+# Gondor Site Key
+.gondor/site_key
