@@ -85,6 +85,7 @@ STATICFILES_STORAGE = "crateweb.storage.CachedStaticS3BotoStorage"
 STATICFILES_S3_OPTIONS = {
     "bucket": "crate-static-production",
     "custom_domain": "dtl9zya2lik3.cloudfront.net",
+    "secure_urls": True,
 }
 
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
