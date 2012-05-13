@@ -25,3 +25,6 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+# site_media
+crateweb/site_media/
