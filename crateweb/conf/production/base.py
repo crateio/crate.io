@@ -88,6 +88,8 @@ STATICFILES_S3_OPTIONS = {
     "secure_urls": True,
 }
 
+STATIC_URL = "https://dtl9zya2lik3.cloudfront.net/"
+
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
 AWS_S3_CUSTOM_DOMAIN = "media.crate-cdn.com"
 
