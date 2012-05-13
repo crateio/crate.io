@@ -55,9 +55,9 @@ STATIC_URL = "/site_media/static/"
 
 ADMIN_MEDIA_PREFIX = posixpath.join(STATIC_URL, "admin/")
 
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_ROOT, "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(PROJECT_ROOT, "static"),
+# ]
 
 STATICFILES_FINDERS = [
     "staticfiles.finders.FileSystemFinder",

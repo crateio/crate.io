@@ -80,7 +80,12 @@ PACKAGE_FILE_STORAGE_OPTIONS = {
 }
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
-# STATICFILES_STORAGE = "storages.backends.s3boto.S3BotoStorage"
+STATICFILES_STORAGE = "crateweb.storage.CachedStaticS3BotoStorage"
+
+STATICFILES_S3_OPTIONS = {
+    "bucket": "crate-static-production",
+    "custom_domain": "dtl9zya2lik3.cloudfront.net",
+}
 
 AWS_STORAGE_BUCKET_NAME = "crate-media-production"
 AWS_S3_CUSTOM_DOMAIN = "media.crate-cdn.com"
