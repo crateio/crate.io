@@ -1,3 +1,6 @@
+import os
+import urlparse
+
 from ..base import *
 
 LOGGING = {
@@ -46,6 +49,22 @@ LOGGING = {
         },
     }
 }
+
+if "DATABASE_URL" in os.environ:
+    urlparse.uses_netloc.append("postgres")
+    url = urlparse.urlparse(os.environ["DATABASE_URL"])
+    DATABASES = {
+        "default": {
+            "ENGINE": {
+                "postgres": "django.db.backends.postgresql_psycopg2"
+            }[url.scheme],
+            "NAME": url.path[1:],
+            "USER": url.username,
+            "PASSWORD": url.password,
+            "HOST": url.hostname,
+            "PORT": url.port
+        }
+    }
 
 SITE_ID = 3
 
