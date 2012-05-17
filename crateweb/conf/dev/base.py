@@ -23,6 +23,8 @@ REDIS = {
 
 PYPI_DATASTORE = "default"
 
+LOCK_DATASTORE = "default"
+
 MIDDLEWARE_CLASSES += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
