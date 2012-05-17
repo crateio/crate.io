@@ -178,6 +178,7 @@ INSTALLED_APPS = [
     "crate.web.history",
     "crate.web.lists",
     "crate.web.utils",
+    "crate.pypi",
 ]
 
 FIXTURE_DIRS = [

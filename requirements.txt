@@ -13,11 +13,12 @@ celery==2.5.3
 celery-haystack==0.4
 certifi==0.0.8
 chardet==1.0.1
--e git+git@github.com:crateio/crate.web.git@c59c0ca48a1ca942976210d5c900b0b9cae301c1#egg=crate.web
+-e git+https://github.com/crateio/crate.web.git#egg=crate.web
+-e git+https://github.com/crateio/crate.pypi.git#egg=crate.pypi
 django-admin-tools==0.4.1
 django-appconf==0.5
 django-celery==2.5.5
--e git+https://github.com/toastdriven/django-haystack.git@ec1f917588b3be1ce89f077a6c3c72be1551f84d#egg=django-haystack
+-e git+https://github.com/toastdriven/django-haystack.git#egg=django-haystack
 django-hosts==0.4.2
 django-jsonfield==0.8.7
 django-model-utils==1.1.0
@@ -28,14 +29,14 @@ django-social-auth==0.6.9
 django-staticfiles==1.2.1
 django-storages==1.1.4
 django-tastypie==0.9.11
--e git://github.com/dstufft/django-user-accounts.git@ff374374cc43f8bfdc047842c10e5e19e8af114e#egg=django-user-accounts
+-e git://github.com/dstufft/django-user-accounts.git#egg=django-user-accounts
 django-uuidfield==0.2
 docutils==0.9
 html5lib==0.95
 httplib2==0.7.4
 isoweek==1.2.0
 jingo==0.4
--e git+git@github.com:dstufft/jutils.git@b83f6bc2773096569ce7f47f42e82d031aed7f15#egg=jutils
+-e git+git@github.com:dstufft/jutils.git#egg=jutils
 kombu==2.1.8
 lxml==2.3.4
 mimeparse==0.1.3
@@ -46,7 +47,7 @@ pinax-utils==1.0b1.dev3
 psycopg2==2.4.5
 py-bcrypt==0.2
 pyasn1==0.1.3
--e git+https://github.com/toastdriven/pyelasticsearch.git@0c7824695f32ea8efa4fb14c3a0db52cb55e3217#egg=pyelasticsearch
+-e git+https://github.com/toastdriven/pyelasticsearch.git#egg=pyelasticsearch
 python-dateutil==1.5
 python-openid==2.2.5
 pytz==2012c
@@ -55,7 +56,7 @@ raven==1.7.6
 redis==2.4.12
 requests==0.12.1
 rsa==3.0.1
--e git+https://github.com/toastdriven/saved_searches.git@c6a48abeb8a2f54548c6c4782d09348aa940e661#egg=saved_searches
+-e git+https://github.com/toastdriven/saved_searches.git#egg=saved_searches
 simplejson==2.5.2
 slumber==0.4.2
 uuid==1.30
