@@ -75,8 +75,8 @@ DEFAULT_FROM_EMAIL = "support@crate.io"
 
 PACKAGE_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
 PACKAGE_FILE_STORAGE_OPTIONS = {
-    "bucket": "crate-production",
-    "custom_domain": "packages.crate-cdn.com",
+    "bucket": os.environ["PACKAGE_BUCKET"],
+    "custom_domain": os.environ["PACKAGE_DOMAIN"],
 }
 
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto.S3BotoStorage"
