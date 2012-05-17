@@ -66,6 +66,51 @@ if "DATABASE_URL" in os.environ:
         }
     }
 
+if "REDIS_URL" in os.environ:
+    urlparse.uses_netloc.append("redis")
+    url = urlparse.urlparse(os.environ["REDIS_URL"])
+
+    REDIS = {
+        "default": {
+            "HOST": url.hostname,
+            "PORT": url.port,
+            "PASSWORD": url.password,
+        }
+    }
+
+    CACHES = {
+       "default": {
+            "BACKEND": "redis_cache.RedisCache",
+            "LOCATION": "%(HOST)s:%(PORT)s" % REDIS["default"],
+            "KEY_PREFIX": "cache",
+            "OPTIONS": {
+                "DB": 0,
+                "PASSWORD": REDIS["default"]["PASSWORD"],
+            }
+        }
+    }
+
+    PYPI_DATASTORE = "default"
+
+    LOCK_DATASTORE = "default"
+
+    # Celery Broker
+    BROKER_TRANSPORT = "redis"
+
+    BROKER_HOST = REDIS["default"]["HOST"]
+    BROKER_PORT = REDIS["default"]["PORT"]
+    BROKER_PASSWORD = REDIS["default"]["PASSWORD"]
+    BROKER_VHOST = "0"
+
+    BROKER_POOL_LIMIT = 10
+
+    # Celery Results
+    CELERY_RESULT_BACKEND = "redis"
+
+    CELERY_REDIS_HOST = REDIS["default"]["HOST"]
+    CELERY_REDIS_PORT = REDIS["default"]["PORT"]
+    CELERY_REDIS_PASSWORD = REDIS["default"]["PORT"]
+
 SITE_ID = 3
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
