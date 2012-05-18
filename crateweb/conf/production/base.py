@@ -111,6 +111,24 @@ if "REDIS_URL" in os.environ:
     CELERY_REDIS_PORT = REDIS["default"]["PORT"]
     CELERY_REDIS_PASSWORD = REDIS["default"]["PORT"]
 
+if "ELASTICSEARCH_URL" in os.environ:
+    url = urlparse.urlparse(os.environ["ELASTICSEARCH_URL"])
+    index = url.path
+
+    if index.startswith("/"):
+        index = index[1:]
+
+    if index.endswith("/"):
+        index = index[:-1]
+
+    HAYSTACK_CONNECTIONS = {
+        "default": {
+            "ENGINE": "haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine",
+            "URL": urlparse.urlunparse([url.scheme, url.netloc, "/", "", "", ""]),
+            "INDEX_NAME": index,
+        },
+    }
+
 SITE_ID = 3
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -168,14 +186,6 @@ EMAIL_USE_TLS = True
 
 AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
 AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
-
-HAYSTACK_CONNECTIONS = {
-    "default": {
-        "ENGINE": os.environ["HAYSTACK_DEFAULT_ENGINE"],
-        "URL": os.environ["HAYSTACK_DEFAULT_URL"],
-        "INDEX_NAME": os.environ["HAYSTACK_DEFAULT_INDEX_NAME"],
-    },
-}
 
 INTERCOM_USER_HASH_KEY = os.environ["INTERCOM_USER_HASH_KEY"]
 
