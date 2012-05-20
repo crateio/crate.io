@@ -1,0 +1,976 @@
+# English translations for PROJECT.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# 
+# Translators:
+# Donald Stufft <donald.stufft@gmail.com>, 2012.
+# Minhee Hong <hong.minhee@gmail.com>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Crate.io\n"
+"Report-Msgid-Bugs-To: support@crate.io\n"
+"POT-Creation-Date: 2012-05-20 08:25-0400\n"
+"PO-Revision-Date: 2012-05-20 12:37+0000\n"
+"Last-Translator: Donald Stufft <donald.stufft@gmail.com>\n"
+"Language-Team: Korean (Korea) (http://www.transifex.net/projects/p/crateio/language/ko_KR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+"Language: ko_KR\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: crate/web/history/models.py:16
+msgid "Package Created"
+msgstr "패키지 등록됨"
+
+#: crate/web/history/models.py:17
+#: crate/web/theme/templates/packages/partials/yanked.html:3
+msgid "Package Deleted"
+msgstr "삭제된 패키지"
+
+#: crate/web/history/models.py:18
+msgid "Release Created"
+msgstr "릴리즈됨"
+
+#: crate/web/history/models.py:19
+msgid "Release Deleted"
+msgstr "PEP"
+
+#: crate/web/history/models.py:20
+msgid "File Added"
+msgstr "파일 추가됨"
+
+#: crate/web/history/models.py:21
+msgid "File Removed"
+msgstr "파일 삭제됨"
+
+#: crate/web/lists/models.py:12
+msgid "Name"
+msgstr "이름"
+
+#: crate/web/lists/models.py:17
+msgid "Private List"
+msgstr ""
+
+#: crate/web/lists/models.py:17
+msgid "Private lists are visible only to you."
+msgstr ""
+
+#: crate/web/lists/models.py:19
+msgid "Packages"
+msgstr ""
+
+#: crate/web/lists/views.py:34 crate/web/lists/views.py:80
+#, python-format
+msgid "Successfully added %(package)s to %(list)s."
+msgstr ""
+
+#: crate/web/lists/views.py:48 crate/web/lists/views.py:124
+msgid "Package does not exist"
+msgstr ""
+
+#: crate/web/lists/views.py:58 crate/web/lists/views.py:126
+msgid "List does not exist"
+msgstr ""
+
+#: crate/web/lists/views.py:113
+#, python-format
+msgid "Successfully removed %(package)s from %(list)s."
+msgstr ""
+
+#: crate/web/packages/evaluators.py:25
+msgid "PEP386 Compatibility"
+msgstr "PEP386 호환"
+
+#: crate/web/packages/evaluators.py:26
+msgid ""
+"PEP386 defines a specific allowed syntax for Python package versions.<br "
+"/><br />Previously it was impossible to accurately determine across any "
+"Python package what order the versions should go in, but with PEP386 we can "
+"now intelligently sort by version...<br /><br />But only if the version "
+"numbers are compatible!"
+msgstr "PEP386은 Python 패키지 버전을 위한 특정한 문법을 정의하는 표준입니다.<br /><br />예전에는 어떤 패키지가 어떤 패키지보다 앞서거나 늦는지 정확히 맞출 수 없었는데, PEP386 덕분에 이제는 똑똑하게 순서를 맞출 수 있게 되었습니다.<br /><br />하지만 물론 버전 넘버가 표준을 따라야 맞출 수 있겠죠!"
+
+#: crate/web/packages/evaluators.py:37
+msgid ""
+"Compatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr "<a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>과 호환됨."
+
+#: crate/web/packages/evaluators.py:43
+msgid ""
+"Almost Compatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr " <a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>과 거의 호환됨."
+
+#: crate/web/packages/evaluators.py:49
+msgid ""
+"Incompatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr "<a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>과 호환 안됨."
+
+#: crate/web/packages/evaluators.py:57
+msgid "Package Hosting"
+msgstr "패키지 호스팅"
+
+#: crate/web/packages/evaluators.py:59
+msgid ""
+"Did you know that packages listed on PyPI aren't required to host there?<br "
+"/><br />When your package manager tries to install a package from PyPI it "
+"looks in number of locations, one such location is an author specified url "
+"of where the package can be downloaded from.<br /><br />Packages hosted by "
+"the author means that installing this package depends on the authors server "
+"staying up, adding another link in the chain that can cause your "
+"installation to fail"
+msgstr "PyPI에 올라온 패키지가 꼭 PyPI에서 파일을 올려야 하는 건 아니라는 사실 알고 계세요?<br /><br />여러분이 쓰고 있는 (<code>easy_install</code>이나 <code>pip</code> 같은) 패키지 관리자는 PyPI의 패키지를 깔기 위해 몇가지 위치를 뒤져봅니다. 그중 하나가 패키지를 만든 사람이 지정한 특정한 패키지 다운로드 URL입니다.<br /><br />만든 사람이 패키지 다운로드를 운영한다는 것은 곧 그 패키지를 설치하는 것이 만든이가 운영하는 서버가 살아있는지에 의존하게 된다는 말입니다."
+
+#: crate/web/packages/evaluators.py:74
+msgid "Package is hosted on PyPI"
+msgstr "PyPI에 올라옴"
+
+#: crate/web/packages/evaluators.py:80
+msgid "Package isn't hosted on PyPI"
+msgstr "PyPI에 올라오지 않음"
+
+#: crate/web/packages/evaluators.py:86
+msgid "No Package Hosting"
+msgstr "올라오지 않음"
+
+#: crate/web/packages/evaluators.py:94
+msgid "Documentation hosted on Read The Docs"
+msgstr "Read The Docs에 올라온 문서"
+
+#: crate/web/packages/evaluators.py:96
+msgid ""
+"Documentation can be one of the most important parts of any library. Even "
+"more important than just having documentation, is making sure that people "
+"are able to find it easily.<br /><br />Read The Docs is an open source "
+"platform for hosting documentation generated by Sphinx.<br /><br />Hosting "
+"your documentation on Read The Docs is easy (even if it's just an additional"
+" copy), and it allows people who want to use your package the ability to "
+"locate your documentation in what is quickly becoming a one stop shop for "
+"online open source documentation.<br /><br /><small>If this says you aren't "
+"hosted on Read The Docs and you are please contact <a "
+"href='mailto:support@crate.io'>support@crate.io</a></small>"
+msgstr "문서는 라이브러리의 가장 중요한 부분 중 하나입니다. 하지만 그냥 문서가 있는 것보다 사람들이 그걸 쉽게 찾을 수 있도록 해주는 게 더 중요합니다.<br /><br />Read The Docs는 Sphinx로 작성된 문서를 올리기 위한 오픈 소스 플랫폼입니다.<br /><br />Read The Docs에 여러분의 문서를 올리는 것은 쉽습니다. (그냥 사본만 만드는 거라면요.) 그리고 그렇게 하면 여러분의 패키지를 쓰고 싶어하는 사람들이 온라인 오픈 소스 문서를 위한 대형 서점이 되어가는 곳에서 문서를 찾을 수 있게 됩니다.<br /><br /><small>혹시 Read The Docs에 올라오지 않았다고 잘못 나오고 있다면, 저희에게 <a href='mailto:support@crate.io'>support@crate.io</a>로 알려주세요.</small>"
+
+#: crate/web/packages/evaluators.py:127
+msgid ""
+"There was an error with the <a href=\"http://readthedocs.org/\">Read The "
+"Docs</a> API."
+msgstr "<a href=\"http://readthedocs.org/\">Read The Docs</a> API에 문제 발생."
+
+#: crate/web/packages/evaluators.py:143
+#, python-format
+msgid "Available on <a href=\"%s\">Read The Docs</a>"
+msgstr "<a href=\"%s\">Read The Docs</a>에 문서 있음"
+
+#: crate/web/packages/evaluators.py:149
+msgid "Unavailable on <a href=\"http://readthedocs.org/\">Read The Docs</a>"
+msgstr "<a href=\"http://readthedocs.org/\">Read The Docs</a>에 문서 없음"
+
+#: crate/web/packages/models.py:341
+msgid "Source"
+msgstr "소스"
+
+#: crate/web/packages/models.py:346
+msgid "Dumb Binary Distribution"
+msgstr ""
+
+#: crate/web/packages/models.py:347
+msgid "Windows Installer Binary Distribution"
+msgstr "Windows 설치 바이너리 배포본"
+
+#: crate/web/packages/search_indexes.py:14
+msgid "Other/Proprietary"
+msgstr "기타/상용"
+
+#: crate/web/packages/search_indexes.py:75
+#: crate/web/packages/search_indexes.py:83
+#: crate/web/packages/search_indexes.py:87
+#: crate/web/packages/search_indexes.py:91
+msgid "Unknown"
+msgstr "알 수 없음"
+
+#: crate/web/packages/views.py:49 crate/web/packages/simple/views.py:79
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: crate/web/search/forms.py:10
+msgid "Has Releases"
+msgstr "릴리즈된 것만"
+
+#: crate/web/search/forms.py:17 crate/web/theme/templates/homepage.html:28
+#: crate/web/theme/templates/site_base.html:22
+msgid "Search"
+msgstr "검색"
+
+#: crate/web/search/views.py:69
+msgid "Page is not 'last', nor can it be converted to an int."
+msgstr ""
+
+#: crate/web/search/views.py:74
+#, python-format
+msgid "Invalid page (%(page_number)s)"
+msgstr "잘못된 페이지 (%(page_number)s)"
+
+#: crate/web/social_auth/views.py:33
+msgid ""
+"Cannot remove the only Social Account without first setting a Password or "
+"adding another Social Account."
+msgstr ""
+
+#: crate/web/social_auth/views.py:39
+#, python-format
+msgid "Removed the %(provider)s account '%(uid)s'."
+msgstr ""
+
+#: crate/web/theme/templates/404.html:3
+msgid "Not Found"
+msgstr "페이지를 찾을 수 없음"
+
+#: crate/web/theme/templates/404.html:7
+msgid "Page not found"
+msgstr ""
+
+#: crate/web/theme/templates/404.html:8
+msgid "We're sorry but that page could not be found."
+msgstr "요청하신 페이지가 존재하지 않습니다."
+
+#: crate/web/theme/templates/500.html:3
+msgid "Server Error"
+msgstr "서버 오류"
+
+#: crate/web/theme/templates/500.html:7
+msgid "Something went wrong"
+msgstr ""
+
+#: crate/web/theme/templates/500.html:8
+msgid ""
+"We're sorry but a server error has occurred. We've been notified and will "
+"look into it as soon as possible."
+msgstr "죄송합니다. 서버에 오류가 발생했습니다. 이 문제는 운영진에게 전달되었고 곧 정상화될 것입니다."
+
+#: crate/web/theme/templates/_account_bar.html:7
+#: crate/web/theme/templates/account/base.html:7
+#: crate/web/theme/templates/account/settings.html:5
+#: crate/web/theme/templates/account/settings.html:11
+msgid "Account"
+msgstr "계정"
+
+#: crate/web/theme/templates/_account_bar.html:8
+msgid "Admin"
+msgstr "관리자"
+
+#: crate/web/theme/templates/_account_bar.html:10
+#: crate/web/theme/templates/account/logout.html:11
+#: crate/web/theme/templates/account/logout.html:16
+#: crate/web/theme/templates/django_openid/login.html:23
+msgid "Log out"
+msgstr "로그아웃"
+
+#: crate/web/theme/templates/_account_bar.html:14
+#, python-format
+msgid ""
+"\n"
+"            <li><a href=\"%(login_url)s\">Log in</a></li>\n"
+"            <li class=\"navbar-text\">or</li>\n"
+"            <li><a href=\"%(signup_url)s\">Sign up</a></li>\n"
+"          "
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:11
+msgid "Hosted by"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:13
+#: crate/web/theme/templates/_footer.html:14
+msgid "Hosted by Gondor"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:20
+msgid "Resolved by"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:22
+#: crate/web/theme/templates/_footer.html:23
+msgid "Resolved by Dyn"
+msgstr ""
+
+#: crate/web/theme/templates/homepage.html:3
+msgid "Welcome"
+msgstr "어서오세요"
+
+#: crate/web/theme/templates/homepage.html:42
+msgid "Crate is a new kind of Python package index."
+msgstr ""
+
+#: crate/web/theme/templates/homepage.html:51
+#, python-format
+msgid "%(number)s <span class=\"info-label\">packages</span>"
+msgstr ""
+
+#: crate/web/theme/templates/homepage.html:58
+#, python-format
+msgid "%(number)s <span class=\"info-label\">downloads</span>"
+msgstr ""
+
+#: crate/web/theme/templates/site_base.html:11
+msgid "Beta"
+msgstr "베타"
+
+#: crate/web/theme/templates/site_base.html:17
+msgid "My Lists"
+msgstr ""
+
+#: crate/web/theme/templates/account/_login_sidebar.html:3
+#: crate/web/theme/templates/account/_signup_sidebar.html:3
+msgid "Or sign in with"
+msgstr ""
+
+#: crate/web/theme/templates/account/_terms.html:5
+#, python-format
+msgid ""
+"If you have any trouble creating your account, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/base.html:8
+msgid "Settings"
+msgstr "설정"
+
+#: crate/web/theme/templates/account/base.html:9
+#: crate/web/theme/templates/account/password_change.html:5
+#: crate/web/theme/templates/account/password_reset_token.html:5
+msgid "Change Password"
+msgstr "암호 변경"
+
+#: crate/web/theme/templates/account/base.html:10
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:3
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:6
+msgid "Social Accounts"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirm.html:3
+#: crate/web/theme/templates/account/email_confirm.html:11
+msgid "Confirm Email"
+msgstr "이메일 확인"
+
+#: crate/web/theme/templates/account/email_confirm.html:13
+#, python-format
+msgid "Confirm email address <b>%(email)s</b>?"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirm.html:15
+msgid "Confirm"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmation_sent.html:3
+#: crate/web/theme/templates/account/email_confirmation_sent.html:6
+msgid "Confirm your email address"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmation_sent.html:8
+#, python-format
+msgid ""
+"We have sent you an email to <b>%(email)s</b> for verification. Follow the "
+"link provided to finalize the signup process. If you do not receive it "
+"within a few minutes, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmed.html:3
+#: crate/web/theme/templates/account/email_confirmed.html:6
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:10
+msgid "Email Confirmed"
+msgstr "이메일 확인됨"
+
+#: crate/web/theme/templates/account/email_confirmed.html:7
+#, python-format
+msgid "You have confirmed <b>%(email)s</b>"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:5
+msgid "Log In"
+msgstr "로그인"
+
+#: crate/web/theme/templates/account/login.html:9
+#: crate/web/theme/templates/account/login.html:28
+#: crate/web/theme/templates/django_openid/login.html:17
+msgid "Log in"
+msgstr "로그인"
+
+#: crate/web/theme/templates/account/login.html:10
+msgid "If you have an existing account, provide your login credentials below."
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:22
+msgid "Log in with an existing account"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:27
+msgid "Forgot your password?"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:33
+#: crate/web/theme/templates/account/signup.html:36
+msgid "Or sign in with your OpenID"
+msgstr "또는 OpenID로 로그인"
+
+#: crate/web/theme/templates/account/login.html:38
+#: crate/web/theme/templates/account/signup.html:41
+#: crate/web/theme/templates/django_openid/associations.html:41
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:34
+msgid "OpenID Identifier"
+msgstr "OpenID 주소"
+
+#: crate/web/theme/templates/account/login.html:45
+#: crate/web/theme/templates/account/signup.html:48
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:41
+msgid "Sign in with OpenID"
+msgstr ""
+
+#: crate/web/theme/templates/account/logout.html:3
+msgid "Log Out"
+msgstr ""
+
+#: crate/web/theme/templates/account/logout.html:13
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_change.html:11
+msgid "Change password"
+msgstr "암호 변경"
+
+#: crate/web/theme/templates/account/password_change.html:15
+#: crate/web/theme/templates/account/password_reset_token.html:16
+#: crate/web/theme/templates/account/settings.html:16
+msgid "Save"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset.html:5
+msgid "Password Reset"
+msgstr "암호 변경"
+
+#: crate/web/theme/templates/account/password_reset.html:13
+msgid "Reset password"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset.html:14
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+msgstr "암호를 까먹었나요? 아래 이메일 주소를 입력하시면 암호를 다시 설정하는 메일을 보내드립니다."
+
+#: crate/web/theme/templates/account/password_reset.html:20
+msgid "Reset my password"
+msgstr "암호 재설정"
+
+#: crate/web/theme/templates/account/password_reset.html:25
+#, python-format
+msgid ""
+"If you have any trouble resetting your password, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:3
+#: crate/web/theme/templates/account/password_reset_sent.html:6
+msgid "Password reset sent"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:9
+#, python-format
+msgid ""
+"We have sent you an email. If you do not receive it within a few minutes, "
+"try resending or contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:17
+msgid "Resend"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:20
+#, python-format
+msgid ""
+"We have resent the password email. If you do not receive it within a few "
+"minutes, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_token.html:10
+msgid "Set password"
+msgstr "두"
+
+#: crate/web/theme/templates/account/password_reset_token_fail.html:3
+#: crate/web/theme/templates/account/password_reset_token_fail.html:6
+msgid "Bad token"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_token_fail.html:10
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a <a href=\"%(password_reset_url)s\">new password "
+"reset</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:5
+#: crate/web/theme/templates/account/signup.html:9
+msgid "Sign Up"
+msgstr "등록"
+
+#: crate/web/theme/templates/account/signup.html:10
+msgid "To sign up with a new account, use the form below."
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:16
+msgid "Sign up with a new account"
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:30
+#: crate/web/theme/templates/django_openid/register.html:23
+msgid "Sign up"
+msgstr "등록"
+
+#: crate/web/theme/templates/django_openid/already_logged_in.html:3
+#: crate/web/theme/templates/django_openid/already_logged_in.html:7
+msgid "Already logged in"
+msgstr "이미 로그인됨"
+
+#: crate/web/theme/templates/django_openid/already_logged_in.html:8
+#, python-format
+msgid ""
+"You are already logged into the site. To login with a different OpenID "
+"please <a href=\"/openid/logout/?next=%(url_acct_logout)s\">logout</a> "
+"first."
+msgstr "이미 로그인되어 있습니다. 다른 OpenID로 로그인하려면 먼저<a href=\"/openid/logout/?next=%(url_acct_logout)s\">로그아웃</a>부터 해주세요."
+
+#: crate/web/theme/templates/django_openid/associate.html:3
+#: crate/web/theme/templates/django_openid/associate.html:8
+msgid "Verify this Association"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:9
+#, python-format
+msgid ""
+"You have begun to associate <strong>%(specific_openid)s</strong> with your "
+"existing account.  This will allow you to sign in as "
+"<strong>%(user_display)s</strong> using that OpenID.  Click below to verify "
+"that association."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:20
+msgid "Verify Association"
+msgstr "연결 확인"
+
+#: crate/web/theme/templates/django_openid/associate.html:21
+msgid "Decline"
+msgstr "파기"
+
+#: crate/web/theme/templates/django_openid/associations.html:3
+msgid "OpenID Associations"
+msgstr "OpenID 연결"
+
+#: crate/web/theme/templates/django_openid/associations.html:8
+msgid "Manage OpenID Associations"
+msgstr "OpenID 연결 관리"
+
+#: crate/web/theme/templates/django_openid/associations.html:25
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:15
+msgid "remove"
+msgstr "없애기"
+
+#: crate/web/theme/templates/django_openid/associations.html:32
+msgid "To associate a new OpenID with this account, sign in with it here:"
+msgstr "새 OpenID를 이 아이디에 연결시키기 위해, 아래에서 로그인하세요."
+
+#: crate/web/theme/templates/django_openid/associations.html:49
+msgid "Authenticate and associate with this account"
+msgstr "인증 및 이 아이디에 연결하기"
+
+#: crate/web/theme/templates/django_openid/error.html:3
+#: crate/web/theme/templates/django_openid/error.html:6
+msgid "Error using OpenID"
+msgstr "OpenID 사용중 오류"
+
+#: crate/web/theme/templates/django_openid/login.html:5
+msgid "Login"
+msgstr "로그인"
+
+#: crate/web/theme/templates/django_openid/login.html:8
+msgid "Log In to OpenID"
+msgstr "OpenID로 로그인"
+
+#: crate/web/theme/templates/django_openid/login.html:26
+#, python-format
+msgid ""
+"If you have any trouble logging in to your account, contact us at <a "
+"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+msgstr "로그인하는데 문제가 있으시면 <a href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>로 문의주세요."
+
+#: crate/web/theme/templates/django_openid/register.html:5
+#: crate/web/theme/templates/django_openid/register.html:8
+msgid "Choose a Username"
+msgstr "아이디를 정하세요"
+
+#: crate/web/theme/templates/django_openid/register.html:11
+msgid "Please correct the errors below:"
+msgstr "잘못된 것들을 바로잡아 주세요:"
+
+#: crate/web/theme/templates/django_openid/register.html:14
+msgid ""
+"Now that you have logged in with your OpenID, we need you to choose a "
+"username for this site."
+msgstr "OpenID로 로그인이 잘 되었습니다. 이제 이 사이트에서 쓸 아이디를 골라주세요."
+
+#: crate/web/theme/templates/django_openid/register.html:32
+#, python-format
+msgid ""
+"<strong>Already have an account?</strong> <a "
+"href=\"%(acct_login_openid_url)s\">Log in</a> to associate your OpenID with "
+"your existing account."
+msgstr "<strong>아이디 이미 있으세요?</strong> OpenID를 이미 존재하는 아이디에 연결하기 위해 <a href=\"%(acct_login_openid_url)s\">로그인</a>하세요."
+
+#: crate/web/theme/templates/django_openid/register.html:33
+#, python-format
+msgid ""
+"By clicking &quot;Sign Up&quot;, you are indicating that you have read and "
+"agree to the <a href=\"%(terms_url)s\">Terms of Use</a> and <a "
+"href=\"%(privacy_url)s\">Privacy Policy</a>."
+msgstr "등록을 계속 진행하시면 <a href=\"%(terms_url)s\">이용 약관</a>과 <a href=\"%(privacy_url)s\">개인 정보 보호 정책</a>에 동의한 것으로 간주됩니다."
+
+#: crate/web/theme/templates/django_openid/register.html:34
+#, python-format
+msgid ""
+"If you have any trouble creating your account, contact us at <a "
+"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+msgstr "아이디 만드는데 문제가 있으시면 <a href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>로 문의주세요."
+
+#: crate/web/theme/templates/django_openid/registration_closed.html:3
+#: crate/web/theme/templates/django_openid/registration_closed.html:6
+msgid "Signup closed"
+msgstr "등록 기간이 아님"
+
+#: crate/web/theme/templates/django_openid/registration_closed.html:8
+msgid ""
+"Whoops, you can't register for an account now. This site is currently closed"
+" for sign-up."
+msgstr "이런, 지금은 등록하실 수 없습니다. 이 사이트는 현재 등록 기간이 아닙니다."
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:3
+msgid "Email Confirmation"
+msgstr ""
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:11
+#, python-format
+msgid ""
+"You have confirmed that %(email)s is an email address for user "
+"'%(user_display)s'."
+msgstr "%(email)s 주소가 '%(user_display)s' 님의 이메일 주소라는 것을 확인했습니다."
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:15
+msgid "Invalid confirmation key"
+msgstr ""
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:16
+msgid "The confirmation key you provided is invalid."
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:5
+msgid "Lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:12
+#, python-format
+msgid "Remove from %(listname)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:18
+#, python-format
+msgid "Add to %(listname)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:28
+msgid "Add to a new List"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:30
+msgid "Sign in to use Lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_detail.html:24
+msgid "This List is Empty"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_list.html:3
+#: crate/web/theme/templates/lists/list_list.html:9
+#, python-format
+msgid "%(username)s's lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_list.html:20
+msgid "This user has no lists."
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:10
+#, python-format
+msgid "Remove %(package)s from %(list)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:17
+#, python-format
+msgid ""
+"Are you sure you want to remove <strong>%(package)s</strong> from "
+"<strong>%(list)s</strong>"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:25
+#: crate/web/theme/templates/lists/modals.html:49
+msgid "Nevermind"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:26
+msgid "Yes, Remove It"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:36
+#, python-format
+msgid "Add %(package)s to a new List"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:50
+msgid "Create List"
+msgstr ""
+
+#: crate/web/theme/templates/packages/release_detail.html:41
+msgid "Description"
+msgstr "설명"
+
+#: crate/web/theme/templates/packages/release_detail.html:42
+msgid "Changelog"
+msgstr "변경된 사항"
+
+#: crate/web/theme/templates/packages/release_detail.html:43
+msgid "License"
+msgstr "라이센스"
+
+#: crate/web/theme/templates/packages/release_detail.html:44
+#: crate/web/theme/templates/packages/partials/history.html:19
+msgid "Info"
+msgstr "정보"
+
+#: crate/web/theme/templates/packages/release_detail.html:45
+msgid "Files"
+msgstr "파일"
+
+#: crate/web/theme/templates/packages/release_detail.html:46
+#, python-format
+msgid "All Versions (%(version_count)s)"
+msgstr "모든 버전 (%(version_count)s)"
+
+#: crate/web/theme/templates/packages/release_detail.html:47
+msgid "History"
+msgstr "이력"
+
+#: crate/web/theme/templates/packages/partials/description.html:8
+msgid "No Description Provided."
+msgstr "설명이 없습니다."
+
+#: crate/web/theme/templates/packages/partials/files.html:4
+msgid "File"
+msgstr "파일"
+
+#: crate/web/theme/templates/packages/partials/files.html:5
+msgid "Type"
+msgstr "형식"
+
+#: crate/web/theme/templates/packages/partials/files.html:6
+msgid "Python Version"
+msgstr "Python 버전"
+
+#: crate/web/theme/templates/packages/partials/files.html:7
+msgid "Uploaded On"
+msgstr "올라온 날짜"
+
+#: crate/web/theme/templates/packages/partials/files.html:8
+msgid "Size"
+msgstr "용량"
+
+#: crate/web/theme/templates/packages/partials/files.html:9
+#: crate/web/theme/templates/packages/partials/sidebar.html:2
+msgid "Downloads"
+msgstr "다운로드 수"
+
+#: crate/web/theme/templates/packages/partials/files.html:25
+#, python-format
+msgid ""
+"There are No Files for This Package's Release, but try the <a "
+"href=\"%(uri)s\">author's downloads</a> for this release."
+msgstr "이 패키지 릴리즈에는 아무 파일도 없지만, <a href=\"%(uri)s\">만든이가 직접 운영하는 다운로드 페이지</a>도 한번 확인해보세요."
+
+#: crate/web/theme/templates/packages/partials/files.html:27
+msgid "There are No Files for This Package's Release."
+msgstr "이 패키지 릴리즈에는 아무 파일도 없습니다."
+
+#: crate/web/theme/templates/packages/partials/history.html:4
+msgid "Date"
+msgstr "날짜"
+
+#: crate/web/theme/templates/packages/partials/history.html:5
+msgid "Package"
+msgstr "패키지"
+
+#: crate/web/theme/templates/packages/partials/history.html:6
+#: crate/web/theme/templates/packages/partials/versions.html:4
+msgid "Version"
+msgstr "버전"
+
+#: crate/web/theme/templates/packages/partials/history.html:7
+msgid "Action"
+msgstr "내역"
+
+#: crate/web/theme/templates/packages/partials/history.html:23
+msgid "This Package is older than the start of History Tracking."
+msgstr ""
+
+#: crate/web/theme/templates/packages/partials/history.html:43
+msgid "Download URI"
+msgstr "다운로드 주소"
+
+#: crate/web/theme/templates/packages/partials/meta.html:3
+msgid "Author"
+msgstr "만든이"
+
+#: crate/web/theme/templates/packages/partials/meta.html:11
+msgid "Links"
+msgstr "링크"
+
+#: crate/web/theme/templates/packages/partials/meta.html:29
+msgid "Classifiers"
+msgstr "분류"
+
+#: crate/web/theme/templates/packages/partials/meta.html:42
+msgid "Requirements"
+msgstr "필요한 패키지"
+
+#: crate/web/theme/templates/packages/partials/meta.html:54
+msgid "Provides"
+msgstr ""
+
+#: crate/web/theme/templates/packages/partials/meta.html:66
+msgid "Obsoletes"
+msgstr ""
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:4
+#, python-format
+msgid "<span class=\"count\">%(count)s</span> total downloads"
+msgstr "총 <span class=\"count\">%(count)s</span>번 다운로드"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:5
+#, python-format
+msgid "<span class=\"count\">%(count)s</span> for this version"
+msgstr "해당 버전 <span class=\"count\">%(count)s</span>번 다운로드"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:15
+msgid "Evaluation"
+msgstr ""
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:15
+msgid "mouse over for details"
+msgstr "마우스를 올라면 자세한 정보가 나옵니다"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:37
+msgid "Latest Versions"
+msgstr "최근 버전"
+
+#: crate/web/theme/templates/packages/partials/versions.html:5
+msgid "Release Date"
+msgstr "올라온 날짜"
+
+#: crate/web/theme/templates/packages/partials/yanked.html:4
+msgid ""
+"This package has been deleted, but it is still available for download for "
+"other packages or projects that may have depended on it."
+msgstr "이 패키지는 삭제되었습니다. 그래도 이 패키지에 의존하는 다른 패키지를 위해 다운로드할 수는 있습니다."
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:5
+#: crate/web/theme/templates/saved_searches/most_recent.html:9
+msgid "Search History"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:9
+msgid "Your"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:18
+#, python-format
+msgid "Searched on %(on)s & has been run %(num)s times."
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:22
+msgid "No search history found. Go search for some packages!"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:29
+#: crate/web/theme/templates/search/results.html:67
+msgid "Previous"
+msgstr "이전"
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:35
+#: crate/web/theme/templates/search/results.html:73
+msgid "Next"
+msgstr "다음"
+
+#: crate/web/theme/templates/search/results.html:20
+msgid "Refine Results"
+msgstr "조건 추가"
+
+#: crate/web/theme/templates/search/results.html:27
+msgid "By Python Version"
+msgstr "Python 버전으로"
+
+#: crate/web/theme/templates/search/results.html:29
+msgid "By Operating System"
+msgstr "운영체제로"
+
+#: crate/web/theme/templates/search/results.html:31
+msgid "By License"
+msgstr "라이센스로"
+
+#: crate/web/theme/templates/search/results.html:33
+msgid "By Implementation"
+msgstr "구현체로"
+
+#: crate/web/theme/templates/search/results.html:35
+msgid "By Other"
+msgstr ""
+
+#: crate/web/theme/templates/search/results.html:60
+msgid "No results found."
+msgstr "결과 없음."
+
+#: crate/web/theme/templates/search/partials/package.html:5
+#: crate/web/theme/templates/search/partials/package.html:7
+#, python-format
+msgid "by %(name)s"
+msgstr ""
+
+#: crate/web/theme/templates/search/partials/package.html:14
+#, python-format
+msgid "<span class=\"count\">%(downloads)s</span> downloads"
+msgstr "<span class=\"count\">%(downloads)s</span>번 다운로드"
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:19
+msgid "You don't have any social accounts associated."
+msgstr ""
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:29
+msgid "Associate an OpenID"
+msgstr ""
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:47
+msgid "Or associate with"
+msgstr ""

@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.net
+minimum_perc = 25
+lang_map = ko_KR: ko
+
+[crateio.djangopo]
+file_filter = locale/<lang>/LC_MESSAGES/django.po
+source_file = locale/en/LC_MESSAGES/django.po
+source_lang = en

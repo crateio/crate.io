@@ -1,0 +1,978 @@
+# English translations for PROJECT.
+# Copyright (C) 2012 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# 
+# Translators:
+# Denis Veselov ( http://git.io/sks ) <>, 2012.
+# Donald Stufft <donald.stufft@gmail.com>, 2012.
+# Eugene MechanisM <contact@mechanism.name>, 2012.
+# Денис  <>, 2012.
+msgid ""
+msgstr ""
+"Project-Id-Version: Crate.io\n"
+"Report-Msgid-Bugs-To: support@crate.io\n"
+"POT-Creation-Date: 2012-05-20 08:25-0400\n"
+"PO-Revision-Date: 2012-05-20 12:37+0000\n"
+"Last-Translator: Donald Stufft <donald.stufft@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.net/projects/p/crateio/language/ru/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
+
+#: crate/web/history/models.py:16
+msgid "Package Created"
+msgstr "Пакет Создан"
+
+#: crate/web/history/models.py:17
+#: crate/web/theme/templates/packages/partials/yanked.html:3
+msgid "Package Deleted"
+msgstr "Пакет удалён"
+
+#: crate/web/history/models.py:18
+msgid "Release Created"
+msgstr "Релиз Создан"
+
+#: crate/web/history/models.py:19
+msgid "Release Deleted"
+msgstr "Релиз Удален"
+
+#: crate/web/history/models.py:20
+msgid "File Added"
+msgstr "Файл Добавлен"
+
+#: crate/web/history/models.py:21
+msgid "File Removed"
+msgstr "Файл Удален"
+
+#: crate/web/lists/models.py:12
+msgid "Name"
+msgstr "Название"
+
+#: crate/web/lists/models.py:17
+msgid "Private List"
+msgstr ""
+
+#: crate/web/lists/models.py:17
+msgid "Private lists are visible only to you."
+msgstr ""
+
+#: crate/web/lists/models.py:19
+msgid "Packages"
+msgstr ""
+
+#: crate/web/lists/views.py:34 crate/web/lists/views.py:80
+#, python-format
+msgid "Successfully added %(package)s to %(list)s."
+msgstr ""
+
+#: crate/web/lists/views.py:48 crate/web/lists/views.py:124
+msgid "Package does not exist"
+msgstr ""
+
+#: crate/web/lists/views.py:58 crate/web/lists/views.py:126
+msgid "List does not exist"
+msgstr ""
+
+#: crate/web/lists/views.py:113
+#, python-format
+msgid "Successfully removed %(package)s from %(list)s."
+msgstr ""
+
+#: crate/web/packages/evaluators.py:25
+msgid "PEP386 Compatibility"
+msgstr "Соответствие PEP386"
+
+#: crate/web/packages/evaluators.py:26
+msgid ""
+"PEP386 defines a specific allowed syntax for Python package versions.<br "
+"/><br />Previously it was impossible to accurately determine across any "
+"Python package what order the versions should go in, but with PEP386 we can "
+"now intelligently sort by version...<br /><br />But only if the version "
+"numbers are compatible!"
+msgstr "PEP386 определяет специфический разрешенный синтаксис для версий Python пакетов.<br /><br />Раньше было невозможно с точностью определить по любому Python пакету в каком порядке должны идти версии, но с PEP386 мы можем грамотно сортировать по версии...<br /><br />Но только в том случае, если номера версий совместимы!"
+
+#: crate/web/packages/evaluators.py:37
+msgid ""
+"Compatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr "Соответствует <a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+
+#: crate/web/packages/evaluators.py:43
+msgid ""
+"Almost Compatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr "Почти соответсвует <a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+
+#: crate/web/packages/evaluators.py:49
+msgid ""
+"Incompatible with <a "
+"href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+msgstr "Не соотвтествует <a href=\"http://www.python.org/dev/peps/pep-0386/\">PEP386</a>."
+
+#: crate/web/packages/evaluators.py:57
+msgid "Package Hosting"
+msgstr "Размещение Пакета"
+
+#: crate/web/packages/evaluators.py:59
+msgid ""
+"Did you know that packages listed on PyPI aren't required to host there?<br "
+"/><br />When your package manager tries to install a package from PyPI it "
+"looks in number of locations, one such location is an author specified url "
+"of where the package can be downloaded from.<br /><br />Packages hosted by "
+"the author means that installing this package depends on the authors server "
+"staying up, adding another link in the chain that can cause your "
+"installation to fail"
+msgstr "А вы знали что пакеты числящиеся в PyPI не обязаны там размещаться?<br /><br />Когда ваш менеджер пакетов пытается установить пакет из PyPI, он ищет в нескольких расположениях, одним из которых может быть указанный автором адрес откуда пакет может быть скачан.<br /><br />Пакеты размещенные у автора подразумевают что установка пакетов зависит от работы сервера автора, добавляя другую ссылку в цепочку может привести к неудачной установке"
+
+#: crate/web/packages/evaluators.py:74
+msgid "Package is hosted on PyPI"
+msgstr "Пакет размещен на PyPI"
+
+#: crate/web/packages/evaluators.py:80
+msgid "Package isn't hosted on PyPI"
+msgstr "Пакет не размещен на PyPI"
+
+#: crate/web/packages/evaluators.py:86
+msgid "No Package Hosting"
+msgstr "Пакет нигде не размещен"
+
+#: crate/web/packages/evaluators.py:94
+msgid "Documentation hosted on Read The Docs"
+msgstr "Документация размещена на Read The Docs"
+
+#: crate/web/packages/evaluators.py:96
+msgid ""
+"Documentation can be one of the most important parts of any library. Even "
+"more important than just having documentation, is making sure that people "
+"are able to find it easily.<br /><br />Read The Docs is an open source "
+"platform for hosting documentation generated by Sphinx.<br /><br />Hosting "
+"your documentation on Read The Docs is easy (even if it's just an additional"
+" copy), and it allows people who want to use your package the ability to "
+"locate your documentation in what is quickly becoming a one stop shop for "
+"online open source documentation.<br /><br /><small>If this says you aren't "
+"hosted on Read The Docs and you are please contact <a "
+"href='mailto:support@crate.io'>support@crate.io</a></small>"
+msgstr "Документация может быть одной из самых важных частей любой библиотеки. Еще важнее чем просто иметь документацию это быть уверенным что люди смогут ее легко найти.<br /><br />Read The Docs это платформа с исходным кодом для размещения документации сгенерированной с помошью Sphinx.<br /><br />Размещать вашу документацию на Read The Docs легко (даже если это просто дополнительная копия), и позволяет людям которые хотят использовать ваш пакет, иметь возможность находить вашу документацию в месте которое быстро становится стандартом для размщения онлайн документации.<br /><br /><small>Если указано что пакет не размещен на Read The Docs, но это не так, то пожалуйста сообщите <a href='mailto:support@crate.io'>support@crate.io</a></small>"
+
+#: crate/web/packages/evaluators.py:127
+msgid ""
+"There was an error with the <a href=\"http://readthedocs.org/\">Read The "
+"Docs</a> API."
+msgstr "Ошибка с API <a href=\"http://readthedocs.org/\">Read The Docs</a>."
+
+#: crate/web/packages/evaluators.py:143
+#, python-format
+msgid "Available on <a href=\"%s\">Read The Docs</a>"
+msgstr "Есть на <a href=\"%s\">Read The Docs</a>"
+
+#: crate/web/packages/evaluators.py:149
+msgid "Unavailable on <a href=\"http://readthedocs.org/\">Read The Docs</a>"
+msgstr "Нет на <a href=\"http://readthedocs.org/\">Read The Docs</a>"
+
+#: crate/web/packages/models.py:341
+msgid "Source"
+msgstr "Исходный код"
+
+#: crate/web/packages/models.py:346
+msgid "Dumb Binary Distribution"
+msgstr "Бинарный Дистрибутив"
+
+#: crate/web/packages/models.py:347
+msgid "Windows Installer Binary Distribution"
+msgstr "Бинарный Дистрибутив Установщика Windows"
+
+#: crate/web/packages/search_indexes.py:14
+msgid "Other/Proprietary"
+msgstr "Другое/Проприетарное"
+
+#: crate/web/packages/search_indexes.py:75
+#: crate/web/packages/search_indexes.py:83
+#: crate/web/packages/search_indexes.py:87
+#: crate/web/packages/search_indexes.py:91
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: crate/web/packages/views.py:49 crate/web/packages/simple/views.py:79
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr "Нет результатов по запросу %(verbose_name)s"
+
+#: crate/web/search/forms.py:10
+msgid "Has Releases"
+msgstr "Имеет релизы"
+
+#: crate/web/search/forms.py:17 crate/web/theme/templates/homepage.html:28
+#: crate/web/theme/templates/site_base.html:22
+msgid "Search"
+msgstr "Поиск"
+
+#: crate/web/search/views.py:69
+msgid "Page is not 'last', nor can it be converted to an int."
+msgstr "Страница не последняя и не может быть преобразована в число."
+
+#: crate/web/search/views.py:74
+#, python-format
+msgid "Invalid page (%(page_number)s)"
+msgstr "Неверная страница (%(page_number)s)"
+
+#: crate/web/social_auth/views.py:33
+msgid ""
+"Cannot remove the only Social Account without first setting a Password or "
+"adding another Social Account."
+msgstr ""
+
+#: crate/web/social_auth/views.py:39
+#, python-format
+msgid "Removed the %(provider)s account '%(uid)s'."
+msgstr ""
+
+#: crate/web/theme/templates/404.html:3
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: crate/web/theme/templates/404.html:7
+msgid "Page not found"
+msgstr "Страница не найдена"
+
+#: crate/web/theme/templates/404.html:8
+msgid "We're sorry but that page could not be found."
+msgstr "Сожалеем, но эта страница не найдена."
+
+#: crate/web/theme/templates/500.html:3
+msgid "Server Error"
+msgstr "Ошибка сервера"
+
+#: crate/web/theme/templates/500.html:7
+msgid "Something went wrong"
+msgstr "Что-то пошло не так"
+
+#: crate/web/theme/templates/500.html:8
+msgid ""
+"We're sorry but a server error has occurred. We've been notified and will "
+"look into it as soon as possible."
+msgstr "Сожалеем, но на сервере произошла ошибка. Мы были уведомлены и исправим это в ближайшее время."
+
+#: crate/web/theme/templates/_account_bar.html:7
+#: crate/web/theme/templates/account/base.html:7
+#: crate/web/theme/templates/account/settings.html:5
+#: crate/web/theme/templates/account/settings.html:11
+msgid "Account"
+msgstr "Аккаунт"
+
+#: crate/web/theme/templates/_account_bar.html:8
+msgid "Admin"
+msgstr "Администратор"
+
+#: crate/web/theme/templates/_account_bar.html:10
+#: crate/web/theme/templates/account/logout.html:11
+#: crate/web/theme/templates/account/logout.html:16
+#: crate/web/theme/templates/django_openid/login.html:23
+msgid "Log out"
+msgstr "Выход"
+
+#: crate/web/theme/templates/_account_bar.html:14
+#, python-format
+msgid ""
+"\n"
+"            <li><a href=\"%(login_url)s\">Log in</a></li>\n"
+"            <li class=\"navbar-text\">or</li>\n"
+"            <li><a href=\"%(signup_url)s\">Sign up</a></li>\n"
+"          "
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:11
+msgid "Hosted by"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:13
+#: crate/web/theme/templates/_footer.html:14
+msgid "Hosted by Gondor"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:20
+msgid "Resolved by"
+msgstr ""
+
+#: crate/web/theme/templates/_footer.html:22
+#: crate/web/theme/templates/_footer.html:23
+msgid "Resolved by Dyn"
+msgstr ""
+
+#: crate/web/theme/templates/homepage.html:3
+msgid "Welcome"
+msgstr "Добро пожаловать"
+
+#: crate/web/theme/templates/homepage.html:42
+msgid "Crate is a new kind of Python package index."
+msgstr ""
+
+#: crate/web/theme/templates/homepage.html:51
+#, python-format
+msgid "%(number)s <span class=\"info-label\">packages</span>"
+msgstr "%(number)s <span class=\"info-label\">пакетов</span>"
+
+#: crate/web/theme/templates/homepage.html:58
+#, python-format
+msgid "%(number)s <span class=\"info-label\">downloads</span>"
+msgstr ""
+
+#: crate/web/theme/templates/site_base.html:11
+msgid "Beta"
+msgstr "Бета"
+
+#: crate/web/theme/templates/site_base.html:17
+msgid "My Lists"
+msgstr ""
+
+#: crate/web/theme/templates/account/_login_sidebar.html:3
+#: crate/web/theme/templates/account/_signup_sidebar.html:3
+msgid "Or sign in with"
+msgstr ""
+
+#: crate/web/theme/templates/account/_terms.html:5
+#, python-format
+msgid ""
+"If you have any trouble creating your account, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/base.html:8
+msgid "Settings"
+msgstr "Настройки"
+
+#: crate/web/theme/templates/account/base.html:9
+#: crate/web/theme/templates/account/password_change.html:5
+#: crate/web/theme/templates/account/password_reset_token.html:5
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+#: crate/web/theme/templates/account/base.html:10
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:3
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:6
+msgid "Social Accounts"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirm.html:3
+#: crate/web/theme/templates/account/email_confirm.html:11
+msgid "Confirm Email"
+msgstr "Подтвердите Email"
+
+#: crate/web/theme/templates/account/email_confirm.html:13
+#, python-format
+msgid "Confirm email address <b>%(email)s</b>?"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirm.html:15
+msgid "Confirm"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmation_sent.html:3
+#: crate/web/theme/templates/account/email_confirmation_sent.html:6
+msgid "Confirm your email address"
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmation_sent.html:8
+#, python-format
+msgid ""
+"We have sent you an email to <b>%(email)s</b> for verification. Follow the "
+"link provided to finalize the signup process. If you do not receive it "
+"within a few minutes, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/email_confirmed.html:3
+#: crate/web/theme/templates/account/email_confirmed.html:6
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:10
+msgid "Email Confirmed"
+msgstr "Email подтверждён"
+
+#: crate/web/theme/templates/account/email_confirmed.html:7
+#, python-format
+msgid "You have confirmed <b>%(email)s</b>"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:5
+msgid "Log In"
+msgstr "Войти"
+
+#: crate/web/theme/templates/account/login.html:9
+#: crate/web/theme/templates/account/login.html:28
+#: crate/web/theme/templates/django_openid/login.html:17
+msgid "Log in"
+msgstr "Войти"
+
+#: crate/web/theme/templates/account/login.html:10
+msgid "If you have an existing account, provide your login credentials below."
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:22
+msgid "Log in with an existing account"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:27
+msgid "Forgot your password?"
+msgstr ""
+
+#: crate/web/theme/templates/account/login.html:33
+#: crate/web/theme/templates/account/signup.html:36
+msgid "Or sign in with your OpenID"
+msgstr "Или войдите с помощью OpenID"
+
+#: crate/web/theme/templates/account/login.html:38
+#: crate/web/theme/templates/account/signup.html:41
+#: crate/web/theme/templates/django_openid/associations.html:41
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:34
+msgid "OpenID Identifier"
+msgstr "OpenID Идентификатор"
+
+#: crate/web/theme/templates/account/login.html:45
+#: crate/web/theme/templates/account/signup.html:48
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:41
+msgid "Sign in with OpenID"
+msgstr ""
+
+#: crate/web/theme/templates/account/logout.html:3
+msgid "Log Out"
+msgstr ""
+
+#: crate/web/theme/templates/account/logout.html:13
+msgid "Are you sure you want to log out?"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_change.html:11
+msgid "Change password"
+msgstr "Изменить пароль"
+
+#: crate/web/theme/templates/account/password_change.html:15
+#: crate/web/theme/templates/account/password_reset_token.html:16
+#: crate/web/theme/templates/account/settings.html:16
+msgid "Save"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset.html:5
+msgid "Password Reset"
+msgstr "Пароль сброшен"
+
+#: crate/web/theme/templates/account/password_reset.html:13
+msgid "Reset password"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset.html:14
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll send you "
+"an email allowing you to reset it."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset.html:20
+msgid "Reset my password"
+msgstr "Сбросить мой пароль"
+
+#: crate/web/theme/templates/account/password_reset.html:25
+#, python-format
+msgid ""
+"If you have any trouble resetting your password, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:3
+#: crate/web/theme/templates/account/password_reset_sent.html:6
+msgid "Password reset sent"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:9
+#, python-format
+msgid ""
+"We have sent you an email. If you do not receive it within a few minutes, "
+"try resending or contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:17
+msgid "Resend"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_sent.html:20
+#, python-format
+msgid ""
+"We have resent the password email. If you do not receive it within a few "
+"minutes, contact us at <a "
+"href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_token.html:10
+msgid "Set password"
+msgstr "Установить пароль"
+
+#: crate/web/theme/templates/account/password_reset_token_fail.html:3
+#: crate/web/theme/templates/account/password_reset_token_fail.html:6
+msgid "Bad token"
+msgstr ""
+
+#: crate/web/theme/templates/account/password_reset_token_fail.html:10
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a <a href=\"%(password_reset_url)s\">new password "
+"reset</a>."
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:5
+#: crate/web/theme/templates/account/signup.html:9
+msgid "Sign Up"
+msgstr "Зарегистрироваться"
+
+#: crate/web/theme/templates/account/signup.html:10
+msgid "To sign up with a new account, use the form below."
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:16
+msgid "Sign up with a new account"
+msgstr ""
+
+#: crate/web/theme/templates/account/signup.html:30
+#: crate/web/theme/templates/django_openid/register.html:23
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+#: crate/web/theme/templates/django_openid/already_logged_in.html:3
+#: crate/web/theme/templates/django_openid/already_logged_in.html:7
+msgid "Already logged in"
+msgstr "Вход и так уже выполнен"
+
+#: crate/web/theme/templates/django_openid/already_logged_in.html:8
+#, python-format
+msgid ""
+"You are already logged into the site. To login with a different OpenID "
+"please <a href=\"/openid/logout/?next=%(url_acct_logout)s\">logout</a> "
+"first."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:3
+#: crate/web/theme/templates/django_openid/associate.html:8
+msgid "Verify this Association"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:9
+#, python-format
+msgid ""
+"You have begun to associate <strong>%(specific_openid)s</strong> with your "
+"existing account.  This will allow you to sign in as "
+"<strong>%(user_display)s</strong> using that OpenID.  Click below to verify "
+"that association."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:20
+msgid "Verify Association"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associate.html:21
+msgid "Decline"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associations.html:3
+msgid "OpenID Associations"
+msgstr "Ассоциация с OpenID"
+
+#: crate/web/theme/templates/django_openid/associations.html:8
+msgid "Manage OpenID Associations"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associations.html:25
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:15
+msgid "remove"
+msgstr "удалить"
+
+#: crate/web/theme/templates/django_openid/associations.html:32
+msgid "To associate a new OpenID with this account, sign in with it here:"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/associations.html:49
+msgid "Authenticate and associate with this account"
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/error.html:3
+#: crate/web/theme/templates/django_openid/error.html:6
+msgid "Error using OpenID"
+msgstr "Ошибка при использовании OpenID"
+
+#: crate/web/theme/templates/django_openid/login.html:5
+msgid "Login"
+msgstr "Войти"
+
+#: crate/web/theme/templates/django_openid/login.html:8
+msgid "Log In to OpenID"
+msgstr "Войти через OpenID"
+
+#: crate/web/theme/templates/django_openid/login.html:26
+#, python-format
+msgid ""
+"If you have any trouble logging in to your account, contact us at <a "
+"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/register.html:5
+#: crate/web/theme/templates/django_openid/register.html:8
+msgid "Choose a Username"
+msgstr "Выберите Имя пользователя"
+
+#: crate/web/theme/templates/django_openid/register.html:11
+msgid "Please correct the errors below:"
+msgstr "Пожалуйста, исправьте ошибки ниже:"
+
+#: crate/web/theme/templates/django_openid/register.html:14
+msgid ""
+"Now that you have logged in with your OpenID, we need you to choose a "
+"username for this site."
+msgstr "Теперь, когда Вы вошли с помощью OpenID, Вы должны выбрать Имя пользователя для этого сайта."
+
+#: crate/web/theme/templates/django_openid/register.html:32
+#, python-format
+msgid ""
+"<strong>Already have an account?</strong> <a "
+"href=\"%(acct_login_openid_url)s\">Log in</a> to associate your OpenID with "
+"your existing account."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/register.html:33
+#, python-format
+msgid ""
+"By clicking &quot;Sign Up&quot;, you are indicating that you have read and "
+"agree to the <a href=\"%(terms_url)s\">Terms of Use</a> and <a "
+"href=\"%(privacy_url)s\">Privacy Policy</a>."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/register.html:34
+#, python-format
+msgid ""
+"If you have any trouble creating your account, contact us at <a "
+"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+msgstr ""
+
+#: crate/web/theme/templates/django_openid/registration_closed.html:3
+#: crate/web/theme/templates/django_openid/registration_closed.html:6
+msgid "Signup closed"
+msgstr "Регистрация закрыта"
+
+#: crate/web/theme/templates/django_openid/registration_closed.html:8
+msgid ""
+"Whoops, you can't register for an account now. This site is currently closed"
+" for sign-up."
+msgstr ""
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:3
+msgid "Email Confirmation"
+msgstr "Подтверждение email"
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:11
+#, python-format
+msgid ""
+"You have confirmed that %(email)s is an email address for user "
+"'%(user_display)s'."
+msgstr ""
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:15
+msgid "Invalid confirmation key"
+msgstr ""
+
+#: crate/web/theme/templates/emailconfirmation/confirm_email.html:16
+msgid "The confirmation key you provided is invalid."
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:5
+msgid "Lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:12
+#, python-format
+msgid "Remove from %(listname)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:18
+#, python-format
+msgid "Add to %(listname)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:28
+msgid "Add to a new List"
+msgstr ""
+
+#: crate/web/theme/templates/lists/button.html:30
+msgid "Sign in to use Lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_detail.html:24
+msgid "This List is Empty"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_list.html:3
+#: crate/web/theme/templates/lists/list_list.html:9
+#, python-format
+msgid "%(username)s's lists"
+msgstr ""
+
+#: crate/web/theme/templates/lists/list_list.html:20
+msgid "This user has no lists."
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:10
+#, python-format
+msgid "Remove %(package)s from %(list)s"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:17
+#, python-format
+msgid ""
+"Are you sure you want to remove <strong>%(package)s</strong> from "
+"<strong>%(list)s</strong>"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:25
+#: crate/web/theme/templates/lists/modals.html:49
+msgid "Nevermind"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:26
+msgid "Yes, Remove It"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:36
+#, python-format
+msgid "Add %(package)s to a new List"
+msgstr ""
+
+#: crate/web/theme/templates/lists/modals.html:50
+msgid "Create List"
+msgstr ""
+
+#: crate/web/theme/templates/packages/release_detail.html:41
+msgid "Description"
+msgstr "Описание"
+
+#: crate/web/theme/templates/packages/release_detail.html:42
+msgid "Changelog"
+msgstr "История изменений"
+
+#: crate/web/theme/templates/packages/release_detail.html:43
+msgid "License"
+msgstr "Лицензия"
+
+#: crate/web/theme/templates/packages/release_detail.html:44
+#: crate/web/theme/templates/packages/partials/history.html:19
+msgid "Info"
+msgstr "Информация"
+
+#: crate/web/theme/templates/packages/release_detail.html:45
+msgid "Files"
+msgstr "Файлы"
+
+#: crate/web/theme/templates/packages/release_detail.html:46
+#, python-format
+msgid "All Versions (%(version_count)s)"
+msgstr "Все версии (%(version_count)s)"
+
+#: crate/web/theme/templates/packages/release_detail.html:47
+msgid "History"
+msgstr "История"
+
+#: crate/web/theme/templates/packages/partials/description.html:8
+msgid "No Description Provided."
+msgstr "Нет описания."
+
+#: crate/web/theme/templates/packages/partials/files.html:4
+msgid "File"
+msgstr "Файл"
+
+#: crate/web/theme/templates/packages/partials/files.html:5
+msgid "Type"
+msgstr "Тип"
+
+#: crate/web/theme/templates/packages/partials/files.html:6
+msgid "Python Version"
+msgstr "Версия Python"
+
+#: crate/web/theme/templates/packages/partials/files.html:7
+msgid "Uploaded On"
+msgstr "Загружен"
+
+#: crate/web/theme/templates/packages/partials/files.html:8
+msgid "Size"
+msgstr "Размер"
+
+#: crate/web/theme/templates/packages/partials/files.html:9
+#: crate/web/theme/templates/packages/partials/sidebar.html:2
+msgid "Downloads"
+msgstr "Загрузок"
+
+#: crate/web/theme/templates/packages/partials/files.html:25
+#, python-format
+msgid ""
+"There are No Files for This Package's Release, but try the <a "
+"href=\"%(uri)s\">author's downloads</a> for this release."
+msgstr "Нет файлов для версии этого пакета, попробуйте посетить <a href=\"%(uri)s\">сайт автора</a> этого пакета."
+
+#: crate/web/theme/templates/packages/partials/files.html:27
+msgid "There are No Files for This Package's Release."
+msgstr "Нет файлов для текущей версии пакета."
+
+#: crate/web/theme/templates/packages/partials/history.html:4
+msgid "Date"
+msgstr "Дата"
+
+#: crate/web/theme/templates/packages/partials/history.html:5
+msgid "Package"
+msgstr "Пакет"
+
+#: crate/web/theme/templates/packages/partials/history.html:6
+#: crate/web/theme/templates/packages/partials/versions.html:4
+msgid "Version"
+msgstr "Версия"
+
+#: crate/web/theme/templates/packages/partials/history.html:7
+msgid "Action"
+msgstr "Действие"
+
+#: crate/web/theme/templates/packages/partials/history.html:23
+msgid "This Package is older than the start of History Tracking."
+msgstr "Этот пакет старее чем началась история версий пакетов."
+
+#: crate/web/theme/templates/packages/partials/history.html:43
+msgid "Download URI"
+msgstr "Адрес для Скачивания"
+
+#: crate/web/theme/templates/packages/partials/meta.html:3
+msgid "Author"
+msgstr "Автор"
+
+#: crate/web/theme/templates/packages/partials/meta.html:11
+msgid "Links"
+msgstr "Ссылки"
+
+#: crate/web/theme/templates/packages/partials/meta.html:29
+msgid "Classifiers"
+msgstr "Классификаторы"
+
+#: crate/web/theme/templates/packages/partials/meta.html:42
+msgid "Requirements"
+msgstr "Зависимости"
+
+#: crate/web/theme/templates/packages/partials/meta.html:54
+msgid "Provides"
+msgstr "Предоставляет"
+
+#: crate/web/theme/templates/packages/partials/meta.html:66
+msgid "Obsoletes"
+msgstr "Устаревшие"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:4
+#, python-format
+msgid "<span class=\"count\">%(count)s</span> total downloads"
+msgstr "<span class=\"count\">%(count)s</span> всего загрузок"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:5
+#, python-format
+msgid "<span class=\"count\">%(count)s</span> for this version"
+msgstr "<span class=\"count\">%(count)s</span> для этой версии"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:15
+msgid "Evaluation"
+msgstr "Состояние"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:15
+msgid "mouse over for details"
+msgstr "наведите курсор для подробностей"
+
+#: crate/web/theme/templates/packages/partials/sidebar.html:37
+msgid "Latest Versions"
+msgstr "Последние версии"
+
+#: crate/web/theme/templates/packages/partials/versions.html:5
+msgid "Release Date"
+msgstr "Дата выпуска"
+
+#: crate/web/theme/templates/packages/partials/yanked.html:4
+msgid ""
+"This package has been deleted, but it is still available for download for "
+"other packages or projects that may have depended on it."
+msgstr "Этот пакет был удалён, но он всё ещё доступен для загрузки из других пакетов или проектов, которые зависели от него."
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:5
+#: crate/web/theme/templates/saved_searches/most_recent.html:9
+msgid "Search History"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:9
+msgid "Your"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:18
+#, python-format
+msgid "Searched on %(on)s & has been run %(num)s times."
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:22
+msgid "No search history found. Go search for some packages!"
+msgstr ""
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:29
+#: crate/web/theme/templates/search/results.html:67
+msgid "Previous"
+msgstr "Предыдущий"
+
+#: crate/web/theme/templates/saved_searches/most_recent.html:35
+#: crate/web/theme/templates/search/results.html:73
+msgid "Next"
+msgstr "Следующий"
+
+#: crate/web/theme/templates/search/results.html:20
+msgid "Refine Results"
+msgstr "Уточнить результаты"
+
+#: crate/web/theme/templates/search/results.html:27
+msgid "By Python Version"
+msgstr "По Версии Python"
+
+#: crate/web/theme/templates/search/results.html:29
+msgid "By Operating System"
+msgstr "По Операционной системе"
+
+#: crate/web/theme/templates/search/results.html:31
+msgid "By License"
+msgstr "По Лицензии"
+
+#: crate/web/theme/templates/search/results.html:33
+msgid "By Implementation"
+msgstr "По Реализации"
+
+#: crate/web/theme/templates/search/results.html:35
+msgid "By Other"
+msgstr ""
+
+#: crate/web/theme/templates/search/results.html:60
+msgid "No results found."
+msgstr "Ничего не найдено"
+
+#: crate/web/theme/templates/search/partials/package.html:5
+#: crate/web/theme/templates/search/partials/package.html:7
+#, python-format
+msgid "by %(name)s"
+msgstr ""
+
+#: crate/web/theme/templates/search/partials/package.html:14
+#, python-format
+msgid "<span class=\"count\">%(downloads)s</span> downloads"
+msgstr "<span class=\"count\">%(downloads)s</span> загрузок"
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:19
+msgid "You don't have any social accounts associated."
+msgstr ""
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:29
+msgid "Associate an OpenID"
+msgstr ""
+
+#: crate/web/theme/templates/social_auth/usersocialauth_list.html:47
+msgid "Or associate with"
+msgstr ""
