@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PROJECT project.
 # 
 # Translators:
+#   <alexis@notmyidea.org>, 2012.
 # Aymeric Augustin <aymeric.augustin@m4x.org>, 2012.
 # Donald Stufft <donald.stufft@gmail.com>, 2012.
 #   <gotcha@bubblenet.be>, 2012.
@@ -11,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Crate.io\n"
 "Report-Msgid-Bugs-To: support@crate.io\n"
 "POT-Creation-Date: 2012-05-20 08:25-0400\n"
-"PO-Revision-Date: 2012-05-20 12:37+0000\n"
-"Last-Translator: Donald Stufft <donald.stufft@gmail.com>\n"
+"PO-Revision-Date: 2012-05-27 19:59+0000\n"
+"Last-Translator: ametaireau <alexis@notmyidea.org>\n"
 "Language-Team: French (http://www.transifex.net/projects/p/crateio/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -52,33 +53,33 @@ msgstr "Nom"
 
 #: crate/web/lists/models.py:17
 msgid "Private List"
-msgstr ""
+msgstr "Liste privée"
 
 #: crate/web/lists/models.py:17
 msgid "Private lists are visible only to you."
-msgstr ""
+msgstr "Vous êtes le seul à pouvoir accéder à vos listes privées"
 
 #: crate/web/lists/models.py:19
 msgid "Packages"
-msgstr ""
+msgstr "paquets"
 
 #: crate/web/lists/views.py:34 crate/web/lists/views.py:80
 #, python-format
 msgid "Successfully added %(package)s to %(list)s."
-msgstr ""
+msgstr "%(package)s à été ajouté à %(list)s"
 
 #: crate/web/lists/views.py:48 crate/web/lists/views.py:124
 msgid "Package does not exist"
-msgstr ""
+msgstr "Le paquet n'existe pas."
 
 #: crate/web/lists/views.py:58 crate/web/lists/views.py:126
 msgid "List does not exist"
-msgstr ""
+msgstr "La liste n'existe pas"
 
 #: crate/web/lists/views.py:113
 #, python-format
 msgid "Successfully removed %(package)s from %(list)s."
-msgstr ""
+msgstr "Supprimé %(package)s de %(list)s"
 
 #: crate/web/packages/evaluators.py:25
 msgid "PEP386 Compatibility"
@@ -221,12 +222,12 @@ msgstr "Page non valide (%(page_number)s)"
 msgid ""
 "Cannot remove the only Social Account without first setting a Password or "
 "adding another Social Account."
-msgstr ""
+msgstr "Impossible d'enlever l'unique compte externe sans d'abord ajouter un mot de passe ou ajouter un autre compte externe."
 
 #: crate/web/social_auth/views.py:39
 #, python-format
 msgid "Removed the %(provider)s account '%(uid)s'."
-msgstr ""
+msgstr "Supprimé le compte %(provider)s '%(uid)s'."
 
 #: crate/web/theme/templates/404.html:3
 msgid "Not Found"
@@ -284,21 +285,21 @@ msgstr "\n            <li><a href=\"%(login_url)s\">Se connecter</a></li>\n     
 
 #: crate/web/theme/templates/_footer.html:11
 msgid "Hosted by"
-msgstr ""
+msgstr "Hébérgé par"
 
 #: crate/web/theme/templates/_footer.html:13
 #: crate/web/theme/templates/_footer.html:14
 msgid "Hosted by Gondor"
-msgstr ""
+msgstr "Hébérgé par Gondor "
 
 #: crate/web/theme/templates/_footer.html:20
 msgid "Resolved by"
-msgstr ""
+msgstr "Résolu par"
 
 #: crate/web/theme/templates/_footer.html:22
 #: crate/web/theme/templates/_footer.html:23
 msgid "Resolved by Dyn"
-msgstr ""
+msgstr "Résolu par Dyn"
 
 #: crate/web/theme/templates/homepage.html:3
 msgid "Welcome"
@@ -324,19 +325,19 @@ msgstr "Beta"
 
 #: crate/web/theme/templates/site_base.html:17
 msgid "My Lists"
-msgstr ""
+msgstr "Mes listes"
 
 #: crate/web/theme/templates/account/_login_sidebar.html:3
 #: crate/web/theme/templates/account/_signup_sidebar.html:3
 msgid "Or sign in with"
-msgstr ""
+msgstr "Ou connectez-vous avec"
 
 #: crate/web/theme/templates/account/_terms.html:5
 #, python-format
 msgid ""
 "If you have any trouble creating your account, contact us at <a "
 "href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
-msgstr ""
+msgstr "Si vous avez des problèmes lors de la création de votre compte, contactez nous à <a href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>"
 
 #: crate/web/theme/templates/account/base.html:8
 msgid "Settings"
@@ -352,7 +353,7 @@ msgstr "Changer le mot de passe"
 #: crate/web/theme/templates/social_auth/usersocialauth_list.html:3
 #: crate/web/theme/templates/social_auth/usersocialauth_list.html:6
 msgid "Social Accounts"
-msgstr ""
+msgstr "Réseaux sociaux"
 
 #: crate/web/theme/templates/account/email_confirm.html:3
 #: crate/web/theme/templates/account/email_confirm.html:11
@@ -362,16 +363,16 @@ msgstr "Confirmer un email"
 #: crate/web/theme/templates/account/email_confirm.html:13
 #, python-format
 msgid "Confirm email address <b>%(email)s</b>?"
-msgstr ""
+msgstr "Confirmez vous l'adresse <b>%(email)s</b> ?"
 
 #: crate/web/theme/templates/account/email_confirm.html:15
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmer"
 
 #: crate/web/theme/templates/account/email_confirmation_sent.html:3
 #: crate/web/theme/templates/account/email_confirmation_sent.html:6
 msgid "Confirm your email address"
-msgstr ""
+msgstr "Confirmez votre adresse mail"
 
 #: crate/web/theme/templates/account/email_confirmation_sent.html:8
 #, python-format
@@ -380,7 +381,7 @@ msgid ""
 "link provided to finalize the signup process. If you do not receive it "
 "within a few minutes, contact us at <a "
 "href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
-msgstr ""
+msgstr "Nous venons d'envoyer un email à <b>%(email)s</b> pour vérification. Suivez le lien proposé pour terminer votre enregistrement. Si vous n'avez pas reçu l'email d'ici quelques minutes, contactez-nous à <a href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
 
 #: crate/web/theme/templates/account/email_confirmed.html:3
 #: crate/web/theme/templates/account/email_confirmed.html:6
@@ -391,7 +392,7 @@ msgstr "Email confirmé"
 #: crate/web/theme/templates/account/email_confirmed.html:7
 #, python-format
 msgid "You have confirmed <b>%(email)s</b>"
-msgstr ""
+msgstr "Votre adresse <b>%(email)s</b> est désormais confirmée."
 
 #: crate/web/theme/templates/account/login.html:5
 msgid "Log In"
@@ -413,7 +414,7 @@ msgstr "Se connecter avec un compte existant"
 
 #: crate/web/theme/templates/account/login.html:27
 msgid "Forgot your password?"
-msgstr ""
+msgstr "Mot de passe oublié ?"
 
 #: crate/web/theme/templates/account/login.html:33
 #: crate/web/theme/templates/account/signup.html:36
@@ -435,11 +436,11 @@ msgstr "S'inscrire avec OpenID"
 
 #: crate/web/theme/templates/account/logout.html:3
 msgid "Log Out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: crate/web/theme/templates/account/logout.html:13
 msgid "Are you sure you want to log out?"
-msgstr ""
+msgstr "Voulez vous vraiment vous déconnecter ?"
 
 #: crate/web/theme/templates/account/password_change.html:11
 msgid "Change password"
@@ -449,7 +450,7 @@ msgstr "Changer le mot de passe"
 #: crate/web/theme/templates/account/password_reset_token.html:16
 #: crate/web/theme/templates/account/settings.html:16
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: crate/web/theme/templates/account/password_reset.html:5
 msgid "Password Reset"
@@ -457,7 +458,7 @@ msgstr "Mot de passe réinitialisé"
 
 #: crate/web/theme/templates/account/password_reset.html:13
 msgid "Reset password"
-msgstr ""
+msgstr "Réinitialisation du mot de passe"
 
 #: crate/web/theme/templates/account/password_reset.html:14
 msgid ""
@@ -474,12 +475,12 @@ msgstr "Réinitialiser mon mot de passe"
 msgid ""
 "If you have any trouble resetting your password, contact us at <a "
 "href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
-msgstr ""
+msgstr "Si vous avez des soucis pour réinitialiser votre mot de passe, vous pouvez nous contacter à <a href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
 
 #: crate/web/theme/templates/account/password_reset_sent.html:3
 #: crate/web/theme/templates/account/password_reset_sent.html:6
 msgid "Password reset sent"
-msgstr ""
+msgstr "Nouveau mot de passe envoyé"
 
 #: crate/web/theme/templates/account/password_reset_sent.html:9
 #, python-format
@@ -487,11 +488,11 @@ msgid ""
 "We have sent you an email. If you do not receive it within a few minutes, "
 "try resending or contact us at <a "
 "href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
-msgstr ""
+msgstr "Nous vous avons envoyé un mot de passe. Si vous ne l'avez pas reçu d'ici quelques minutes, essayez de le renvoyer ou contactez-nous à <a href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
 
 #: crate/web/theme/templates/account/password_reset_sent.html:17
 msgid "Resend"
-msgstr ""
+msgstr "Ré-envoyer"
 
 #: crate/web/theme/templates/account/password_reset_sent.html:20
 #, python-format
@@ -499,7 +500,7 @@ msgid ""
 "We have resent the password email. If you do not receive it within a few "
 "minutes, contact us at <a "
 "href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
-msgstr ""
+msgstr "Nous avons renvoyé le mail.  Si vous ne l'avez pas reçu d'ici quelques minutes, contactez-nous à <a href=\"mailto:%(ACCOUNT_CONTACT_EMAIL)s\">%(ACCOUNT_CONTACT_EMAIL)s</a>."
 
 #: crate/web/theme/templates/account/password_reset_token.html:10
 msgid "Set password"
@@ -508,7 +509,7 @@ msgstr "Initialiser le mot de passe"
 #: crate/web/theme/templates/account/password_reset_token_fail.html:3
 #: crate/web/theme/templates/account/password_reset_token_fail.html:6
 msgid "Bad token"
-msgstr ""
+msgstr "Mauvais jeton d'identification"
 
 #: crate/web/theme/templates/account/password_reset_token_fail.html:10
 #, python-format
@@ -516,7 +517,7 @@ msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used. Please request a <a href=\"%(password_reset_url)s\">new password "
 "reset</a>."
-msgstr ""
+msgstr "Le mot de passe de réinitialisation de mot de passe est invalide. Probablement parce qu’il à déjà été utilisé. Merci de refaire une demande sur  <a href=\"%(password_reset_url)s\">new password reset</a>."
 
 #: crate/web/theme/templates/account/signup.html:5
 #: crate/web/theme/templates/account/signup.html:9
@@ -529,7 +530,7 @@ msgstr "Pour vous inscrire avec un nouveau compte, utilisez le formulaire ci-des
 
 #: crate/web/theme/templates/account/signup.html:16
 msgid "Sign up with a new account"
-msgstr ""
+msgstr "Connectez vous avec un nouveau compte"
 
 #: crate/web/theme/templates/account/signup.html:30
 #: crate/web/theme/templates/django_openid/register.html:23
@@ -682,69 +683,69 @@ msgstr "La clef de confirmation que vous fournissez n'est pas valide."
 
 #: crate/web/theme/templates/lists/button.html:5
 msgid "Lists"
-msgstr ""
+msgstr "Listes"
 
 #: crate/web/theme/templates/lists/button.html:12
 #, python-format
 msgid "Remove from %(listname)s"
-msgstr ""
+msgstr "Supprimer de %(listname)s"
 
 #: crate/web/theme/templates/lists/button.html:18
 #, python-format
 msgid "Add to %(listname)s"
-msgstr ""
+msgstr "Ajouter à %(listname)s"
 
 #: crate/web/theme/templates/lists/button.html:28
 msgid "Add to a new List"
-msgstr ""
+msgstr "Ajouter à une nouvelle liste"
 
 #: crate/web/theme/templates/lists/button.html:30
 msgid "Sign in to use Lists"
-msgstr ""
+msgstr "Connectez vous pour utiliser les listes"
 
 #: crate/web/theme/templates/lists/list_detail.html:24
 msgid "This List is Empty"
-msgstr ""
+msgstr "Cette liste est vide"
 
 #: crate/web/theme/templates/lists/list_list.html:3
 #: crate/web/theme/templates/lists/list_list.html:9
 #, python-format
 msgid "%(username)s's lists"
-msgstr ""
+msgstr "Listes de %(username)s"
 
 #: crate/web/theme/templates/lists/list_list.html:20
 msgid "This user has no lists."
-msgstr ""
+msgstr "Aucune liste pour cet utilisateur"
 
 #: crate/web/theme/templates/lists/modals.html:10
 #, python-format
 msgid "Remove %(package)s from %(list)s"
-msgstr ""
+msgstr "Supprimer %(package)s de %(list)s"
 
 #: crate/web/theme/templates/lists/modals.html:17
 #, python-format
 msgid ""
 "Are you sure you want to remove <strong>%(package)s</strong> from "
 "<strong>%(list)s</strong>"
-msgstr ""
+msgstr "Êtes vous sur de vouloir supprimer <strong>%(package)s</strong>de <strong>%(list)s</strong>"
 
 #: crate/web/theme/templates/lists/modals.html:25
 #: crate/web/theme/templates/lists/modals.html:49
 msgid "Nevermind"
-msgstr ""
+msgstr "Finalement, non"
 
 #: crate/web/theme/templates/lists/modals.html:26
 msgid "Yes, Remove It"
-msgstr ""
+msgstr "Oui, supprime le"
 
 #: crate/web/theme/templates/lists/modals.html:36
 #, python-format
 msgid "Add %(package)s to a new List"
-msgstr ""
+msgstr "Ajouter %(package)s à une nouvelle liste"
 
 #: crate/web/theme/templates/lists/modals.html:50
 msgid "Create List"
-msgstr ""
+msgstr "Créer une liste"
 
 #: crate/web/theme/templates/packages/release_detail.html:41
 msgid "Description"
@@ -900,20 +901,20 @@ msgstr "Ce paquet a été supprimé, mais il est toujours disponible au téléch
 #: crate/web/theme/templates/saved_searches/most_recent.html:5
 #: crate/web/theme/templates/saved_searches/most_recent.html:9
 msgid "Search History"
-msgstr ""
+msgstr "Historique de recherche"
 
 #: crate/web/theme/templates/saved_searches/most_recent.html:9
 msgid "Your"
-msgstr ""
+msgstr "Votre"
 
 #: crate/web/theme/templates/saved_searches/most_recent.html:18
 #, python-format
 msgid "Searched on %(on)s & has been run %(num)s times."
-msgstr ""
+msgstr "Recherché le %(on)s. (vous avez recherché ce terme %(num)s fois)"
 
 #: crate/web/theme/templates/saved_searches/most_recent.html:22
 msgid "No search history found. Go search for some packages!"
-msgstr ""
+msgstr "Aucun historique de recherche pour l'instant. Cherchez quelques packages !"
 
 #: crate/web/theme/templates/saved_searches/most_recent.html:29
 #: crate/web/theme/templates/search/results.html:67
@@ -966,12 +967,12 @@ msgstr "<span class=\"count\">%(downloads)s</span> téléchargements"
 
 #: crate/web/theme/templates/social_auth/usersocialauth_list.html:19
 msgid "You don't have any social accounts associated."
-msgstr ""
+msgstr "Vous n'avez aucun compte externe d'associé."
 
 #: crate/web/theme/templates/social_auth/usersocialauth_list.html:29
 msgid "Associate an OpenID"
-msgstr ""
+msgstr "Associez un compte OpenID"
 
 #: crate/web/theme/templates/social_auth/usersocialauth_list.html:47
 msgid "Or associate with"
-msgstr ""
+msgstr "Ou associez avec"
