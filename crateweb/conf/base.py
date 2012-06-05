@@ -180,6 +180,8 @@ INSTALLED_APPS = [
     "crate.web.lists",
     "crate.web.utils",
     "crate.pypi",
+
+    "cmds",
 ]
 
 FIXTURE_DIRS = [
