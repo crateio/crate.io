@@ -31,7 +31,7 @@ django-storages==1.1.4
 django-tastypie==0.9.11
 -e git://github.com/dstufft/django-user-accounts.git#egg=django-user-accounts
 django-uuidfield==0.2
-docutils==0.9
+docutils==0.9.1
 html5lib==0.95
 httplib2==0.7.4
 isoweek==1.2.0
