@@ -226,6 +226,8 @@ GITHUB_EXTRA_DATA = [
     ("login", "display"),
 ]
 
+SOCIAL_AUTH_ASSOCIATE_BY_MAIL = False
+
 LOGIN_URL = "/account/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGIN_ERROR_URL = "/"
