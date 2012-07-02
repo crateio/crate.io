@@ -15,6 +15,7 @@ certifi==0.0.8
 chardet==1.0.1
 -e git+https://github.com/crateio/crate.web.git#egg=crate.web
 -e git+https://github.com/crateio/crate.pypi.git#egg=crate.pypi
+eventlet==0.9.16
 django-admin-tools==0.4.1
 django-appconf==0.5
 django-celery==2.5.5
@@ -32,6 +33,8 @@ django-tastypie==0.9.11
 -e git://github.com/dstufft/django-user-accounts.git#egg=django-user-accounts
 django-uuidfield==0.2
 docutils==0.9.1
+greenlet==0.4.0
+gunicorn==0.14.5
 html5lib==0.95
 httplib2==0.7.4
 isoweek==1.2.0
