@@ -112,12 +112,20 @@ if "REDIS_URL" in os.environ:
     CELERY_REDIS_PASSWORD = REDIS["default"]["PORT"]
 
 if "ELASTICSEARCH_URL" in os.environ:
+    url = urlparse.urlparse(os.environ["ELASTICSEARCH_URL"])
+    index = url.path
+
+    if index.startswith("/"):
+        index = index[1:]
+
+    if index.endswith("/"):
+        index = index[:-1]
 
     HAYSTACK_CONNECTIONS = {
         "default": {
             "ENGINE": "haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine",
-            "URL": os.environ["ELASTICSEARCH_URL"],
-            "INDEX_NAME": "main.production",
+            "URL": urlparse.urlunparse([url.scheme, url.netloc, "/", "", "", ""]),
+            "INDEX_NAME": index,
         },
     }
 
