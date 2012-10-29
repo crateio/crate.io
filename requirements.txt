@@ -50,7 +50,7 @@ pinax-utils==1.0b1.dev3
 psycopg2==2.4.5
 py-bcrypt==0.2
 pyasn1==0.1.3
-pyelasticsearch==0.2
+pyelasticsearch==0.1
 python-dateutil==1.5
 python-openid==2.2.5
 pytz==2012c
