@@ -48,7 +48,7 @@ DEFAULT = HtmlFormatter(noclasses=INLINESTYLES)
 
 # Add name -> formatter pairs for every variant you want to use
 VARIANTS = {
-    # 'linenos': HtmlFormatter(noclasses=INLINESTYLES, linenos=True),
+    'linenos': HtmlFormatter(noclasses=INLINESTYLES, linenos=True),
 }
 
 
