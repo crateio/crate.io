@@ -63,3 +63,4 @@ rsa==3.0.1
 simplejson==2.5.2
 slumber==0.4.2
 uuid==1.30
+Pygments==1.5
