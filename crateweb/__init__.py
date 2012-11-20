@@ -83,3 +83,4 @@ class Pygments(Directive):
 
 directives.register_directive('code', Pygments)
 directives.register_directive('sourcecode', Pygments)
+directives.register_directive('code-block', Pygments)
