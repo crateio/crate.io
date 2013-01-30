@@ -16,7 +16,7 @@ handler500 = "pinax.views.server_error"
 
 urlpatterns = patterns("",
     url(r"^security/$", direct_to_template, {"template": "security.html"}),
-    url(r"^security.asc$", direct_to_template, {"template": "security.asc"}),
+    url(r"^security.asc$", direct_to_template, {"template": "security.asc", "mimetype": "text/plain"}),
     url(r"^$", Search.as_view(), name="home"),
     url(r"^admin/", include(admin.site.urls)),
     #url(r"^about/", include("about.urls")),
