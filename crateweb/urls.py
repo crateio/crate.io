@@ -37,7 +37,7 @@ urlpatterns = patterns("",
     #url(r"^help/", include("helpdocs.urls")),
     #url(r"^api/", include("crateweb.api_urls")),
 
-    url(r"^status-quo/$", "crate.web.packages.views.fuck_the_status_quo"),
+    url(r"^externally-hosted/$", "crate.web.packages.views.fuck_the_status_quo"),
 
     url(r"^", include("crate.web.search.urls")),
 )
