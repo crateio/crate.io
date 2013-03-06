@@ -34,7 +34,7 @@ django-tastypie==0.9.11
 django-uuidfield==0.2
 docutils==0.9.1
 greenlet==0.4.0
-gunicorn==0.14.5
+gunicorn==0.17.2
 html5lib==0.95
 httplib2==0.7.4
 isoweek==1.2.0
