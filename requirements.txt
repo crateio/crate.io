@@ -1,3 +1,4 @@
+--index-url=https://simple.crate.io/
 --extra-index-url=http://dist.pinaxproject.com/dev/
 
 Babel==0.9.6
