@@ -1,4 +1,4 @@
---index-url=https://simple.crate.io/
+--index-url=https://pypi.a.ssl.fastly.net/simple/
 --extra-index-url=http://dist.pinaxproject.com/dev/
 
 Babel==0.9.6
